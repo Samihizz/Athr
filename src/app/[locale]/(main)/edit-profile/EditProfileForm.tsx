@@ -34,7 +34,9 @@ export default function EditProfileForm({
   const [expertise, setExpertise] = useState((profile?.expertise as string) || "");
   const [education, setEducation] = useState((profile?.education as string) || "");
   const [experience, setExperience] = useState((profile?.experience as string) || "");
-  const [skills, setSkills] = useState((profile?.skills as string[])?.join(", ") || "");
+  const [skills, setSkills] = useState(
+    Array.isArray(profile?.skills) ? profile.skills.join(", ") : (profile?.skills as string) || ""
+  );
   const [linkedin, setLinkedin] = useState((profile?.linkedin_url as string) || "");
   const [wantToLearn, setWantToLearn] = useState((profile?.want_to_learn as string) || "");
   const [avatarUrl, setAvatarUrl] = useState((profile?.avatar_url as string) || "");

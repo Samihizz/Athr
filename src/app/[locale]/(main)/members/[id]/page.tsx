@@ -124,11 +124,11 @@ export default async function MemberProfilePage({
           </div>
 
           {/* Skills */}
-          {member.skills && member.skills.length > 0 && (
+          {member.skills && (Array.isArray(member.skills) ? member.skills : String(member.skills).split(",").map((s: string) => s.trim()).filter(Boolean)).length > 0 && (
             <div className="mb-6">
               <h2 className="text-sm font-semibold mb-2">{t.skills}</h2>
               <div className="flex flex-wrap gap-2">
-                {member.skills.map((skill: string) => (
+                {(Array.isArray(member.skills) ? member.skills : String(member.skills).split(",").map((s: string) => s.trim()).filter(Boolean)).map((skill: string) => (
                   <span key={skill} className="text-xs px-3 py-1 rounded-full bg-primary/10 text-primary-light">{skill}</span>
                 ))}
               </div>
