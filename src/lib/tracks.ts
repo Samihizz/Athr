@@ -4,7 +4,7 @@ export const ATHR_COMMUNITY_WHATSAPP = "https://chat.whatsapp.com/BCmwuJabcY717C
 export const tracks = [
   {
     id: "ai",
-    icon: "/tracks/ai.svg",
+    icon: "/images/tracks/ai.svg",
     whatsappGroup: "https://chat.whatsapp.com/BCmwuJabcY717CB5XVgD3H?mode=gi_t",
     en: {
       name: "AI & Emerging Tech",
@@ -17,7 +17,7 @@ export const tracks = [
   },
   {
     id: "creative",
-    icon: "/tracks/creative.svg",
+    icon: "/images/tracks/creative.svg",
     whatsappGroup: "https://chat.whatsapp.com/BCmwuJabcY717CB5XVgD3H?mode=gi_t",
     en: {
       name: "Creative & Freelancing",
@@ -30,7 +30,7 @@ export const tracks = [
   },
   {
     id: "business",
-    icon: "/tracks/business.svg",
+    icon: "/images/tracks/business.svg",
     whatsappGroup: "https://chat.whatsapp.com/BCmwuJabcY717CB5XVgD3H?mode=gi_t",
     en: {
       name: "Business & Entrepreneurship",
@@ -43,7 +43,7 @@ export const tracks = [
   },
   {
     id: "marketing",
-    icon: "/tracks/marketing.svg",
+    icon: "/images/tracks/marketing.svg",
     whatsappGroup: "https://chat.whatsapp.com/BCmwuJabcY717CB5XVgD3H?mode=gi_t",
     en: {
       name: "Digital Marketing & Content",
@@ -56,7 +56,7 @@ export const tracks = [
   },
   {
     id: "finance",
-    icon: "/tracks/finance.svg",
+    icon: "/images/tracks/finance.svg",
     whatsappGroup: "https://chat.whatsapp.com/BCmwuJabcY717CB5XVgD3H?mode=gi_t",
     en: {
       name: "Finance & Investment",
@@ -69,7 +69,7 @@ export const tracks = [
   },
   {
     id: "tech",
-    icon: "/tracks/tech.svg",
+    icon: "/images/tracks/tech.svg",
     whatsappGroup: "https://chat.whatsapp.com/BCmwuJabcY717CB5XVgD3H?mode=gi_t",
     en: {
       name: "Tech & Development",
