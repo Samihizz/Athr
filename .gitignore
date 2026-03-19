@@ -47,3 +47,5 @@ public/Screen Shot*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+public/tracks/*.svg
+public/Track icons/
