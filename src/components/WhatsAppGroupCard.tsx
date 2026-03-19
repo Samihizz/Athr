@@ -51,20 +51,22 @@ export default function WhatsAppGroupCard({
   }
 
   return (
-    <div className="glass rounded-2xl p-6 flex items-center gap-5">
-      {/* WhatsApp icon circle */}
-      <div
-        className="shrink-0 h-14 w-14 rounded-2xl flex items-center justify-center"
-        style={{ background: "rgba(37, 211, 102, 0.12)" }}
-      >
-        <WhatsAppIcon size={28} />
-      </div>
+    <div className="glass rounded-2xl p-4 sm:p-6 flex flex-col sm:flex-row items-start sm:items-center gap-4 sm:gap-5">
+      {/* WhatsApp icon + text row */}
+      <div className="flex items-center gap-4 w-full sm:w-auto sm:flex-1 min-w-0">
+        <div
+          className="shrink-0 h-12 w-12 sm:h-14 sm:w-14 rounded-2xl flex items-center justify-center"
+          style={{ background: "rgba(37, 211, 102, 0.12)" }}
+        >
+          <WhatsAppIcon size={24} />
+        </div>
 
-      <div className="flex-1 min-w-0">
-        <h3 className="font-semibold text-lg leading-tight">{trackName}</h3>
-        <p className="text-sm text-muted mt-0.5">
-          {isAr ? "قروب واتساب المسار" : "Track WhatsApp Group"}
-        </p>
+        <div className="min-w-0">
+          <h3 className="font-semibold text-base sm:text-lg leading-tight">{trackName}</h3>
+          <p className="text-xs sm:text-sm text-muted mt-0.5">
+            {isAr ? "قروب واتساب المسار" : "Track WhatsApp Group"}
+          </p>
+        </div>
       </div>
 
       {hasLink ? (
@@ -72,7 +74,7 @@ export default function WhatsAppGroupCard({
           href={whatsappLink}
           target="_blank"
           rel="noopener noreferrer"
-          className="shrink-0 inline-flex items-center gap-2 px-5 py-2.5 rounded-xl font-semibold text-sm transition-all hover:opacity-90 hover:-translate-y-0.5 hover:shadow-lg"
+          className="w-full sm:w-auto shrink-0 inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl font-semibold text-sm transition-all hover:opacity-90 hover:-translate-y-0.5 hover:shadow-lg"
           style={{
             background: "#25D366",
             color: "#fff",
@@ -83,7 +85,7 @@ export default function WhatsAppGroupCard({
           {joinLabel}
         </a>
       ) : (
-        <span className="shrink-0 text-sm text-muted px-5 py-2.5 rounded-xl bg-surface border border-border">
+        <span className="w-full sm:w-auto shrink-0 text-sm text-muted text-center px-5 py-2.5 rounded-xl bg-surface border border-border">
           {comingSoon}
         </span>
       )}
@@ -103,21 +105,23 @@ export function CommunityWhatsAppCard({
   const hasLink = !!whatsappLink;
 
   return (
-    <div className="glass-strong rounded-2xl p-6 border-l-4 border-[#25D366] flex items-center gap-5">
-      <div
-        className="shrink-0 h-14 w-14 rounded-2xl flex items-center justify-center"
-        style={{ background: "rgba(37, 211, 102, 0.12)" }}
-      >
-        <WhatsAppIcon size={28} />
-      </div>
+    <div className="glass-strong rounded-2xl p-4 sm:p-6 border-l-4 border-[#25D366] flex flex-col sm:flex-row items-start sm:items-center gap-4 sm:gap-5">
+      <div className="flex items-center gap-4 w-full sm:w-auto sm:flex-1 min-w-0">
+        <div
+          className="shrink-0 h-12 w-12 sm:h-14 sm:w-14 rounded-2xl flex items-center justify-center"
+          style={{ background: "rgba(37, 211, 102, 0.12)" }}
+        >
+          <WhatsAppIcon size={24} />
+        </div>
 
-      <div className="flex-1 min-w-0">
-        <h3 className="font-semibold text-lg leading-tight">
-          {isAr ? "قروب مجتمع أثر" : "Athr Community Group"}
-        </h3>
-        <p className="text-sm text-muted mt-0.5">
-          {isAr ? "القروب العام لجميع الشفاتة" : "General group for all members"}
-        </p>
+        <div className="min-w-0">
+          <h3 className="font-semibold text-base sm:text-lg leading-tight">
+            {isAr ? "قروب مجتمع أثر" : "Athr Community Group"}
+          </h3>
+          <p className="text-xs sm:text-sm text-muted mt-0.5">
+            {isAr ? "القروب العام لجميع الشفاتة" : "General group for all members"}
+          </p>
+        </div>
       </div>
 
       {hasLink ? (
@@ -125,7 +129,7 @@ export function CommunityWhatsAppCard({
           href={whatsappLink}
           target="_blank"
           rel="noopener noreferrer"
-          className="shrink-0 inline-flex items-center gap-2 px-5 py-2.5 rounded-xl font-semibold text-sm transition-all hover:opacity-90 hover:-translate-y-0.5 hover:shadow-lg"
+          className="w-full sm:w-auto shrink-0 inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl font-semibold text-sm transition-all hover:opacity-90 hover:-translate-y-0.5 hover:shadow-lg"
           style={{
             background: "#25D366",
             color: "#fff",
@@ -136,7 +140,7 @@ export function CommunityWhatsAppCard({
           {isAr ? "خش قروب الواتساب" : "Join WhatsApp Group"}
         </a>
       ) : (
-        <span className="shrink-0 text-sm text-muted px-5 py-2.5 rounded-xl bg-surface border border-border">
+        <span className="w-full sm:w-auto shrink-0 text-sm text-muted text-center px-5 py-2.5 rounded-xl bg-surface border border-border">
           {isAr ? "قريباً" : "Coming Soon"}
         </span>
       )}

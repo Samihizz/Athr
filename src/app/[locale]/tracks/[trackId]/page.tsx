@@ -88,7 +88,7 @@ export default async function TrackPage({
 
       {/* Hero with cover image */}
       <section className="relative pt-20 overflow-hidden">
-        <div className="relative h-64 sm:h-80 w-full">
+        <div className="relative h-48 sm:h-64 md:h-80 w-full">
           <Image
             src={trackImages[trackId] || trackImages.ai}
             alt={trackName}
@@ -96,13 +96,13 @@ export default async function TrackPage({
             className="object-cover"
             priority
           />
-          <div className="absolute inset-0 bg-gradient-to-t from-background via-background/60 to-transparent" />
+          <div className="absolute inset-0 bg-gradient-to-t from-background via-background/80 to-background/30" />
         </div>
 
-        <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 -mt-24">
+        <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 -mt-16 sm:-mt-24">
           <Link
             href={`/${locale}#tracks`}
-            className="inline-flex items-center gap-1.5 text-sm text-muted hover:text-foreground transition-colors mb-6"
+            className="inline-flex items-center gap-1.5 text-sm text-muted hover:text-foreground transition-colors mb-4 sm:mb-6"
           >
             <svg className="h-4 w-4 rtl:rotate-180" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
@@ -110,25 +110,25 @@ export default async function TrackPage({
             {labels.backToTracks}
           </Link>
 
-          <div className="flex items-start gap-5">
-            <div className="h-16 w-16 rounded-2xl card-elevated flex items-center justify-center shrink-0 p-2">
-              <img src={track.icon} alt="" className="w-12 h-12 rounded" />
+          <div className="flex flex-col sm:flex-row items-start gap-3 sm:gap-5">
+            <div className="h-12 w-12 sm:h-16 sm:w-16 rounded-xl sm:rounded-2xl card-elevated flex items-center justify-center shrink-0 p-1.5 sm:p-2">
+              <img src={track.icon} alt="" className="w-8 h-8 sm:w-12 sm:h-12 rounded" />
             </div>
             <div>
-              <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold">{trackName}</h1>
-              <p className="mt-3 text-lg text-muted max-w-2xl">{trackDesc}</p>
+              <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold">{trackName}</h1>
+              <p className="mt-2 sm:mt-3 text-sm sm:text-lg text-muted max-w-2xl">{trackDesc}</p>
             </div>
           </div>
 
           <Link
             href={`/${locale}/signup`}
-            className="mt-8 btn-primary inline-flex"
+            className="mt-6 sm:mt-8 btn-primary inline-flex"
           >
             {labels.joinTrack}
           </Link>
 
           {/* WhatsApp Group Card */}
-          <div className="mt-8">
+          <div className="mt-6 sm:mt-8">
             <WhatsAppGroupCard
               trackName={trackName}
               trackIcon={track.icon}
