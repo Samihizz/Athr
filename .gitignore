@@ -38,7 +38,7 @@ yarn-error.log*
 
 # design/source files (not needed in production)
 *.pdf
-*.png
+/public/tracks/*.png
 Athar PNG/
 public/Track icons/
 public/notifications-sql.sql

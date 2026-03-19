@@ -10,12 +10,12 @@ import Footer from "@/components/layout/Footer";
 import WhatsAppGroupCard from "@/components/WhatsAppGroupCard";
 
 const trackImages: Record<string, string> = {
-  ai: "/images/tracks/ai.svg",
-  creative: "/images/tracks/creative.svg",
-  business: "/images/tracks/business.svg",
-  marketing: "/images/tracks/marketing.svg",
-  finance: "/images/tracks/finance.svg",
-  tech: "/images/tracks/tech.svg",
+  ai: "/images/tracks/ai.png",
+  creative: "/images/tracks/creative.png",
+  business: "/images/tracks/business.png",
+  marketing: "/images/tracks/marketing.png",
+  finance: "/images/tracks/finance.png",
+  tech: "/images/tracks/tech.png",
 };
 
 export function generateStaticParams() {
