@@ -12,12 +12,12 @@ import AnimatedStats from "@/components/landing/AnimatedStats";
 import AnimatedCTA from "@/components/landing/AnimatedCTA";
 
 const trackImages: Record<string, string> = {
-  ai: "/images/tracks/ai.png",
-  creative: "/images/tracks/creative.png",
-  business: "/images/tracks/business.png",
-  marketing: "/images/tracks/marketing.png",
-  finance: "/images/tracks/finance.png",
-  tech: "/images/tracks/tech.png",
+  ai: "/images/tracks/ai.svg",
+  creative: "/images/tracks/creative.svg",
+  business: "/images/tracks/business.svg",
+  marketing: "/images/tracks/marketing.svg",
+  finance: "/images/tracks/finance.svg",
+  tech: "/images/tracks/tech.svg",
 };
 
 export default async function LandingPage({
