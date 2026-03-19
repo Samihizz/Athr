@@ -36,6 +36,14 @@ yarn-error.log*
 # vercel
 .vercel
 
+# design/source files (not needed in production)
+*.pdf
+*.png
+Athar PNG/
+public/Track icons/
+public/notifications-sql.sql
+public/Screen Shot*
+
 # typescript
 *.tsbuildinfo
 next-env.d.ts
