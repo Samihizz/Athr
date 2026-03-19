@@ -13,9 +13,9 @@ export default async function MemberProfilePage({
   const { locale, id } = await params;
   const isAr = locale === "ar";
   const supabase = await createClient();
-  const { data: { user } } = await supabase.auth.getUser();
+  const { data: { user }, error: authError } = await supabase.auth.getUser();
 
-  if (!user) redirect(`/${locale}/login`);
+  if (!user || authError) redirect(`/${locale}/login`);
 
   const { data: currentProfile } = await supabase
     .from("profiles")
@@ -23,13 +23,13 @@ export default async function MemberProfilePage({
     .eq("id", user.id)
     .single();
 
-  const { data: member } = await supabase
+  const { data: member, error: memberError } = await supabase
     .from("profiles")
     .select("*")
     .eq("id", id)
     .single();
 
-  if (!member) notFound();
+  if (!member || memberError) notFound();
 
   const memberTrack = tracks.find((t) => t.id === member.expertise);
   const isOwnProfile = user.id === id;
