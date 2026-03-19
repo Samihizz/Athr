@@ -51,9 +51,8 @@ export default async function MemberProfilePage({
     joined: isAr ? "انضم" : "Joined",
   };
 
-  function shareUrl() {
-    return `https://wa.me/?text=${encodeURIComponent(`${member.full_name} — ${isAr ? "شفت في أثر" : "Athr Member"}\n${typeof window !== "undefined" ? window.location.href : ""}`)}`;
-  }
+  const profileUrl = `https://athrsa.org/${locale}/members/${id}`;
+  const shareUrl = `https://wa.me/?text=${encodeURIComponent(`${member.full_name} — ${isAr ? "شفت في أثر" : "Athr Member"}\n${profileUrl}`)}`;
 
   return (
     <>
@@ -88,7 +87,7 @@ export default async function MemberProfilePage({
               </div>
               {member.created_at && (
                 <p className="text-xs text-muted mt-1">
-                  {t.joined} {new Date(member.created_at).toLocaleDateString(isAr ? "ar-SA" : "en-US", { year: "numeric", month: "long" })}
+                  {t.joined} {new Date(member.created_at).toLocaleDateString("en-US", { year: "numeric", month: "long" })}
                 </p>
               )}
             </div>
@@ -164,7 +163,7 @@ export default async function MemberProfilePage({
               </a>
             )}
             <a
-              href={shareUrl()}
+              href={shareUrl}
               target="_blank"
               rel="noopener noreferrer"
               className="px-5 py-2 rounded-xl glass text-sm hover:bg-surface-hover transition-colors"
