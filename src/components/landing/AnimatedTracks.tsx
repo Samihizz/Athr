@@ -62,7 +62,7 @@ export default function AnimatedTracks({
                     <div className="absolute inset-0 bg-gradient-to-t from-card via-card/40 to-transparent" />
                     <div className="absolute top-4 start-4">
                       <img
-                        src={`/tracks/${track.id}.svg`}
+                        src={track.icon}
                         alt=""
                         className="w-8 h-8 rounded"
                       />
