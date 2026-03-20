@@ -86,6 +86,16 @@ export interface Notification {
   created_at: string;
 }
 
+export interface Connection {
+  id: string;
+  requester_id: string;
+  receiver_id: string;
+  status: 'pending' | 'accepted' | 'declined';
+  note: string | null;
+  created_at: string;
+  updated_at: string;
+}
+
 export interface CommunityStats {
   total_members: number;
   track_ai: number;

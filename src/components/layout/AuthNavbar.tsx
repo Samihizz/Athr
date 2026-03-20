@@ -24,6 +24,7 @@ export default function AuthNavbar({ locale, userName, userId, isAdmin }: AuthNa
     events: isAr ? "البرامج" : "Events",
     community: isAr ? "ناس الشرقية" : "Community",
     feed: isAr ? "الشمارات" : "Feed",
+    connections: isAr ? "اتصالاتي" : "Connections",
     news: isAr ? "الأخبار" : "News",
     profile: isAr ? "ملفي الشخصي" : "My Profile",
     editProfile: isAr ? "تعديل الملف" : "Edit Profile",
@@ -47,6 +48,7 @@ export default function AuthNavbar({ locale, userName, userId, isAdmin }: AuthNa
               { href: `/${locale}/dashboard`, label: t.dashboard },
               { href: `/${locale}/events`, label: t.events },
               { href: `/${locale}/community`, label: t.community },
+              { href: `/${locale}/connections`, label: t.connections },
               { href: `/${locale}/feed`, label: t.feed },
               { href: `/${locale}/news`, label: t.news },
             ].map((link) => (
@@ -118,6 +120,7 @@ export default function AuthNavbar({ locale, userName, userId, isAdmin }: AuthNa
               { href: `/${locale}/dashboard`, label: t.dashboard },
               { href: `/${locale}/events`, label: t.events },
               { href: `/${locale}/community`, label: t.community },
+              { href: `/${locale}/connections`, label: t.connections },
               { href: `/${locale}/feed`, label: t.feed },
               { href: `/${locale}/news`, label: t.news },
             ].map((link) => (

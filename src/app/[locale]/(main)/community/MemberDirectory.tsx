@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import Link from "next/link";
+import ConnectButton from "@/components/ConnectButton";
 
 type Member = {
   id: string;
@@ -18,10 +19,12 @@ export default function MemberDirectory({
   members,
   locale,
   tracks,
+  currentUserId,
 }: {
   members: Member[];
   locale: string;
   tracks: { id: string; name: string }[];
+  currentUserId?: string;
 }) {
   const isAr = locale === "ar";
   const [search, setSearch] = useState("");
@@ -95,37 +98,48 @@ export default function MemberDirectory({
       {filtered.length > 0 ? (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
           {filtered.map((member) => (
-            <Link
+            <div
               key={member.id}
-              href={`/${locale}/members/${member.id}`}
               className="glass rounded-2xl p-5 hover:bg-surface-hover transition-colors group"
             >
-              <div className="flex items-center gap-3 mb-3">
-                <div className="h-11 w-11 rounded-full bg-primary/20 flex items-center justify-center text-sm font-bold text-primary-light shrink-0">
-                  {member.full_name?.charAt(0)?.toUpperCase() || "?"}
-                </div>
-                <div className="min-w-0">
-                  <h3 className="font-semibold text-sm truncate group-hover:text-gold transition-colors">
-                    {member.full_name || (isAr ? "شفت" : "Member")}
-                  </h3>
-                  <div className="flex items-center gap-2 text-xs text-muted">
-                    {member.city && <span>{member.city}</span>}
+              <Link href={`/${locale}/members/${member.id}`}>
+                <div className="flex items-center gap-3 mb-3">
+                  <div className="h-11 w-11 rounded-full bg-primary/20 flex items-center justify-center text-sm font-bold text-primary-light shrink-0">
+                    {member.full_name?.charAt(0)?.toUpperCase() || "?"}
+                  </div>
+                  <div className="min-w-0">
+                    <h3 className="font-semibold text-sm truncate group-hover:text-gold transition-colors">
+                      {member.full_name || (isAr ? "شفت" : "Member")}
+                    </h3>
+                    <div className="flex items-center gap-2 text-xs text-muted">
+                      {member.city && <span>{member.city}</span>}
+                    </div>
                   </div>
                 </div>
-              </div>
-              {member.bio && (
-                <p className="text-xs text-muted line-clamp-2 mb-3">{member.bio}</p>
-              )}
-              {member.skills && (
-                <div className="flex flex-wrap gap-1">
-                  {(Array.isArray(member.skills) ? member.skills : String(member.skills).split(",").map((s: string) => s.trim()).filter(Boolean)).slice(0, 3).map((skill: string) => (
-                    <span key={skill} className="text-[10px] px-2 py-0.5 rounded-full bg-primary/10 text-primary-light">
-                      {skill}
-                    </span>
-                  ))}
+                {member.bio && (
+                  <p className="text-xs text-muted line-clamp-2 mb-3">{member.bio}</p>
+                )}
+                {member.skills && (
+                  <div className="flex flex-wrap gap-1 mb-3">
+                    {(Array.isArray(member.skills) ? member.skills : String(member.skills).split(",").map((s: string) => s.trim()).filter(Boolean)).slice(0, 3).map((skill: string) => (
+                      <span key={skill} className="text-[10px] px-2 py-0.5 rounded-full bg-primary/10 text-primary-light">
+                        {skill}
+                      </span>
+                    ))}
+                  </div>
+                )}
+              </Link>
+              {currentUserId && currentUserId !== member.id && (
+                <div className="mt-2 pt-2 border-t border-border">
+                  <ConnectButton
+                    currentUserId={currentUserId}
+                    targetUserId={member.id}
+                    locale={locale}
+                    compact
+                  />
                 </div>
               )}
-            </Link>
+            </div>
           ))}
         </div>
       ) : (

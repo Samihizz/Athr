@@ -68,6 +68,7 @@ export default async function CommunityPage({
           members={members || []}
           locale={locale}
           tracks={tracks.map((t) => ({ id: t.id, name: isAr ? t.ar.name : t.en.name }))}
+          currentUserId={user.id}
         />
       </main>
     </>

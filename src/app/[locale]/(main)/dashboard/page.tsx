@@ -61,6 +61,22 @@ export default async function DashboardPage({
     .order("created_at", { ascending: false })
     .limit(2);
 
+  // Fetch pending connection requests (incoming)
+  const { data: pendingConnections } = await supabase
+    .from("connections")
+    .select("id")
+    .eq("receiver_id", user.id)
+    .eq("status", "pending");
+  const pendingConnectionCount = pendingConnections?.length || 0;
+
+  // Fetch accepted connections count
+  const { data: acceptedConnections } = await supabase
+    .from("connections")
+    .select("id")
+    .or(`requester_id.eq.${user.id},receiver_id.eq.${user.id}`)
+    .eq("status", "accepted");
+  const connectionCount = acceptedConnections?.length || 0;
+
   // Fetch user's event registrations for calendar icon
   const { data: myRegistrations } = await supabase
     .from("event_registrations")
@@ -93,6 +109,9 @@ export default async function DashboardPage({
     editProfile: isAr ? "تعديل الملف" : "Edit Profile",
     news: isAr ? "الأخبار" : "News",
     trackGroup: isAr ? "قروب مسارك" : "Your Track Group",
+    connections: isAr ? "اتصالاتي" : "Connections",
+    pendingRequests: isAr ? "طلبات اتصال جديدة" : "Pending Connection Requests",
+    viewConnections: isAr ? "عرض الاتصالات" : "View Connections",
   };
 
   return (
@@ -153,8 +172,13 @@ export default async function DashboardPage({
             <AnimatedStatsItem>
               <AnimatedStatCard value={stats?.mentors || 0} label={t.mentors} />
             </AnimatedStatsItem>
+            <AnimatedStatsItem>
+              <Link href={`/${locale}/connections`} className="block">
+                <AnimatedStatCard value={connectionCount} label={t.connections} />
+              </Link>
+            </AnimatedStatsItem>
             {userTrack && (
-              <AnimatedStatsItem className="col-span-2">
+              <AnimatedStatsItem>
                 <div className="glass rounded-xl p-5 text-center">
                   <img src={userTrack.icon} alt="" className="w-8 h-8 rounded mx-auto" />
                   <div className="text-xs text-muted mt-1">{t.yourTrack}: {isAr ? userTrack.ar.name : userTrack.en.name}</div>
@@ -163,11 +187,32 @@ export default async function DashboardPage({
             )}
           </AnimatedStatsRow>
 
+          {/* Pending Connection Requests */}
+          {pendingConnectionCount > 0 && (
+            <AnimatedSection className="mb-8" delay={0.12}>
+              <Link
+                href={`/${locale}/connections`}
+                className="block glass rounded-xl p-5 border border-gold/30 hover:bg-surface-hover transition-colors"
+              >
+                <div className="flex items-center gap-4">
+                  <div className="h-10 w-10 rounded-full gradient-gold flex items-center justify-center text-background font-bold text-lg shrink-0">
+                    {pendingConnectionCount}
+                  </div>
+                  <div>
+                    <h3 className="font-semibold text-sm">{t.pendingRequests}</h3>
+                    <p className="text-xs text-gold mt-0.5">{t.viewConnections} &rarr;</p>
+                  </div>
+                </div>
+              </Link>
+            </AnimatedSection>
+          )}
+
           {/* Quick links */}
-          <AnimatedQuickLinks className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-4 mb-10">
+          <AnimatedQuickLinks className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-4 mb-10">
             {[
               { href: `/${locale}/events`, icon: "📅", label: t.events },
               { href: `/${locale}/community`, icon: "👥", label: t.community },
+              { href: `/${locale}/connections`, icon: "🤝", label: t.connections },
               { href: `/${locale}/feed`, icon: "📰", label: t.feed },
               { href: `/${locale}/news`, icon: "🗞️", label: t.news },
               { href: `/${locale}/edit-profile`, icon: "✏️", label: t.editProfile },

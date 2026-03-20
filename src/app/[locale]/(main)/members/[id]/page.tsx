@@ -4,6 +4,7 @@ import { type Locale } from "@/i18n/config";
 import { createClient } from "@/lib/supabase/server";
 import { tracks } from "@/lib/tracks";
 import AuthNavbar from "@/components/layout/AuthNavbar";
+import ConnectButton from "@/components/ConnectButton";
 
 export default async function MemberProfilePage({
   params,
@@ -89,6 +90,17 @@ export default async function MemberProfilePage({
               )}
             </div>
           </div>
+
+          {/* Connect Button */}
+          {!isOwnProfile && (
+            <div className="mb-6">
+              <ConnectButton
+                currentUserId={user.id}
+                targetUserId={id}
+                locale={locale}
+              />
+            </div>
+          )}
 
           {/* Bio */}
           {member.bio && (
