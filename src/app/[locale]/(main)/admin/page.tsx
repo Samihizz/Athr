@@ -23,10 +23,12 @@ export default async function AdminPage({
 
   if (!profile?.is_admin) redirect(`/${locale}/dashboard`);
 
-  const { data: members } = await supabase
+  const { data: members, error: membersError } = await supabase
     .from("profiles")
-    .select("id, full_name, email, city, expertise, role, is_mentor, is_admin, profile_complete, created_at")
+    .select("id, full_name, email, city, expertise, role, is_admin, profile_complete, created_at")
     .order("created_at", { ascending: false });
+
+  if (membersError) console.error("Members query error:", membersError);
 
   const { data: events } = await supabase
     .from("events")

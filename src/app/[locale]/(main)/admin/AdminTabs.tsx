@@ -10,7 +10,6 @@ type Member = {
   city: string | null;
   expertise: string | null;
   role: string | null;
-  is_mentor: boolean;
   is_admin: boolean;
   profile_complete: boolean;
   created_at: string;
@@ -47,14 +46,13 @@ export default function AdminTabs({
   ];
 
   function exportMembersCSV() {
-    const headers = ["Name", "Email", "City", "Expertise", "Role", "Mentor", "Joined"];
+    const headers = ["Name", "Email", "City", "Expertise", "Role", "Joined"];
     const rows = members.map((m) => [
       m.full_name || "",
       m.email || "",
       m.city || "",
       m.expertise || "",
       m.role || "",
-      m.is_mentor ? "Yes" : "No",
       new Date(m.created_at).toLocaleDateString("en-US"),
     ]);
     const csv = [headers, ...rows].map((r) => r.map((c) => `"${c}"`).join(",")).join("\n");
@@ -142,7 +140,7 @@ export default function AdminTabs({
                     <td className="py-3 px-3">
                       <div className="flex items-center gap-2">
                         <span>{m.full_name || "—"}</span>
-                        {m.is_mentor && <span className="text-[10px] px-1.5 py-0.5 rounded-full bg-gold/20 text-gold">M</span>}
+                        {m.is_admin && <span className="text-[10px] px-1.5 py-0.5 rounded-full bg-gold/20 text-gold">A</span>}
                         {m.is_admin && <span className="text-[10px] px-1.5 py-0.5 rounded-full bg-primary/30 text-primary-light">A</span>}
                       </div>
                     </td>
