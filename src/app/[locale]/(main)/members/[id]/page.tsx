@@ -77,9 +77,6 @@ export default async function MemberProfilePage({
             <div className="flex-1">
               <div className="flex items-center gap-3 flex-wrap">
                 <h1 className="text-2xl font-bold">{member.full_name}</h1>
-                {member.is_mentor && (
-                  <span className="px-2.5 py-0.5 rounded-full bg-gold/20 text-gold text-xs font-medium">{t.mentor}</span>
-                )}
               </div>
               <div className="flex items-center gap-3 text-sm text-muted mt-1 flex-wrap">
                 {member.city && <span>📍 {member.city}</span>}
@@ -143,13 +140,6 @@ export default async function MemberProfilePage({
                 className="px-5 py-2 rounded-xl gradient-gold text-background text-sm font-medium hover:opacity-90 transition-opacity"
               >
                 {t.editProfile}
-              </Link>
-            ) : member.is_mentor ? (
-              <Link
-                href={`/${locale}/community`}
-                className="px-5 py-2 rounded-xl gradient-gold text-background text-sm font-medium hover:opacity-90 transition-opacity"
-              >
-                {t.requestMentor}
               </Link>
             ) : null}
             {member.linkedin_url && (

@@ -10,8 +10,7 @@ type Member = {
   city: string | null;
   expertise: string | null;
   role: string | null;
-  skills: string[] | null;
-  is_mentor: boolean;
+  skills: string | string[] | null;
   avatar_url: string | null;
 };
 
@@ -28,7 +27,6 @@ export default function MemberDirectory({
   const [search, setSearch] = useState("");
   const [trackFilter, setTrackFilter] = useState("all");
   const [cityFilter, setCityFilter] = useState("all");
-  const [mentorOnly, setMentorOnly] = useState(false);
 
   const cities = Array.from(new Set(members.map((m) => m.city).filter(Boolean))) as string[];
 
@@ -38,12 +36,11 @@ export default function MemberDirectory({
       const match =
         m.full_name?.toLowerCase().includes(q) ||
         m.bio?.toLowerCase().includes(q) ||
-        m.skills?.some((s) => s.toLowerCase().includes(q));
+        (typeof m.skills === "string" ? m.skills.toLowerCase().includes(q) : Array.isArray(m.skills) && m.skills.some((s) => s.toLowerCase().includes(q)));
       if (!match) return false;
     }
     if (trackFilter !== "all" && m.expertise !== trackFilter) return false;
     if (cityFilter !== "all" && m.city !== cityFilter) return false;
-    if (mentorOnly && !m.is_mentor) return false;
     return true;
   });
 
@@ -92,15 +89,6 @@ export default function MemberDirectory({
 
       <div className="flex items-center justify-between mb-6">
         <p className="text-sm text-muted">{t.results}</p>
-        <label className="flex items-center gap-2 text-sm cursor-pointer">
-          <input
-            type="checkbox"
-            checked={mentorOnly}
-            onChange={(e) => setMentorOnly(e.target.checked)}
-            className="rounded accent-gold"
-          />
-          {t.mentorsOnly}
-        </label>
       </div>
 
       {/* Grid */}
@@ -122,20 +110,15 @@ export default function MemberDirectory({
                   </h3>
                   <div className="flex items-center gap-2 text-xs text-muted">
                     {member.city && <span>{member.city}</span>}
-                    {member.is_mentor && (
-                      <span className="px-1.5 py-0.5 rounded-full bg-gold/20 text-gold text-[10px] font-medium">
-                        {t.mentor}
-                      </span>
-                    )}
                   </div>
                 </div>
               </div>
               {member.bio && (
                 <p className="text-xs text-muted line-clamp-2 mb-3">{member.bio}</p>
               )}
-              {member.skills && member.skills.length > 0 && (
+              {member.skills && (
                 <div className="flex flex-wrap gap-1">
-                  {member.skills.slice(0, 3).map((skill) => (
+                  {(Array.isArray(member.skills) ? member.skills : String(member.skills).split(",").map((s: string) => s.trim()).filter(Boolean)).slice(0, 3).map((skill: string) => (
                     <span key={skill} className="text-[10px] px-2 py-0.5 rounded-full bg-primary/10 text-primary-light">
                       {skill}
                     </span>

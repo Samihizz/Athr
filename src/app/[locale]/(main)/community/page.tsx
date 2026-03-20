@@ -26,7 +26,7 @@ export default async function CommunityPage({
 
   const { data: members } = await supabase
     .from("profiles")
-    .select("id, full_name, bio, city, expertise, role, skills, is_mentor, avatar_url")
+    .select("id, full_name, bio, city, expertise, role, skills, avatar_url")
     .order("created_at", { ascending: false });
 
   return (

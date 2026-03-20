@@ -41,12 +41,11 @@ export default async function TrackPage({
   const isAr = locale === "ar";
   const supabase = await createClient();
 
-  // Fetch mentors in this track
+  // Fetch members in this track
   const { data: mentors } = await supabase
     .from("profiles")
     .select("id, full_name, bio, city, skills")
     .eq("expertise", trackId)
-    .eq("is_mentor", true)
     .limit(6);
 
   // Fetch upcoming events for this track
