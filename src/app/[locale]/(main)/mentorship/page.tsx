@@ -2,6 +2,7 @@ import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import { tracks } from "@/lib/tracks";
 import AuthNavbar from "@/components/layout/AuthNavbar";
+import PageHeader from "@/components/PageHeader";
 import MentorshipContent from "./MentorshipContent";
 
 export default async function MentorshipPage({
@@ -101,16 +102,19 @@ export default async function MentorshipPage({
         userId={user.id}
         isAdmin={profile?.is_admin}
       />
-      <main className="pt-24 pb-16 px-4 sm:px-6 lg:px-8 mx-auto max-w-7xl">
-        <h1 className="text-3xl font-bold mb-2">
-          {isAr ? "الإرشاد" : "Mentorship"}
-        </h1>
-        <p className="text-muted mb-8">
-          {isAr
-            ? "لاقي مرشد يساعدك في مسارك أو ارشد غيرك"
-            : "Find a mentor to guide you or mentor others in the community"}
-        </p>
+      <main className="pt-20 pb-16">
+        <PageHeader
+          title={isAr ? "الإرشاد" : "Mentorship"}
+          subtitle={
+            isAr
+              ? "لاقي مرشدين في مسارك أو شارك خبرتك مع الآخرين."
+              : "Find experienced mentors in your track or share your knowledge with others."
+          }
+          coverGradient="linear-gradient(135deg, #7C3AED 0%, #4F46E5 50%, #6366F1 100%)"
+          locale={locale}
+        />
 
+        <div className="px-4 sm:px-6 lg:px-8 mx-auto max-w-7xl mt-8">
         <MentorshipContent
           mentors={(mentors as ProfileInfo[]) || []}
           myRequests={myRequests || []}
@@ -120,6 +124,7 @@ export default async function MentorshipPage({
           currentUserId={user.id}
           locale={locale}
         />
+        </div>
       </main>
     </>
   );

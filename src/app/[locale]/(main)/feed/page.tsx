@@ -62,6 +62,21 @@ export default async function FeedPage({
     }
   }
 
+  // Fetch comment counts per post
+  const commentCounts: Record<string, number> = {};
+  if (postIds.length > 0) {
+    const { data: comments } = await supabase
+      .from("post_comments")
+      .select("post_id")
+      .in("post_id", postIds);
+
+    if (comments) {
+      for (const c of comments) {
+        commentCounts[c.post_id] = (commentCounts[c.post_id] || 0) + 1;
+      }
+    }
+  }
+
   const postsWithAuthors = (posts || []).map((p) => {
     const author = authorMap.get(p.author_id);
     return {
@@ -70,6 +85,7 @@ export default async function FeedPage({
       author_avatar: author?.avatar_url || null,
       reaction_count: reactionCounts[p.id] || 0,
       user_reacted: userReactions.has(p.id),
+      comment_count: commentCounts[p.id] || 0,
     };
   });
 
@@ -84,7 +100,7 @@ export default async function FeedPage({
               ? "شارك أفكارك واسأل أسئلتك وخليك على تواصل مع المجتمع."
               : "Share insights, ask questions, and stay connected with the community."
           }
-          icon="📰"
+
           coverGradient="linear-gradient(135deg, #1800AD 0%, #4B2FE8 40%, #7C3AED 100%)"
           locale={locale}
         />
@@ -97,6 +113,7 @@ export default async function FeedPage({
           userId={user.id}
           userName={profile?.full_name || user.email || ""}
           userAvatar={profile?.avatar_url || undefined}
+          isAdmin={profile?.is_admin || false}
         />
         </div>
       </main>

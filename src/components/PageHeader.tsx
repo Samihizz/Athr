@@ -1,7 +1,6 @@
 interface PageHeaderProps {
   title: string;
   subtitle: string;
-  icon?: React.ReactNode;
   coverGradient?: string;
   locale: string;
 }
@@ -9,7 +8,6 @@ interface PageHeaderProps {
 export default function PageHeader({
   title,
   subtitle,
-  icon,
   coverGradient = "linear-gradient(135deg, #1800AD 0%, #CCA300 100%)",
   locale,
 }: PageHeaderProps) {
@@ -55,28 +53,16 @@ export default function PageHeader({
 
       {/* Content */}
       <div
-        className={`relative z-10 flex items-center justify-between px-6 sm:px-8 lg:px-10 py-10 sm:py-12 max-w-7xl mx-auto ${
-          isAr ? "flex-row-reverse text-right" : ""
+        className={`relative z-10 px-6 sm:px-8 lg:px-10 py-10 sm:py-12 max-w-7xl mx-auto ${
+          isAr ? "text-right" : ""
         }`}
       >
-        <div className="flex-1 min-w-0">
-          <h1 className="text-3xl sm:text-4xl font-bold text-white tracking-tight">
-            {title}
-          </h1>
-          <p className="mt-3 text-base sm:text-lg text-white/70 max-w-xl leading-relaxed">
-            {subtitle}
-          </p>
-        </div>
-
-        {icon && (
-          <div
-            className={`hidden sm:flex shrink-0 items-center justify-center w-20 h-20 rounded-2xl glass-strong ${
-              isAr ? "ml-0 mr-6" : "mr-0 ml-6"
-            }`}
-          >
-            <span className="text-4xl">{icon}</span>
-          </div>
-        )}
+        <h1 className="text-3xl sm:text-4xl font-bold text-white tracking-tight">
+          {title}
+        </h1>
+        <p className="mt-3 text-base sm:text-lg text-white/70 max-w-xl leading-relaxed">
+          {subtitle}
+        </p>
       </div>
     </div>
   );

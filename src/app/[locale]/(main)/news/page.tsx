@@ -83,7 +83,7 @@ export default async function NewsPage({
               ? "آخر الأخبار من السعودية والسودان وعالم التقنية."
               : "Latest news from Saudi Arabia, Sudan, and the tech world — curated and community-shared."
           }
-          icon="🗞️"
+
           coverGradient="linear-gradient(135deg, #059669 0%, #0D9488 40%, #14B8A6 100%)"
           locale={locale}
         />

@@ -41,7 +41,7 @@ export default async function CommunityPage({
               ? "تواصل مع الشفاتة في المنطقة الشرقية. لاقي مرشدين وشركاء وابني علاقات قوية."
               : "Connect with Sudanese professionals in the Eastern Region. Find mentors, collaborators, and build meaningful relationships."
           }
-          icon="👥"
+
           coverGradient="linear-gradient(135deg, #1800AD 0%, #3D1FAD 40%, #CCA300 100%)"
           locale={locale}
         />

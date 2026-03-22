@@ -88,7 +88,7 @@ export default async function ConnectionsPage({
               ? "شبكتك المهنية في مجتمع أثر."
               : "Your professional network within the Athr community."
           }
-          icon="🤝"
+
           coverGradient="linear-gradient(135deg, #1800AD 0%, #CCA300 50%, #E6BE2E 100%)"
           locale={locale}
         />

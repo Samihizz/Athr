@@ -21,6 +21,7 @@ export default function AuthNavbar({ locale, userName, userId, isAdmin }: AuthNa
 
   const t = {
     dashboard: isAr ? "محل الشغل" : "Dashboard",
+    tracks: isAr ? "المسارات" : "Tracks",
     events: isAr ? "البرامج" : "Events",
     community: isAr ? "ناس الشرقية" : "Community",
     feed: isAr ? "الشمارات" : "Feed",
@@ -48,6 +49,7 @@ export default function AuthNavbar({ locale, userName, userId, isAdmin }: AuthNa
           <div className="hidden md:flex items-center gap-1">
             {[
               { href: `/${locale}/dashboard`, label: t.dashboard },
+              { href: `/${locale}/tracks`, label: t.tracks },
               { href: `/${locale}/events`, label: t.events },
               { href: `/${locale}/community`, label: t.community },
               { href: `/${locale}/connections`, label: t.connections },
@@ -122,6 +124,7 @@ export default function AuthNavbar({ locale, userName, userId, isAdmin }: AuthNa
           <div className="glass-strong rounded-2xl p-4 flex flex-col gap-1">
             {[
               { href: `/${locale}/dashboard`, label: t.dashboard },
+              { href: `/${locale}/tracks`, label: t.tracks },
               { href: `/${locale}/events`, label: t.events },
               { href: `/${locale}/community`, label: t.community },
               { href: `/${locale}/connections`, label: t.connections },

@@ -1,9 +1,10 @@
 "use client";
 
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useRef } from "react";
 import Image from "next/image";
 import { createClient } from "@/lib/supabase/client";
 import PostComposer from "./PostComposer";
+import Comments from "./Comments";
 
 type Post = {
   id: string;
@@ -23,6 +24,7 @@ type Post = {
   author_avatar?: string;
   reaction_count?: number;
   user_reacted?: boolean;
+  comment_count?: number;
 };
 
 /* ── Relative time ── */
@@ -125,6 +127,93 @@ function ReactionButton({
   );
 }
 
+/* ── Post Menu (three dots) ── */
+function PostMenu({
+  postId,
+  locale,
+  onDelete,
+}: {
+  postId: string;
+  locale: string;
+  onDelete: (postId: string) => void;
+}) {
+  const isAr = locale === "ar";
+  const [open, setOpen] = useState(false);
+  const menuRef = useRef<HTMLDivElement>(null);
+
+  // Close on outside click
+  useEffect(() => {
+    if (!open) return;
+    function handleClick(e: MouseEvent) {
+      if (menuRef.current && !menuRef.current.contains(e.target as Node)) {
+        setOpen(false);
+      }
+    }
+    document.addEventListener("mousedown", handleClick);
+    return () => document.removeEventListener("mousedown", handleClick);
+  }, [open]);
+
+  async function handleDelete() {
+    const confirmed = confirm(isAr ? "متأكد؟" : "Are you sure?");
+    if (!confirmed) return;
+    setOpen(false);
+
+    const supabase = createClient();
+    const { error } = await supabase
+      .from("content_posts")
+      .delete()
+      .eq("id", postId);
+
+    if (!error) {
+      onDelete(postId);
+    }
+  }
+
+  return (
+    <div className="relative" ref={menuRef}>
+      <button
+        onClick={() => setOpen((v) => !v)}
+        className="p-1.5 rounded-lg text-muted hover:bg-surface hover:text-foreground transition-colors"
+        aria-label="Post menu"
+      >
+        <svg
+          className="w-5 h-5"
+          fill="currentColor"
+          viewBox="0 0 24 24"
+        >
+          <circle cx="12" cy="5" r="1.5" />
+          <circle cx="12" cy="12" r="1.5" />
+          <circle cx="12" cy="19" r="1.5" />
+        </svg>
+      </button>
+
+      {open && (
+        <div className="absolute end-0 top-full mt-1 z-20 min-w-[160px] glass-strong rounded-xl overflow-hidden shadow-lg shadow-black/40">
+          <button
+            onClick={handleDelete}
+            className="w-full flex items-center gap-2 px-4 py-2.5 text-sm text-red-400 hover:bg-red-400/10 transition-colors"
+          >
+            <svg
+              className="w-4 h-4"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+              strokeWidth={1.5}
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.084a2.25 2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 0 0-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0-7.5 0"
+              />
+            </svg>
+            {isAr ? "احذف المنشور" : "Delete Post"}
+          </button>
+        </div>
+      )}
+    </div>
+  );
+}
+
 /* ── Main Feed ── */
 export default function ContentFeed({
   posts: initialPosts,
@@ -133,6 +222,7 @@ export default function ContentFeed({
   userId,
   userName,
   userAvatar,
+  isAdmin,
 }: {
   posts: Post[];
   locale: string;
@@ -140,6 +230,7 @@ export default function ContentFeed({
   userId?: string;
   userName?: string;
   userAvatar?: string;
+  isAdmin?: boolean;
 }) {
   const isAr = locale === "ar";
   const [posts, setPosts] = useState(initialPosts);
@@ -163,7 +254,21 @@ export default function ContentFeed({
   });
 
   function handlePostCreated(newPost: Post) {
-    setPosts((prev) => [newPost, ...prev]);
+    setPosts((prev) => [{ ...newPost, comment_count: 0 }, ...prev]);
+  }
+
+  function handlePostDeleted(postId: string) {
+    setPosts((prev) => prev.filter((p) => p.id !== postId));
+  }
+
+  function handleCommentCountChange(postId: string, delta: number) {
+    setPosts((prev) =>
+      prev.map((p) =>
+        p.id === postId
+          ? { ...p, comment_count: Math.max(0, (p.comment_count ?? 0) + delta) }
+          : p
+      )
+    );
   }
 
   function toggleExpand(id: string) {
@@ -186,6 +291,13 @@ export default function ContentFeed({
   function getTrackName(trackId: string | null) {
     if (!trackId) return null;
     return tracks.find((t) => t.id === trackId)?.name || null;
+  }
+
+  function canDeletePost(post: Post) {
+    if (!userId) return false;
+    if (post.author_id === userId) return true;
+    if (isAdmin) return true;
+    return false;
   }
 
   return (
@@ -249,7 +361,7 @@ export default function ContentFeed({
                   post.is_pinned ? "ring-1 ring-gold/20" : ""
                 }`}
               >
-                {/* Header: avatar + name + time */}
+                {/* Header: avatar + name + time + menu */}
                 <div className="px-4 pt-4 pb-2">
                   <div className="flex items-start gap-3">
                     {post.author_avatar ? (
@@ -285,6 +397,15 @@ export default function ContentFeed({
                         )}
                       </div>
                     </div>
+
+                    {/* Three-dot menu for delete */}
+                    {canDeletePost(post) && (
+                      <PostMenu
+                        postId={post.id}
+                        locale={locale}
+                        onDelete={handlePostDeleted}
+                      />
+                    )}
                   </div>
                 </div>
 
@@ -347,6 +468,17 @@ export default function ContentFeed({
                     initialCount={post.reaction_count ?? 0}
                     initialReacted={post.user_reacted ?? false}
                     locale={locale}
+                  />
+
+                  {/* Comment toggle */}
+                  <Comments
+                    postId={post.id}
+                    locale={locale}
+                    userId={userId}
+                    userName={userName}
+                    userAvatar={userAvatar}
+                    initialCount={post.comment_count ?? 0}
+                    onCountChange={handleCommentCountChange}
                   />
 
                   <button

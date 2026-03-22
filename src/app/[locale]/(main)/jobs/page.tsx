@@ -3,6 +3,7 @@ import Link from "next/link";
 import { createClient } from "@/lib/supabase/server";
 import { tracks } from "@/lib/tracks";
 import AuthNavbar from "@/components/layout/AuthNavbar";
+import PageHeader from "@/components/PageHeader";
 import JobsList from "./JobsList";
 
 export default async function JobsPage({
@@ -31,21 +32,27 @@ export default async function JobsPage({
   return (
     <>
       <AuthNavbar locale={locale} userName={profile?.full_name || user.email || ""} userId={user.id} isAdmin={profile?.is_admin} />
-      <main className="pt-24 pb-16 px-4 sm:px-6 lg:px-8 mx-auto max-w-3xl">
-        <div className="flex items-center justify-between mb-2">
-          <h1 className="text-3xl font-bold">
-            {isAr ? "فرص العمل" : "Jobs & Opportunities"}
-          </h1>
-          <Link
-            href={`/${locale}/jobs/create`}
-            className="btn-primary text-sm px-5 py-2.5"
-          >
-            {isAr ? "انشر فرصة" : "Post Opportunity"}
-          </Link>
-        </div>
-        <p className="text-muted mb-8">
-          {isAr ? "اكتشف فرص العمل والتعاون من مجتمعك" : "Discover jobs, gigs, and collaboration opportunities from your community"}
-        </p>
+      <main className="pt-20 pb-16">
+        <PageHeader
+          title={isAr ? "فرص العمل" : "Jobs & Opportunities"}
+          subtitle={
+            isAr
+              ? "لاقي وظايف وفرص عمل حر وتعاون من المجتمع."
+              : "Find jobs, freelance gigs, and collaboration opportunities posted by the community."
+          }
+          coverGradient="linear-gradient(135deg, #F59E0B 0%, #EA580C 50%, #F97316 100%)"
+          locale={locale}
+        />
+
+        <div className="px-4 sm:px-6 lg:px-8 mx-auto max-w-3xl mt-8">
+          <div className="flex items-center justify-end mb-6">
+            <Link
+              href={`/${locale}/jobs/create`}
+              className="btn-primary text-sm px-5 py-2.5"
+            >
+              {isAr ? "انشر فرصة" : "Post Opportunity"}
+            </Link>
+          </div>
 
         <JobsList
           jobs={jobs || []}
@@ -53,6 +60,7 @@ export default async function JobsPage({
           tracks={tracks.map((t) => ({ id: t.id, name: isAr ? t.ar.name : t.en.name }))}
           currentUserId={user.id}
         />
+        </div>
       </main>
     </>
   );

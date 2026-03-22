@@ -60,7 +60,7 @@ export default async function EventsPage({
               ? "ورش عمل ولقاءات وفعاليات تشبيك عشان تطوّر مهاراتك وتوسّع دائرتك."
               : "Workshops, meetups, and networking events designed to grow your skills and expand your circle."
           }
-          icon="📅"
+
           coverGradient="linear-gradient(135deg, #CCA300 0%, #E6BE2E 40%, #D4880F 100%)"
           locale={locale}
         />
