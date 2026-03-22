@@ -25,7 +25,7 @@ export default async function AdminPage({
 
   const { data: members, error: membersError } = await supabase
     .from("profiles")
-    .select("id, full_name, email, city, expertise, role, is_admin, profile_complete, created_at")
+    .select("id, full_name, email, city, expertise, role, is_admin, profile_complete, avatar_url, verified, created_at")
     .order("created_at", { ascending: false });
 
   if (membersError) console.error("Members query error:", membersError);
@@ -68,6 +68,7 @@ export default async function AdminPage({
           announcements={announcements || []}
           stats={stats}
           locale={locale}
+          currentUserId={user.id}
         />
       </main>
     </>

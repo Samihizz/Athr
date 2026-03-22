@@ -2,6 +2,7 @@ import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import { tracks } from "@/lib/tracks";
 import AuthNavbar from "@/components/layout/AuthNavbar";
+import PageHeader from "@/components/PageHeader";
 import ConnectionsClient from "./ConnectionsClient";
 
 export default async function ConnectionsPage({
@@ -20,7 +21,7 @@ export default async function ConnectionsPage({
 
   const { data: profile } = await supabase
     .from("profiles")
-    .select("full_name, is_admin")
+    .select("full_name, is_admin, city, expertise")
     .eq("id", user.id)
     .single();
 
@@ -79,23 +80,30 @@ export default async function ConnectionsPage({
         userId={user.id}
         isAdmin={profile?.is_admin}
       />
-      <main className="pt-24 pb-16 px-4 sm:px-6 lg:px-8 mx-auto max-w-7xl">
-        <h1 className="text-3xl font-bold mb-2">
-          {isAr ? "اتصالاتي" : "My Connections"}
-        </h1>
-        <p className="text-muted mb-8">
-          {isAr
-            ? "تواصل مع الشفاتة في المنطقة"
-            : "Manage your network connections"}
-        </p>
-
-        <ConnectionsClient
-          connections={connections || []}
-          profileMap={profileMap}
-          trackMap={trackMap}
-          currentUserId={user.id}
+      <main className="pt-20 pb-16">
+        <PageHeader
+          title={isAr ? "شبكتي" : "Connections"}
+          subtitle={
+            isAr
+              ? "شبكتك المهنية في مجتمع أثر."
+              : "Your professional network within the Athr community."
+          }
+          icon="🤝"
+          coverGradient="linear-gradient(135deg, #1800AD 0%, #CCA300 50%, #E6BE2E 100%)"
           locale={locale}
         />
+
+        <div className="px-4 sm:px-6 lg:px-8 mx-auto max-w-7xl mt-8">
+          <ConnectionsClient
+            connections={connections || []}
+            profileMap={profileMap}
+            trackMap={trackMap}
+            currentUserId={user.id}
+            locale={locale}
+            userCity={profile?.city || null}
+            userTrack={profile?.expertise || null}
+          />
+        </div>
       </main>
     </>
   );

@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import { createClient } from "@/lib/supabase/client";
 import type { Connection } from "@/types";
+import SuggestedConnections from "@/components/connections/SuggestedConnections";
 
 type ProfileInfo = {
   id: string;
@@ -21,9 +22,11 @@ type ConnectionsClientProps = {
   trackMap: Record<string, string>;
   currentUserId: string;
   locale: string;
+  userCity: string | null;
+  userTrack: string | null;
 };
 
-type Tab = "connected" | "pending" | "sent";
+type Tab = "connected" | "pending" | "sent" | "suggested";
 
 export default function ConnectionsClient({
   connections: initialConnections,
@@ -31,6 +34,8 @@ export default function ConnectionsClient({
   trackMap,
   currentUserId,
   locale,
+  userCity,
+  userTrack,
 }: ConnectionsClientProps) {
   const [connections, setConnections] = useState<Connection[]>(initialConnections);
   const [profiles, setProfiles] = useState<Record<string, ProfileInfo>>(profileMap);
@@ -58,6 +63,7 @@ export default function ConnectionsClient({
     saveNote: isAr ? "حفظ" : "Save",
     connectionCount: (n: number) =>
       isAr ? `${n} اتصال` : `${n} connection${n !== 1 ? "s" : ""}`,
+    suggested: isAr ? "اتصالات مقترحة" : "Suggested",
   };
 
   // Real-time subscription
@@ -193,6 +199,7 @@ export default function ConnectionsClient({
     { key: "connected", label: t.myConnections, count: connected.length },
     { key: "pending", label: t.pending, count: pendingReceived.length },
     { key: "sent", label: t.sent, count: pendingSent.length },
+    { key: "suggested", label: t.suggested, count: 0 },
   ];
 
   function renderMemberCard(
@@ -530,6 +537,17 @@ export default function ConnectionsClient({
             </div>
           )}
         </>
+      )}
+
+      {activeTab === "suggested" && (
+        <SuggestedConnections
+          userId={currentUserId}
+          userCity={userCity}
+          userTrack={userTrack}
+          locale={locale}
+          limit={12}
+          layout="grid"
+        />
       )}
     </div>
   );

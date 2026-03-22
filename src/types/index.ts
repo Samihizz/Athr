@@ -18,6 +18,7 @@ export interface Profile {
   skills: string[] | null;
   linkedin_url: string | null;
   is_mentor: boolean;
+  verified: boolean;
   created_at: string;
   updated_at: string;
 }
@@ -73,6 +74,17 @@ export interface MentorConnection {
   updated_at: string;
 }
 
+export interface MentorshipRequest {
+  id: string;
+  mentee_id: string;
+  mentor_id: string;
+  track: string;
+  message: string | null;
+  status: 'pending' | 'accepted' | 'declined' | 'completed';
+  created_at: string;
+  updated_at: string;
+}
+
 export interface Notification {
   id: string;
   user_id: string;
@@ -92,6 +104,25 @@ export interface Connection {
   receiver_id: string;
   status: 'pending' | 'accepted' | 'declined';
   note: string | null;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface Job {
+  id: string;
+  author_id: string;
+  author_name: string;
+  title: string;
+  description: string;
+  type: 'job' | 'freelance' | 'collaboration' | 'internship';
+  company: string | null;
+  location: string | null;
+  remote: boolean;
+  track: string | null;
+  salary_range: string | null;
+  contact_method: string | null;
+  contact_value: string | null;
+  is_open: boolean;
   created_at: string;
   updated_at: string;
 }

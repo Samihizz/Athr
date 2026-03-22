@@ -16,6 +16,7 @@ import {
   AnimatedQuickLink,
   AnimatedSection,
 } from "@/components/dashboard/AnimatedDashboard";
+import SuggestedConnections from "@/components/connections/SuggestedConnections";
 
 export default async function DashboardPage({
   params,
@@ -110,8 +111,12 @@ export default async function DashboardPage({
     news: isAr ? "الأخبار" : "News",
     trackGroup: isAr ? "قروب مسارك" : "Your Track Group",
     connections: isAr ? "اتصالاتي" : "Connections",
+    mentorship: isAr ? "الإرشاد" : "Mentorship",
+    jobs: isAr ? "فرص العمل" : "Jobs",
     pendingRequests: isAr ? "طلبات اتصال جديدة" : "Pending Connection Requests",
     viewConnections: isAr ? "عرض الاتصالات" : "View Connections",
+    suggestedConnections: isAr ? "اتصالات مقترحة" : "Suggested Connections",
+    viewAllConnections: isAr ? "عرض الكل" : "View All",
   };
 
   return (
@@ -208,11 +213,13 @@ export default async function DashboardPage({
           )}
 
           {/* Quick links */}
-          <AnimatedQuickLinks className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-4 mb-10">
+          <AnimatedQuickLinks className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-8 gap-4 mb-10">
             {[
               { href: `/${locale}/events`, icon: "📅", label: t.events },
               { href: `/${locale}/community`, icon: "👥", label: t.community },
               { href: `/${locale}/connections`, icon: "🤝", label: t.connections },
+              { href: `/${locale}/mentorship`, icon: "🎓", label: t.mentorship },
+              { href: `/${locale}/jobs`, icon: "💼", label: t.jobs },
               { href: `/${locale}/feed`, icon: "📰", label: t.feed },
               { href: `/${locale}/news`, icon: "🗞️", label: t.news },
               { href: `/${locale}/edit-profile`, icon: "✏️", label: t.editProfile },
@@ -243,6 +250,24 @@ export default async function DashboardPage({
               </div>
             )}
             <CommunityWhatsAppCard whatsappLink={ATHR_COMMUNITY_WHATSAPP} locale={locale} />
+          </AnimatedSection>
+
+          {/* Suggested Connections */}
+          <AnimatedSection className="mb-10" delay={0.18}>
+            <div className="flex items-center justify-between mb-4">
+              <h2 className="text-lg font-bold">{t.suggestedConnections}</h2>
+              <Link href={`/${locale}/connections`} className="text-sm text-gold hover:text-gold-light transition-colors">
+                {t.viewAllConnections}
+              </Link>
+            </div>
+            <SuggestedConnections
+              userId={user.id}
+              userCity={profile?.city || null}
+              userTrack={profile?.expertise || null}
+              locale={locale}
+              limit={6}
+              layout="scroll"
+            />
           </AnimatedSection>
 
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">

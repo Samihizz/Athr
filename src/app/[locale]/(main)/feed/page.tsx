@@ -2,6 +2,7 @@ import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import { tracks } from "@/lib/tracks";
 import AuthNavbar from "@/components/layout/AuthNavbar";
+import PageHeader from "@/components/PageHeader";
 import ContentFeed from "./ContentFeed";
 
 export default async function FeedPage({
@@ -40,26 +41,55 @@ export default async function FeedPage({
 
   const authorMap = new Map((authors || []).map((a) => [a.id, a]));
 
+  // Fetch reaction counts per post
+  const postIds = (posts || []).map((p) => p.id);
+  const reactionCounts: Record<string, number> = {};
+  const userReactions = new Set<string>();
+
+  if (postIds.length > 0) {
+    const { data: reactions } = await supabase
+      .from("post_reactions")
+      .select("post_id, user_id")
+      .in("post_id", postIds);
+
+    if (reactions) {
+      for (const r of reactions) {
+        reactionCounts[r.post_id] = (reactionCounts[r.post_id] || 0) + 1;
+        if (r.user_id === user.id) {
+          userReactions.add(r.post_id);
+        }
+      }
+    }
+  }
+
   const postsWithAuthors = (posts || []).map((p) => {
     const author = authorMap.get(p.author_id);
     return {
       ...p,
       author_name: author?.full_name || null,
       author_avatar: author?.avatar_url || null,
+      reaction_count: reactionCounts[p.id] || 0,
+      user_reacted: userReactions.has(p.id),
     };
   });
 
   return (
     <>
       <AuthNavbar locale={locale} userName={profile?.full_name || user.email || ""} userId={user.id} isAdmin={profile?.is_admin} />
-      <main className="pt-28 pb-16 px-4 sm:px-6 lg:px-8 mx-auto max-w-3xl">
-        <h1 className="text-3xl font-bold mb-2">
-          {isAr ? "الشمارات" : "Content Feed"}
-        </h1>
-        <p className="text-muted mb-8">
-          {isAr ? "شمارات مختارة من الشفاتة والخبراء" : "Curated content from the community and mentors"}
-        </p>
+      <main className="pt-20 pb-16">
+        <PageHeader
+          title={isAr ? "الشمارات" : "Feed"}
+          subtitle={
+            isAr
+              ? "شارك أفكارك واسأل أسئلتك وخليك على تواصل مع المجتمع."
+              : "Share insights, ask questions, and stay connected with the community."
+          }
+          icon="📰"
+          coverGradient="linear-gradient(135deg, #1800AD 0%, #4B2FE8 40%, #7C3AED 100%)"
+          locale={locale}
+        />
 
+        <div className="px-4 sm:px-6 mx-auto max-w-2xl mt-8">
         <ContentFeed
           posts={postsWithAuthors}
           locale={locale}
@@ -68,6 +98,7 @@ export default async function FeedPage({
           userName={profile?.full_name || user.email || ""}
           userAvatar={profile?.avatar_url || undefined}
         />
+        </div>
       </main>
     </>
   );

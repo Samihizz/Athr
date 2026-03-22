@@ -1,7 +1,21 @@
 import { redirect } from "next/navigation";
+import Link from "next/link";
 import { createClient } from "@/lib/supabase/server";
 import AuthNavbar from "@/components/layout/AuthNavbar";
+import PageHeader from "@/components/PageHeader";
 import NewsContent from "./NewsContent";
+
+export type UserNewsItem = {
+  id: string;
+  author_id: string;
+  author_name: string;
+  title: string;
+  summary: string | null;
+  source_url: string;
+  category: string;
+  image_url: string | null;
+  created_at: string;
+};
 
 export default async function NewsPage({
   params,
@@ -38,6 +52,12 @@ export default async function NewsPage({
     news = [];
   }
 
+  // Fetch community-submitted news
+  const { data: userNews } = await supabase
+    .from("user_news")
+    .select("*")
+    .order("created_at", { ascending: false });
+
   const t = {
     title: isAr ? "الأخبار" : "News",
     subtitle: isAr ? "آخر الأخبار المهمة للمهنيين السودانيين في السعودية" : "Latest news relevant to Sudanese professionals in Saudi Arabia",
@@ -55,23 +75,34 @@ export default async function NewsPage({
   return (
     <>
       <AuthNavbar locale={locale} userName={displayName} userId={user.id} isAdmin={profile?.is_admin} />
-      <main className="pt-24 pb-16 px-4 sm:px-6 lg:px-8 mx-auto max-w-7xl">
-        {/* Header */}
-        <div className="mb-8">
-          <div className="flex items-center gap-3 mb-2">
-            <div className="h-10 w-10 rounded-xl gradient-gold flex items-center justify-center">
-              <svg className="h-5 w-5 text-background" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9a2 2 0 00-2-2h-2m-4-3H9M7 16h6M7 8h6v4H7V8z" />
-              </svg>
-            </div>
-            <div>
-              <h1 className="text-3xl font-bold">{t.title}</h1>
-              <p className="text-muted text-sm mt-1">{t.subtitle}</p>
-            </div>
-          </div>
-        </div>
+      <main className="pt-20 pb-16">
+        <PageHeader
+          title={isAr ? "الأخبار" : "News"}
+          subtitle={
+            isAr
+              ? "آخر الأخبار من السعودية والسودان وعالم التقنية."
+              : "Latest news from Saudi Arabia, Sudan, and the tech world — curated and community-shared."
+          }
+          icon="🗞️"
+          coverGradient="linear-gradient(135deg, #059669 0%, #0D9488 40%, #14B8A6 100%)"
+          locale={locale}
+        />
 
-        <NewsContent news={news} locale={locale} translations={t} />
+        <div className="px-4 sm:px-6 lg:px-8 mx-auto max-w-7xl mt-8">
+          <div className="flex items-center justify-end mb-6">
+            <Link
+              href={`/${locale}/news/create`}
+              className="gradient-gold text-background px-5 py-2.5 rounded-xl font-semibold text-sm hover:opacity-90 transition-opacity flex items-center gap-2 shrink-0"
+            >
+              <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                <path strokeLinecap="round" strokeLinejoin="round" d="M12 4v16m8-8H4" />
+              </svg>
+              {isAr ? "شارك خبر" : "Share News"}
+            </Link>
+          </div>
+
+          <NewsContent news={news} userNews={(userNews as UserNewsItem[]) || []} locale={locale} translations={t} />
+        </div>
       </main>
     </>
   );

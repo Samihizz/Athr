@@ -47,33 +47,45 @@ export default function MemberDirectory({
     return true;
   });
 
+  const getTrackName = (expertise: string | null) => {
+    if (!expertise) return null;
+    const track = tracks.find((t) => t.id === expertise);
+    return track?.name || null;
+  };
+
+  const getSkills = (skills: string | string[] | null): string[] => {
+    if (!skills) return [];
+    if (Array.isArray(skills)) return skills;
+    return String(skills).split(",").map((s: string) => s.trim()).filter(Boolean);
+  };
+
   const t = {
     search: isAr ? "ابحث بالاسم أو المهارة..." : "Search by name or skill...",
     all: isAr ? "الكل" : "All",
     allCities: isAr ? "جميع المدن" : "All Cities",
-    mentorsOnly: isAr ? "الخبراء بس" : "Mentors Only",
-    mentor: isAr ? "خبير" : "Mentor",
+    allTracks: isAr ? "جميع المسارات" : "All Tracks",
     noResults: isAr ? "ما في نتائج" : "No members found",
     results: isAr ? `${filtered.length} شفت` : `${filtered.length} members`,
+    viewProfile: isAr ? "الملف" : "View",
   };
 
   return (
     <div>
-      {/* Search & Filters */}
-      <div className="flex flex-col sm:flex-row gap-3 mb-6">
+      {/* Search & Filters — horizontal scrollable bar */}
+      <div className="flex gap-3 mb-6 overflow-x-auto pb-2 scrollbar-none">
         <input
           type="text"
           value={search}
           onChange={(e) => setSearch(e.target.value)}
           placeholder={t.search}
-          className="flex-1 rounded-xl bg-surface border border-border px-4 py-2.5 text-sm text-foreground placeholder:text-muted focus:outline-none focus:border-primary transition-colors"
+          className="min-w-[200px] flex-1 rounded-xl bg-surface border border-border px-4 py-2.5 text-sm text-foreground placeholder:text-muted focus:outline-none focus:border-primary transition-colors"
         />
         <select
           value={trackFilter}
           onChange={(e) => setTrackFilter(e.target.value)}
-          className="rounded-xl bg-surface border border-border px-4 py-2.5 text-sm text-foreground focus:outline-none focus:border-primary"
+          className="shrink-0 rounded-xl bg-surface border border-border px-4 py-2.5 text-sm text-foreground focus:outline-none focus:border-primary"
         >
-          <option value="all">{t.all}</option>
+          <option value="all">{t.allTracks}</option>
           {tracks.map((track) => (
             <option key={track.id} value={track.id}>{track.name}</option>
           ))}
@@ -81,7 +93,7 @@ export default function MemberDirectory({
         <select
           value={cityFilter}
           onChange={(e) => setCityFilter(e.target.value)}
-          className="rounded-xl bg-surface border border-border px-4 py-2.5 text-sm text-foreground focus:outline-none focus:border-primary"
+          className="shrink-0 rounded-xl bg-surface border border-border px-4 py-2.5 text-sm text-foreground focus:outline-none focus:border-primary"
         >
           <option value="all">{t.allCities}</option>
           {cities.map((city) => (
@@ -90,57 +102,99 @@ export default function MemberDirectory({
         </select>
       </div>
 
-      <div className="flex items-center justify-between mb-6">
+      <div className="flex items-center justify-between mb-4">
         <p className="text-sm text-muted">{t.results}</p>
       </div>
 
-      {/* Grid */}
+      {/* Member list — row layout */}
       {filtered.length > 0 ? (
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-          {filtered.map((member) => (
-            <div
-              key={member.id}
-              className="glass rounded-2xl p-5 hover:bg-surface-hover transition-colors group"
-            >
-              <Link href={`/${locale}/members/${member.id}`}>
-                <div className="flex items-center gap-3 mb-3">
-                  <div className="h-11 w-11 rounded-full bg-primary/20 flex items-center justify-center text-sm font-bold text-primary-light shrink-0">
-                    {member.full_name?.charAt(0)?.toUpperCase() || "?"}
-                  </div>
-                  <div className="min-w-0">
-                    <h3 className="font-semibold text-sm truncate group-hover:text-gold transition-colors">
-                      {member.full_name || (isAr ? "شفت" : "Member")}
-                    </h3>
-                    <div className="flex items-center gap-2 text-xs text-muted">
-                      {member.city && <span>{member.city}</span>}
+        <div className="glass rounded-2xl divide-y divide-border overflow-hidden">
+          {filtered.map((member) => {
+            const trackName = getTrackName(member.expertise);
+            const skills = getSkills(member.skills);
+
+            return (
+              <div
+                key={member.id}
+                className="flex flex-col sm:flex-row sm:items-center gap-3 sm:gap-4 px-4 sm:px-5 py-4 hover:bg-surface-hover transition-colors"
+              >
+                {/* Avatar + info */}
+                <Link
+                  href={`/${locale}/members/${member.id}`}
+                  className="flex items-center gap-3 flex-1 min-w-0"
+                >
+                  {/* Avatar */}
+                  {member.avatar_url ? (
+                    <img
+                      src={member.avatar_url}
+                      alt=""
+                      className="h-12 w-12 rounded-full object-cover shrink-0 border border-border"
+                    />
+                  ) : (
+                    <div className="h-12 w-12 rounded-full bg-primary/20 flex items-center justify-center text-sm font-bold text-primary-light shrink-0">
+                      {member.full_name?.charAt(0)?.toUpperCase() || "?"}
                     </div>
-                  </div>
-                </div>
-                {member.bio && (
-                  <p className="text-xs text-muted line-clamp-2 mb-3">{member.bio}</p>
-                )}
-                {member.skills && (
-                  <div className="flex flex-wrap gap-1 mb-3">
-                    {(Array.isArray(member.skills) ? member.skills : String(member.skills).split(",").map((s: string) => s.trim()).filter(Boolean)).slice(0, 3).map((skill: string) => (
-                      <span key={skill} className="text-[10px] px-2 py-0.5 rounded-full bg-primary/10 text-primary-light">
-                        {skill}
+                  )}
+
+                  {/* Name, track, city */}
+                  <div className="min-w-0 flex-1">
+                    <div className="flex items-center gap-2 flex-wrap">
+                      <span className="font-semibold text-sm truncate hover:text-gold transition-colors">
+                        {member.full_name || (isAr ? "شفت" : "Member")}
                       </span>
-                    ))}
+                      {trackName && (
+                        <span className="text-[10px] px-2 py-0.5 rounded-full bg-gold/10 text-gold-light font-medium shrink-0">
+                          {trackName}
+                        </span>
+                      )}
+                      {member.city && (
+                        <span className="text-xs text-muted shrink-0">
+                          {member.city}
+                        </span>
+                      )}
+                    </div>
+
+                    {/* Skills pills */}
+                    {skills.length > 0 && (
+                      <div className="flex flex-wrap gap-1 mt-1.5">
+                        {skills.slice(0, 4).map((skill: string) => (
+                          <span
+                            key={skill}
+                            className="text-[10px] px-2 py-0.5 rounded-full bg-primary/10 text-primary-light"
+                          >
+                            {skill}
+                          </span>
+                        ))}
+                        {skills.length > 4 && (
+                          <span className="text-[10px] px-2 py-0.5 rounded-full bg-surface text-muted">
+                            +{skills.length - 4}
+                          </span>
+                        )}
+                      </div>
+                    )}
                   </div>
-                )}
-              </Link>
-              {currentUserId && currentUserId !== member.id && (
-                <div className="mt-2 pt-2 border-t border-border">
-                  <ConnectButton
-                    currentUserId={currentUserId}
-                    targetUserId={member.id}
-                    locale={locale}
-                    compact
-                  />
+                </Link>
+
+                {/* Action buttons */}
+                <div className="flex items-center gap-2 shrink-0 sm:ml-auto pl-15 sm:pl-0">
+                  <Link
+                    href={`/${locale}/members/${member.id}`}
+                    className="text-xs px-3 py-1.5 rounded-lg bg-surface border border-border hover:bg-surface-hover transition-colors text-foreground font-medium"
+                  >
+                    {t.viewProfile}
+                  </Link>
+                  {currentUserId && currentUserId !== member.id && (
+                    <ConnectButton
+                      currentUserId={currentUserId}
+                      targetUserId={member.id}
+                      locale={locale}
+                      compact
+                    />
+                  )}
                 </div>
-              )}
-            </div>
-          ))}
+              </div>
+            );
+          })}
         </div>
       ) : (
         <div className="glass rounded-xl p-12 text-center">
