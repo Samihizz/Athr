@@ -157,6 +157,17 @@ export default async function DashboardPage({
     supabase.from("profiles").select("id, full_name, avatar_url, city, expertise"),
   ]);
 
+  // Auto-generate referral code if missing
+  if (profile && !profile.referral_code) {
+    const { generateReferralCode } = await import("@/lib/referral");
+    const code = generateReferralCode(profile.full_name || user.email || "ATHR");
+    await supabase
+      .from("profiles")
+      .update({ referral_code: code })
+      .eq("id", user.id);
+    profile.referral_code = code;
+  }
+
   const pendingConnectionCount = pendingConnections?.length || 0;
   const connectionCount = acceptedConnections?.length || 0;
   const registeredEventIds = new Set(myRegistrations?.map((r: { event_id: string }) => r.event_id) || []);
