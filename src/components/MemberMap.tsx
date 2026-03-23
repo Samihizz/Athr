@@ -22,21 +22,32 @@ type CityData = {
 };
 
 /*
-  City positions based on actual Eastern Region geography.
-  Coordinate system: viewBox 0 0 500 600
-  Gulf coast runs along the right side, cities positioned accordingly.
+  City positions traced from Google Maps of the Eastern Region.
+  viewBox: 0 0 600 700
+
+  Geography reference (from the screenshot):
+  - Coastline runs diagonally from upper-right (Jubail area) curving down
+    to mid-right (Dammam/Khobar), then coast continues south
+  - Jubail: upper area, slightly inland
+  - Ras Tanura: peninsula jutting right into the Gulf
+  - Qatif: below Ras Tanura, near coast
+  - Dammam: right side, on the coast
+  - Khobar: just below Dammam, on the coast
+  - Bahrain: island to the far right of Khobar
+  - Abqaiq: inland, south-west
+  - Al Ahsa/Hofuf: far south, very inland (left side)
 */
 const CITY_LAYOUT: Record<string, { x: number; y: number; nameAr: string }> = {
-  "Jubail":      { x: 285, y: 95,  nameAr: "الجبيل" },
-  "Ras Tanura":  { x: 320, y: 170, nameAr: "رأس تنورة" },
-  "Safwa":       { x: 335, y: 210, nameAr: "صفوى" },
-  "Qatif":       { x: 350, y: 240, nameAr: "القطيف" },
-  "Tarut":       { x: 380, y: 230, nameAr: "تاروت" },
-  "Saihat":      { x: 365, y: 265, nameAr: "سيهات" },
-  "Dammam":      { x: 340, y: 300, nameAr: "الدمام" },
-  "Dhahran":     { x: 310, y: 340, nameAr: "الظهران" },
-  "Khobar":      { x: 355, y: 360, nameAr: "الخبر" },
-  "Al Ahsa":     { x: 220, y: 480, nameAr: "الأحساء" },
+  "Jubail":      { x: 230, y: 105, nameAr: "الجبيل" },
+  "Ras Tanura":  { x: 350, y: 195, nameAr: "رأس تنورة" },
+  "Safwa":       { x: 310, y: 240, nameAr: "صفوى" },
+  "Qatif":       { x: 330, y: 275, nameAr: "القطيف" },
+  "Tarut":       { x: 375, y: 260, nameAr: "تاروت" },
+  "Saihat":      { x: 360, y: 295, nameAr: "سيهات" },
+  "Dammam":      { x: 395, y: 330, nameAr: "الدمام" },
+  "Dhahran":     { x: 365, y: 365, nameAr: "الظهران" },
+  "Khobar":      { x: 410, y: 385, nameAr: "الخبر" },
+  "Al Ahsa":     { x: 195, y: 600, nameAr: "الأحساء" },
 };
 
 function dotRadius(count: number, maxCount: number): number {
@@ -45,6 +56,25 @@ function dotRadius(count: number, maxCount: number): number {
   const max = 18;
   return min + (count / Math.max(maxCount, 1)) * (max - min);
 }
+
+/* ─── Shared SVG Geography ─── */
+/* Coastline traced to match real Eastern Region from Google Maps */
+const COASTLINE_PATH = "M280 0 Q270 30 250 55 Q235 80 240 100 Q250 120 270 135 Q300 150 330 160 Q360 175 380 190 Q395 200 390 215 Q380 225 370 235 Q365 245 370 255 Q380 265 390 275 Q405 290 415 305 Q425 320 430 335 Q435 350 440 365 Q445 380 450 395 Q455 410 455 430 Q450 455 440 475 Q425 495 410 510 Q390 530 370 545 Q345 560 320 575 Q295 590 270 600 L270 700 L600 700 L600 0 Z";
+
+const LAND_OUTLINE_PATH = "M280 0 Q270 30 250 55 Q235 80 240 100 Q250 120 270 135 Q300 150 330 160 Q360 175 380 190 Q395 200 390 215 Q380 225 370 235 Q365 245 370 255 Q380 265 390 275 Q405 290 415 305 Q425 320 430 335 Q435 350 440 365 Q445 380 450 395 Q455 410 455 430 Q450 455 440 475 Q425 495 410 510 Q390 530 370 545 Q345 560 320 575 Q295 590 270 600 L200 650 Q150 660 100 650 Q60 640 30 610 Q10 585 5 550 Q0 510 5 470 Q10 430 10 390 Q8 350 5 310 Q3 270 5 230 Q8 190 10 150 Q12 110 15 70 Q20 35 40 15 Q80 0 130 0 Z";
+
+/* Bahrain island — small island shape to the right of Khobar */
+const BAHRAIN_PATH = "M490 370 Q495 365 502 363 Q510 362 515 368 Q520 375 518 385 Q515 395 510 400 Q505 405 498 404 Q492 400 490 393 Q488 385 488 378 Q489 372 490 370 Z";
+
+/* Road lines connecting major cities */
+const ROAD_PATHS = [
+  "M230 105 L290 145 Q320 160 350 195",           // Jubail → Ras Tanura
+  "M350 195 L330 240 L340 275",                     // Ras Tanura → Qatif
+  "M340 275 L380 310 L395 330",                     // Qatif → Dammam
+  "M395 330 L405 360 L410 385",                     // Dammam → Khobar
+  "M365 365 L300 430 Q250 510 195 600",             // Dhahran → Al Ahsa
+  "M395 330 L365 365",                               // Dammam → Dhahran
+];
 
 /* ─── Main Map ─── */
 export default function MemberMap({
@@ -96,7 +126,7 @@ export default function MemberMap({
       <div className="flex flex-col lg:flex-row gap-4 lg:gap-6">
         {/* SVG Map */}
         <div className="relative flex-1 min-h-[320px] sm:min-h-[400px]">
-          <svg viewBox="0 0 500 600" className="w-full h-full" style={{ maxHeight: 500 }}>
+          <svg viewBox="0 0 600 700" className="w-full h-full" style={{ maxHeight: 520 }}>
             <defs>
               <radialGradient id="goldGrad" cx="40%" cy="35%">
                 <stop offset="0%" stopColor="#E6BE2E" />
@@ -109,40 +139,78 @@ export default function MemberMap({
                   <feMergeNode in="SourceGraphic" />
                 </feMerge>
               </filter>
-              {/* Water pattern */}
-              <pattern id="waterPattern" x="0" y="0" width="20" height="20" patternUnits="userSpaceOnUse">
-                <path d="M0 10 Q5 8 10 10 Q15 12 20 10" fill="none" stroke="rgba(24,0,173,0.06)" strokeWidth="0.5" />
+              {/* Water wave pattern */}
+              <pattern id="waterWaves" x="0" y="0" width="30" height="12" patternUnits="userSpaceOnUse">
+                <path d="M0 6 Q7.5 3 15 6 Q22.5 9 30 6" fill="none" stroke="rgba(56,189,248,0.08)" strokeWidth="0.6" />
+              </pattern>
+              {/* Sand texture for land */}
+              <pattern id="sandTexture" x="0" y="0" width="8" height="8" patternUnits="userSpaceOnUse">
+                <circle cx="2" cy="2" r="0.3" fill="rgba(204,163,0,0.04)" />
+                <circle cx="6" cy="5" r="0.3" fill="rgba(204,163,0,0.03)" />
               </pattern>
             </defs>
 
-            {/* Persian Gulf (water) — right side */}
+            {/* Background — entire area is water (Gulf) */}
+            <rect x="0" y="0" width="600" height="700" fill="rgba(14,116,144,0.06)" />
+            <rect x="0" y="0" width="600" height="700" fill="url(#waterWaves)" />
+
+            {/* Land mass — Eastern Region */}
             <path
-              d="M390 0 L500 0 L500 600 L390 600 Q400 550 395 500 Q385 450 400 400 Q410 370 400 340 Q390 310 400 280 Q410 250 405 220 Q400 190 410 160 Q415 130 405 100 Q395 70 400 40 Q405 20 390 0Z"
-              fill="rgba(24,0,173,0.08)"
+              d={LAND_OUTLINE_PATH}
+              fill="rgba(240,237,232,0.05)"
+              stroke="rgba(204,163,0,0.2)"
+              strokeWidth="1.5"
             />
+            <path d={LAND_OUTLINE_PATH} fill="url(#sandTexture)" />
+
+            {/* Coastline highlight */}
             <path
-              d="M390 0 L500 0 L500 600 L390 600 Q400 550 395 500 Q385 450 400 400 Q410 370 400 340 Q390 310 400 280 Q410 250 405 220 Q400 190 410 160 Q415 130 405 100 Q395 70 400 40 Q405 20 390 0Z"
-              fill="url(#waterPattern)"
+              d={COASTLINE_PATH}
+              fill="none"
+              stroke="rgba(56,189,248,0.12)"
+              strokeWidth="2"
             />
 
-            {/* Gulf label */}
-            <text x="450" y="300" textAnchor="middle" fill="rgba(24,0,173,0.2)" fontSize="12" fontWeight="600" transform="rotate(90, 450, 300)">
+            {/* Bahrain island */}
+            <path
+              d={BAHRAIN_PATH}
+              fill="rgba(240,237,232,0.04)"
+              stroke="rgba(204,163,0,0.15)"
+              strokeWidth="1"
+            />
+            <text
+              x="505" y="420"
+              textAnchor="middle"
+              fill="rgba(240,237,232,0.25)"
+              fontSize="9"
+              fontWeight="500"
+            >
+              {isAr ? "البحرين" : "Bahrain"}
+            </text>
+
+            {/* Gulf label — rotated along the water */}
+            <text
+              x="530" y="250"
+              textAnchor="middle"
+              fill="rgba(56,189,248,0.15)"
+              fontSize="14"
+              fontWeight="600"
+              transform="rotate(75, 530, 250)"
+            >
               {isAr ? "الخليج العربي" : "Arabian Gulf"}
             </text>
 
-            {/* Eastern Region land outline */}
-            <path
-              d="M50 30 Q120 20 200 25 Q260 30 300 60 Q320 75 290 95 Q310 120 325 150 Q340 180 345 200 Q350 220 360 235 Q370 250 365 270 Q360 290 350 305 Q340 320 330 340 Q345 355 365 370 Q380 385 375 400 Q365 420 340 440 Q310 460 280 480 Q250 500 230 510 Q200 525 170 530 Q130 535 90 520 Q60 505 50 480 Q40 440 45 400 Q50 350 48 300 Q45 250 48 200 Q50 150 48 100 Q46 60 50 30Z"
-              fill="rgba(240,237,232,0.03)"
-              stroke="rgba(204,163,0,0.15)"
-              strokeWidth="1.2"
-            />
-
-            {/* Internal region lines (roads/borders) */}
-            <path d="M290 95 L340 300" fill="none" stroke="rgba(204,163,0,0.06)" strokeWidth="0.8" strokeDasharray="4 4" />
-            <path d="M340 300 L355 360" fill="none" stroke="rgba(204,163,0,0.06)" strokeWidth="0.8" strokeDasharray="4 4" />
-            <path d="M310 340 L220 480" fill="none" stroke="rgba(204,163,0,0.06)" strokeWidth="0.8" strokeDasharray="4 4" />
-            <path d="M285 95 L340 170 L350 240" fill="none" stroke="rgba(204,163,0,0.06)" strokeWidth="0.8" strokeDasharray="4 4" />
+            {/* Roads connecting cities */}
+            {ROAD_PATHS.map((d, i) => (
+              <path
+                key={i}
+                d={d}
+                fill="none"
+                stroke="rgba(204,163,0,0.08)"
+                strokeWidth="1"
+                strokeDasharray="6 4"
+              />
+            ))}
 
             {/* City dots + labels */}
             {cities.map((city) => {
@@ -288,19 +356,22 @@ export function MemberMapCompact({
         </Link>
       </div>
       <div className="relative">
-        <svg viewBox="0 0 500 600" className="w-full" style={{ maxHeight: 180 }}>
-          {/* Simplified land outline */}
+        <svg viewBox="0 0 600 700" className="w-full" style={{ maxHeight: 200 }}>
+          {/* Water background */}
+          <rect x="0" y="0" width="600" height="700" fill="rgba(14,116,144,0.04)" />
+
+          {/* Land mass */}
           <path
-            d="M50 30 Q120 20 200 25 Q260 30 300 60 Q320 75 290 95 Q310 120 325 150 Q340 180 345 200 Q350 220 360 235 Q370 250 365 270 Q360 290 350 305 Q340 320 330 340 Q345 355 365 370 Q380 385 375 400 Q365 420 340 440 Q310 460 280 480 Q250 500 230 510 Q200 525 170 530 Q130 535 90 520 Q60 505 50 480 Q40 440 45 400 Q50 350 48 300 Q45 250 48 200 Q50 150 48 100 Q46 60 50 30Z"
-            fill="rgba(240,237,232,0.02)"
-            stroke="rgba(204,163,0,0.1)"
+            d={LAND_OUTLINE_PATH}
+            fill="rgba(240,237,232,0.04)"
+            stroke="rgba(204,163,0,0.12)"
             strokeWidth="1"
           />
-          {/* Gulf water */}
-          <path
-            d="M390 0 L500 0 L500 600 L390 600 Q400 550 395 500 Q385 450 400 400 Q410 370 400 340 Q390 310 400 280 Q410 250 405 220 Q400 190 410 160 Q415 130 405 100 Q395 70 400 40 Q405 20 390 0Z"
-            fill="rgba(24,0,173,0.05)"
-          />
+
+          {/* Bahrain */}
+          <path d={BAHRAIN_PATH} fill="rgba(240,237,232,0.03)" stroke="rgba(204,163,0,0.1)" strokeWidth="0.8" />
+
+          {/* City dots */}
           {Object.entries(CITY_LAYOUT).map(([name, layout]) => {
             const count = cityMap.get(name) || 0;
             const r = dotRadius(count, maxCount) * 0.7;
