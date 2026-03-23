@@ -120,7 +120,7 @@ export default function AuthNavbar({ locale, userName, userId, isAdmin }: AuthNa
       </div>
 
       {mobileOpen && (
-        <div className="md:hidden mx-4 mt-2">
+        <div className="md:hidden mx-4 mt-2 max-h-[calc(100vh-5rem)] overflow-y-auto">
           <div className="glass-strong rounded-2xl p-4 flex flex-col gap-1">
             {[
               { href: `/${locale}/dashboard`, label: t.dashboard },
