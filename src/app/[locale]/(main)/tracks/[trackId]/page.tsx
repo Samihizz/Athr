@@ -5,6 +5,7 @@ import { tracks, getTrackById } from "@/lib/tracks";
 import AuthNavbar from "@/components/layout/AuthNavbar";
 import PageHeader from "@/components/PageHeader";
 import WhatsAppGroupCard from "@/components/WhatsAppGroupCard";
+import TrackChat from "@/components/TrackChat";
 import TrackFeed from "./TrackFeed";
 
 const trackGradients: Record<string, string> = {
@@ -150,6 +151,20 @@ export default async function AuthTrackPage({
               locale={locale}
             />
           </div>
+
+          {/* Track Chat */}
+          <section className="mb-12">
+            <h2 className="text-2xl font-bold mb-6">
+              {isAr ? "دردشة المسار" : "Track Chat"}
+            </h2>
+            <TrackChat
+              trackId={trackId}
+              userId={user.id}
+              userName={profile?.full_name || user.email || ""}
+              avatarUrl={profile?.avatar_url}
+              locale={locale}
+            />
+          </section>
 
           {/* Track Members */}
           <section className="mb-12">

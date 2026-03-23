@@ -3,8 +3,10 @@ import Link from "next/link";
 import { notFound, redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import { tracks } from "@/lib/tracks";
+import { getUserBadges } from "@/lib/badges";
 import AuthNavbar from "@/components/layout/AuthNavbar";
 import ConnectButton from "@/components/ConnectButton";
+import { BadgeRow } from "@/components/ActivityBadge";
 
 /* ── Track color mapping ── */
 function getTrackColor(trackId: string): string {
@@ -118,6 +120,9 @@ export default async function MemberProfilePage({
       }
     }
   }
+
+  // Fetch activity badges for this member
+  const memberBadges = await getUserBadges(id, supabase);
 
   const initials = (member.full_name ?? "?")
     .split(" ")
@@ -389,6 +394,13 @@ export default async function MemberProfilePage({
                           </svg>
                           {mutualCount} {t.mutualConnections}
                         </p>
+                      )}
+
+                      {/* Activity Badges */}
+                      {memberBadges.length > 0 && (
+                        <div className="mt-3">
+                          <BadgeRow badges={memberBadges} locale={locale} size="sm" />
+                        </div>
                       )}
                     </div>
                   </div>

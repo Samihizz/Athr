@@ -4,6 +4,7 @@ import { createClient } from "@/lib/supabase/server";
 import { tracks } from "@/lib/tracks";
 import AuthNavbar from "@/components/layout/AuthNavbar";
 import PageHeader from "@/components/PageHeader";
+import TrackCardUnreadBadge from "@/components/TrackCardUnreadBadge";
 
 const trackGradients: Record<string, string> = {
   ai: "linear-gradient(135deg, #8B5CF6 0%, #7C3AED 100%)",
@@ -68,7 +69,7 @@ export default async function TracksPage({
                 >
                   <div className="flex items-center gap-4">
                     <div
-                      className="h-12 w-12 rounded-xl flex items-center justify-center shrink-0"
+                      className="relative h-12 w-12 rounded-xl flex items-center justify-center shrink-0"
                       style={{ background: trackGradients[track.id] }}
                     >
                       <img
@@ -76,6 +77,7 @@ export default async function TracksPage({
                         alt=""
                         className="w-7 h-7 rounded"
                       />
+                      <TrackCardUnreadBadge trackId={track.id} />
                     </div>
                     <h2 className="text-lg font-semibold group-hover:text-white transition-colors">
                       {name}

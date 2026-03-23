@@ -19,6 +19,9 @@ export interface Profile {
   linkedin_url: string | null;
   is_mentor: boolean;
   verified: boolean;
+  referral_code: string | null;
+  referred_by: string | null;
+  referral_count: number;
   created_at: string;
   updated_at: string;
 }
@@ -125,6 +128,26 @@ export interface Job {
   is_open: boolean;
   created_at: string;
   updated_at: string;
+}
+
+export interface Service {
+  id: string;
+  author_id: string;
+  title: string;
+  description: string | null;
+  category: string;
+  price_range: string | null;
+  price_type: string;
+  track: string | null;
+  contact_method: string | null;
+  contact_value: string | null;
+  is_active: boolean;
+  created_at: string;
+  author?: {
+    full_name: string | null;
+    avatar_url: string | null;
+    expertise: string | null;
+  };
 }
 
 export interface CommunityStats {

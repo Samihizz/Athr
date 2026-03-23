@@ -1,14 +1,26 @@
 "use client";
 
 import Link from "next/link";
-import { useEffect, useState } from "react";
-import { useParams, useRouter } from "next/navigation";
+import { Suspense, useEffect, useState } from "react";
+import { useParams, useRouter, useSearchParams } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
 import { MAX_MEMBERS } from "@/lib/constants";
+import { generateReferralCode } from "@/lib/referral";
 
 export default function SignupPage() {
+  return (
+    <Suspense fallback={<div className="min-h-screen flex items-center justify-center"><div className="animate-spin h-8 w-8 border-2 border-gold border-t-transparent rounded-full" /></div>}>
+      <SignupContent />
+    </Suspense>
+  );
+}
+
+function SignupContent() {
   const { locale } = useParams<{ locale: string }>();
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const refCode = searchParams.get("ref");
+
   const [fullName, setFullName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -25,6 +37,9 @@ export default function SignupPage() {
   // Waitlist state
   const [waitlistEmail, setWaitlistEmail] = useState("");
   const [waitlistSubmitted, setWaitlistSubmitted] = useState(false);
+
+  // Referral state
+  const [referrerName, setReferrerName] = useState<string | null>(null);
 
   const isAr = locale === "ar";
 
@@ -44,6 +59,7 @@ export default function SignupPage() {
     errorGeneric: isAr ? "حدث خطأ. حاول مرة أخرى." : "Something went wrong. Please try again.",
     checkEmail: isAr ? "تحقق من بريدك الإلكتروني لتأكيد حسابك" : "Check your email to confirm your account",
     backToHome: isAr ? "العودة للرئيسية" : "Back to Home",
+    invitedBy: isAr ? "تمت الدعوة بواسطة" : "Invited by",
     // Capacity translations
     communityFull: isAr
       ? "الملتقى امتلأ! سجّل في قائمة الانتظار وبنبلغك لمن يفتح مكان."
@@ -55,11 +71,13 @@ export default function SignupPage() {
     waitlistComingSoon: isAr ? "قائمة الانتظار قريبًا" : "Waitlist coming soon",
   };
 
-  // Check member count on mount
+  // Check member count + referrer on mount
   useEffect(() => {
-    async function checkCapacity() {
+    async function init() {
       try {
         const supabase = createClient();
+
+        // Check capacity
         const { count, error } = await supabase
           .from("profiles")
           .select("id", { count: "exact", head: true });
@@ -68,14 +86,27 @@ export default function SignupPage() {
           setMemberCount(count);
           setIsFull(count >= MAX_MEMBERS);
         }
+
+        // Look up referrer name if ref code present
+        if (refCode) {
+          const { data: referrer } = await supabase
+            .from("profiles")
+            .select("full_name")
+            .eq("referral_code", refCode)
+            .single();
+
+          if (referrer?.full_name) {
+            setReferrerName(referrer.full_name);
+          }
+        }
       } catch {
         // If the check fails, allow signup (fail open)
       } finally {
         setCapacityLoading(false);
       }
     }
-    checkCapacity();
-  }, []);
+    init();
+  }, [refCode]);
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
@@ -105,11 +136,18 @@ export default function SignupPage() {
       return;
     }
 
+    // Generate a referral code for the new user
+    const newReferralCode = generateReferralCode(fullName);
+
     const { error: authError } = await supabase.auth.signUp({
       email,
       password,
       options: {
-        data: { full_name: fullName },
+        data: {
+          full_name: fullName,
+          referral_code: newReferralCode,
+          ...(refCode ? { referred_by: refCode } : {}),
+        },
         emailRedirectTo: `${window.location.origin}/auth/callback?locale=${locale}`,
       },
     });
@@ -205,10 +243,21 @@ export default function SignupPage() {
       <div className="glass-strong rounded-2xl p-8 text-center">
         <div className="text-4xl mb-4">📬</div>
         <h2 className="text-xl font-bold mb-2">{t.checkEmail}</h2>
-        <p className="text-sm text-muted">{email}</p>
+        <p className="text-sm text-muted mb-2">{email}</p>
+        <p className="text-xs text-muted mb-6">
+          {isAr
+            ? "بعد ما تأكد الإيميل، ارجع هنا واضغط الزر تحت"
+            : "After confirming your email, come back here and tap the button below"}
+        </p>
+        <Link
+          href={`/${locale}/login`}
+          className="inline-block w-full py-3 rounded-xl gradient-gold text-background font-semibold text-sm hover:opacity-90 transition-opacity"
+        >
+          {isAr ? "تم التأكيد — خش سجّل دخولك" : "I've confirmed — Log me in"}
+        </Link>
         <Link
           href={`/${locale}`}
-          className="mt-6 inline-block text-sm text-gold hover:text-gold-light transition-colors"
+          className="mt-3 inline-block text-sm text-muted hover:text-gold transition-colors"
         >
           {t.backToHome}
         </Link>
@@ -218,6 +267,20 @@ export default function SignupPage() {
 
   return (
     <div className="glass-strong rounded-2xl p-8">
+      {/* Referral banner */}
+      {referrerName && (
+        <div className="mb-6 flex items-center gap-3 rounded-xl bg-gold/10 border border-gold/20 px-4 py-3">
+          <div className="shrink-0 h-8 w-8 rounded-full gradient-gold flex items-center justify-center text-background font-bold text-xs">
+            {referrerName.charAt(0).toUpperCase()}
+          </div>
+          <div>
+            <p className="text-sm font-medium text-gold">
+              {t.invitedBy} {referrerName}
+            </p>
+          </div>
+        </div>
+      )}
+
       <div className="text-center mb-8">
         <h1 className="text-2xl font-bold">{t.signupTitle}</h1>
         <p className="mt-2 text-sm text-muted">{t.signupSubtitle}</p>

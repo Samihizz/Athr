@@ -4,6 +4,7 @@ import { createClient } from "@/lib/supabase/server";
 import { tracks, ATHR_COMMUNITY_WHATSAPP } from "@/lib/tracks";
 import AuthNavbar from "@/components/layout/AuthNavbar";
 import PageHeader from "@/components/PageHeader";
+import MemberMap from "@/components/MemberMap";
 import MemberDirectory from "./MemberDirectory";
 import WhatsAppGroupCard, { CommunityWhatsAppCard } from "@/components/WhatsAppGroupCard";
 
@@ -47,6 +48,17 @@ export default async function CommunityPage({
         />
 
         <div className="px-4 sm:px-6 lg:px-8 mx-auto max-w-7xl mt-8">
+          <MemberMap
+            members={(members || []).map((m) => ({
+              id: m.id,
+              full_name: m.full_name,
+              avatar_url: m.avatar_url,
+              city: m.city,
+              expertise: m.expertise,
+            }))}
+            locale={locale}
+          />
+
           <MemberDirectory
             members={members || []}
             locale={locale}

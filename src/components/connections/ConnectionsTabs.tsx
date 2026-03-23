@@ -26,7 +26,7 @@ export default function ConnectionsTabs({
   const t = {
     myConnections: isAr ? "شبكتي" : "My Connections",
     pending: isAr ? "طلبات الاتصال" : "Pending Requests",
-    suggested: isAr ? "اتصالات مقترحة" : "Suggested",
+    suggested: isAr ? "فِرد مقترحين" : "Suggested",
   };
 
   const tabs = [

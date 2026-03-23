@@ -20,6 +20,11 @@ import {
   ProfileCompletionBar,
 } from "@/components/dashboard/AnimatedDashboard";
 import SuggestedConnections from "@/components/connections/SuggestedConnections";
+import ReferralCard from "@/components/ReferralCard";
+import { MemberMapCompact } from "@/components/MemberMap";
+import { getUserBadges, isUserInactive7Days } from "@/lib/badges";
+import { BadgeRow } from "@/components/ActivityBadge";
+import WelcomeBackBanner from "@/components/dashboard/WelcomeBackBanner";
 
 /* ─── SVG Icons (inline, no emoji) ─── */
 function IconUsers({ className = "w-5 h-5" }: { className?: string }) {
@@ -94,6 +99,14 @@ function IconUserGroup({ className = "w-5 h-5" }: { className?: string }) {
   );
 }
 
+function IconStorefront({ className = "w-5 h-5" }: { className?: string }) {
+  return (
+    <svg className={className} fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor">
+      <path strokeLinecap="round" strokeLinejoin="round" d="M13.5 21v-7.5a.75.75 0 0 1 .75-.75h3a.75.75 0 0 1 .75.75V21m-4.5 0H2.36m11.14 0H18m0 0h3.64m-1.39 0V9.349M3.75 21V9.349m0 0a3.001 3.001 0 0 0 3.75-.615A2.993 2.993 0 0 0 9.75 9.75c.896 0 1.7-.393 2.25-1.016a2.993 2.993 0 0 0 2.25 1.016c.896 0 1.7-.393 2.25-1.015a3.001 3.001 0 0 0 3.75.614m-16.5 0a3.004 3.004 0 0 1-.621-4.72l1.189-1.19A1.5 1.5 0 0 1 5.378 3h13.243a1.5 1.5 0 0 1 1.06.44l1.19 1.189a3 3 0 0 1-.621 4.72M6.75 18h3.75a.75.75 0 0 0 .75-.75V13.5a.75.75 0 0 0-.75-.75H6.75a.75.75 0 0 0-.75.75v3.75c0 .414.336.75.75.75Z" />
+    </svg>
+  );
+}
+
 function IconMegaphone({ className = "w-5 h-5" }: { className?: string }) {
   return (
     <svg className={className} fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor">
@@ -122,62 +135,43 @@ export default async function DashboardPage({
 
   if (!user) redirect(`/${locale}/login`);
 
-  const { data: profile } = await supabase
-    .from("profiles")
-    .select("*")
-    .eq("id", user.id)
-    .single();
+  // Parallelize ALL Supabase queries for performance
+  const [
+    { data: profile },
+    { data: stats },
+    { data: upcomingEvents },
+    { data: recentPosts },
+    { data: announcements },
+    { data: pendingConnections },
+    { data: acceptedConnections },
+    { data: myRegistrations },
+    { data: allMembers },
+  ] = await Promise.all([
+    supabase.from("profiles").select("*").eq("id", user.id).single(),
+    supabase.from("community_stats").select("*").single(),
+    supabase.from("events").select("*").gte("event_date", new Date().toISOString()).order("event_date", { ascending: true }).limit(3),
+    supabase.from("content_posts").select("*").eq("is_published", true).order("created_at", { ascending: false }).limit(3),
+    supabase.from("announcements").select("*").eq("is_active", true).order("created_at", { ascending: false }).limit(2),
+    supabase.from("connections").select("id").eq("receiver_id", user.id).eq("status", "pending"),
+    supabase.from("connections").select("id").or(`requester_id.eq.${user.id},receiver_id.eq.${user.id}`).eq("status", "accepted"),
+    supabase.from("event_registrations").select("event_id").eq("profile_id", user.id),
+    supabase.from("profiles").select("id, full_name, avatar_url, city, expertise"),
+  ]);
 
-  const { data: stats } = await supabase
-    .from("community_stats")
-    .select("*")
-    .single();
-
-  const { data: upcomingEvents } = await supabase
-    .from("events")
-    .select("*")
-    .gte("event_date", new Date().toISOString())
-    .order("event_date", { ascending: true })
-    .limit(3);
-
-  const { data: recentPosts } = await supabase
-    .from("content_posts")
-    .select("*")
-    .eq("is_published", true)
-    .order("created_at", { ascending: false })
-    .limit(3);
-
-  const { data: announcements } = await supabase
-    .from("announcements")
-    .select("*")
-    .eq("is_active", true)
-    .order("created_at", { ascending: false })
-    .limit(2);
-
-  const { data: pendingConnections } = await supabase
-    .from("connections")
-    .select("id")
-    .eq("receiver_id", user.id)
-    .eq("status", "pending");
   const pendingConnectionCount = pendingConnections?.length || 0;
-
-  const { data: acceptedConnections } = await supabase
-    .from("connections")
-    .select("id")
-    .or(`requester_id.eq.${user.id},receiver_id.eq.${user.id}`)
-    .eq("status", "accepted");
   const connectionCount = acceptedConnections?.length || 0;
-
-  const { data: myRegistrations } = await supabase
-    .from("event_registrations")
-    .select("event_id")
-    .eq("profile_id", user.id);
   const registeredEventIds = new Set(myRegistrations?.map((r: { event_id: string }) => r.event_id) || []);
 
   const displayName = profile?.full_name || user.user_metadata?.full_name || user.email;
   const firstName = (displayName || "").split(" ")[0];
   const userTrack = tracks.find((t) => t.id === profile?.expertise);
   const profileCompletion = calcProfileCompletion(profile);
+
+  // Activity badges (parallel)
+  const [userBadges, showWelcomeBack] = await Promise.all([
+    getUserBadges(user.id, supabase),
+    isUserInactive7Days(user.id, supabase),
+  ]);
 
   const t = {
     welcomeBack: isAr ? `حبابك يا ${firstName}` : `Welcome back, ${firstName}`,
@@ -191,15 +185,17 @@ export default async function DashboardPage({
     createPostDesc: isAr ? "شارك خبرتك مع المجتمع" : "Share your expertise with the community",
     browseJobs: isAr ? "تصفح الفرص" : "Browse Jobs",
     browseJobsDesc: isAr ? "اكتشف فرص العمل المتاحة" : "Discover available opportunities",
+    browseMarket: isAr ? "سوق الشرقية" : "Eastern Market",
+    browseMarketDesc: isAr ? "اكتشف خدمات أعضاء المجتمع" : "Discover community services",
     findMentors: isAr ? "ابحث عن مرشد" : "Find Mentors",
     findMentorsDesc: isAr ? "تواصل مع خبراء في مجالك" : "Connect with experts in your field",
     createEvent: isAr ? "أنشئ فعالية" : "Create Event",
     createEventDesc: isAr ? "نظم لقاء أو ورشة عمل" : "Organize a meetup or workshop",
-    myConnections: isAr ? "اتصالاتي" : "My Connections",
+    myConnections: isAr ? "الفِرد" : "My Connections",
     myConnectionsDesc: isAr ? "تابع شبكة علاقاتك" : "Manage your network",
     shareNews: isAr ? "شارك خبر" : "Share News",
     shareNewsDesc: isAr ? "أضف خبر يهم المجتمع" : "Post news for the community",
-    suggestedConnections: isAr ? "اتصالات مقترحة" : "Suggested Connections",
+    suggestedConnections: isAr ? "فِرد مقترحين" : "Suggested Connections",
     upcomingEvents: isAr ? "الفعاليات الجاية" : "Upcoming Events",
     noEvents: isAr ? "ما في فعاليات جاية" : "No upcoming events",
     recentPosts: isAr ? "آخر الشمارات" : "Recent Posts",
@@ -213,6 +209,8 @@ export default async function DashboardPage({
     pendingRequests: isAr ? "طلبات اتصال جديدة" : "Pending requests",
     register: isAr ? "سجل" : "Register",
     addToCal: isAr ? "أضف للتقويم" : "Add to Calendar",
+    myBadges: isAr ? "أوسمتك" : "Your Badges",
+    noBadges: isAr ? "ما عندك أوسمة لسه — كن أكثر نشاطاً!" : "No badges yet — get more active!",
   };
 
   return (
@@ -229,6 +227,15 @@ export default async function DashboardPage({
       />
       <DashboardFadeIn>
         <main className="pt-24 pb-16 px-4 sm:px-6 lg:px-8 mx-auto max-w-7xl space-y-6">
+
+          {/* ── 0. Welcome Back Banner (inactive 7+ days) ── */}
+          {showWelcomeBack && (
+            <WelcomeBackBanner
+              firstName={firstName}
+              locale={locale}
+              userId={user.id}
+            />
+          )}
 
           {/* ── 1. Welcome Banner ── */}
           <AnimatedSection>
@@ -338,6 +345,14 @@ export default async function DashboardPage({
                   icon={<IconBriefcase className="w-5 h-5" />}
                   title={t.browseJobs}
                   description={t.browseJobsDesc}
+                />
+              </AnimatedQuickLink>
+              <AnimatedQuickLink>
+                <QuickActionCard
+                  href={`/${locale}/market`}
+                  icon={<IconStorefront className="w-5 h-5" />}
+                  title={t.browseMarket}
+                  description={t.browseMarketDesc}
                 />
               </AnimatedQuickLink>
               <AnimatedQuickLink>
@@ -481,6 +496,45 @@ export default async function DashboardPage({
 
             {/* Right column (narrower) */}
             <div className="lg:col-span-2 space-y-6">
+
+              {/* Referral Card — "جيب صاحبك" */}
+              <AnimatedSection delay={0.16}>
+                <ReferralCard
+                  locale={locale}
+                  userId={user.id}
+                  referralCode={(profile?.referral_code as string) || null}
+                  referralCount={(profile?.referral_count as number) || 0}
+                  memberCount={stats?.total_members || 0}
+                />
+              </AnimatedSection>
+
+              {/* Member Map (compact) */}
+              <AnimatedSection delay={0.17}>
+                <MemberMapCompact
+                  members={(allMembers || []).map((m) => ({
+                    id: m.id,
+                    full_name: m.full_name,
+                    avatar_url: m.avatar_url,
+                    city: m.city,
+                    expertise: m.expertise,
+                  }))}
+                  locale={locale}
+                />
+              </AnimatedSection>
+
+              {/* Activity Badges */}
+              <AnimatedSection delay={0.18}>
+                <SectionHeader title={t.myBadges} />
+                {userBadges.length > 0 ? (
+                  <div className="glass rounded-xl p-4">
+                    <BadgeRow badges={userBadges} locale={locale} />
+                  </div>
+                ) : (
+                  <div className="glass rounded-xl p-6 text-center">
+                    <p className="text-xs text-muted">{t.noBadges}</p>
+                  </div>
+                )}
+              </AnimatedSection>
 
               {/* Announcements */}
               <AnimatedSection delay={0.2}>

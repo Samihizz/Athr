@@ -132,9 +132,12 @@ export default function OnboardingFlow({
 
   const t = {
     welcomeTitle: isAr ? "حبابك في أثر" : "Welcome to Athr",
+    welcomePoem: isAr
+      ? "مرحب يا اخويا في خشم الباب..\nمرحب و حبابك..\nرتبنا البيت..\nهنا قعدة كيف..\nو هنا بِركة نور..\nو مع أجمل جار ح نهِدّ السور\nشان تعرف ريح.. موسيقى اللوز\nو نغني نشيد البن و الشاي..\nلحن العصفور.."
+      : "",
     welcomeDesc1: isAr
-      ? "مجتمع الشفاتة في المنطقة الشرقية"
-      : "The Eastern Province's professional community",
+      ? ""
+      : "The Eastern Province's professional community for Sudanese talent",
     bullet1: isAr
       ? "تواصل مع شفاتة في مجالك وتبادلوا الخبرات"
       : "Connect with professionals in your field and share expertise",
@@ -227,26 +230,35 @@ export default function OnboardingFlow({
                   <h2 className="text-2xl font-bold text-gradient-gold">
                     {t.welcomeTitle}
                   </h2>
-                  <p className="text-sm text-muted mt-2">{t.welcomeDesc1}</p>
-                </div>
-
-                <div className="space-y-3 text-start mb-8">
-                  {[t.bullet1, t.bullet2, t.bullet3].map((text, i) => (
-                    <div
-                      key={i}
-                      className="flex items-start gap-3 glass rounded-xl p-3"
-                    >
-                      <span className="shrink-0 mt-0.5 h-5 w-5 rounded-full gradient-gold flex items-center justify-center text-xs font-bold text-background">
-                        {i + 1}
-                      </span>
-                      <p className="text-sm">{text}</p>
+                  {isAr && t.welcomePoem ? (
+                    <div className="mt-4 glass rounded-xl p-5" dir="rtl">
+                      <p className="text-sm leading-loose text-foreground whitespace-pre-line font-medium">
+                        {t.welcomePoem}
+                      </p>
                     </div>
-                  ))}
+                  ) : (
+                    <>
+                      <p className="text-sm text-muted mt-2">{t.welcomeDesc1}</p>
+                      <div className="space-y-3 text-start mt-6 mb-2">
+                        {[t.bullet1, t.bullet2, t.bullet3].map((text, i) => (
+                          <div
+                            key={i}
+                            className="flex items-start gap-3 glass rounded-xl p-3"
+                          >
+                            <span className="shrink-0 mt-0.5 h-5 w-5 rounded-full gradient-gold flex items-center justify-center text-xs font-bold text-background">
+                              {i + 1}
+                            </span>
+                            <p className="text-sm">{text}</p>
+                          </div>
+                        ))}
+                      </div>
+                    </>
+                  )}
                 </div>
 
                 <button
                   onClick={() => goToStep(1)}
-                  className="w-full btn-primary"
+                  className="w-full btn-primary mt-4"
                 >
                   {t.getStarted}
                 </button>

@@ -40,7 +40,7 @@ export default function SuggestedConnections({
   const isAr = locale === "ar";
 
   const t = {
-    suggested: isAr ? "اتصالات مقترحة" : "Suggested Connections",
+    suggested: isAr ? "فِرد مقترحين" : "Suggested Connections",
     basedOnCity: isAr ? "من مدينتك" : "Based on your city",
     basedOnTrack: isAr ? "من مسارك" : "Based on your track",
     noSuggestions: isAr ? "ما في اقتراحات حالياً" : "No suggestions available",

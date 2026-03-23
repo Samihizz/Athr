@@ -47,7 +47,7 @@ export default function ConnectionsClient({
   const isAr = locale === "ar";
 
   const t = {
-    myConnections: isAr ? "اتصالاتي" : "My Connections",
+    myConnections: isAr ? "الفِرد" : "My Connections",
     pending: isAr ? "طلبات الاتصال" : "Pending Requests",
     sent: isAr ? "طلبات مرسلة" : "Sent Requests",
     viewProfile: isAr ? "عرض الملف" : "View Profile",
@@ -63,7 +63,7 @@ export default function ConnectionsClient({
     saveNote: isAr ? "حفظ" : "Save",
     connectionCount: (n: number) =>
       isAr ? `${n} اتصال` : `${n} connection${n !== 1 ? "s" : ""}`,
-    suggested: isAr ? "اتصالات مقترحة" : "Suggested",
+    suggested: isAr ? "فِرد مقترحين" : "Suggested",
   };
 
   // Real-time subscription

@@ -65,9 +65,40 @@ async function redirectAfterAuth(
   if (user) {
     const { data: profile } = await supabase
       .from("profiles")
-      .select("bio")
+      .select("bio, referral_code, referred_by")
       .eq("id", user.id)
       .single();
+
+    // Process referral data from user metadata (set during signup)
+    const metadata = user.user_metadata || {};
+    if (profile && !profile.referral_code && metadata.referral_code) {
+      await supabase
+        .from("profiles")
+        .update({ referral_code: metadata.referral_code })
+        .eq("id", user.id);
+    }
+
+    if (profile && !profile.referred_by && metadata.referred_by) {
+      // Set referred_by on the new user's profile
+      await supabase
+        .from("profiles")
+        .update({ referred_by: metadata.referred_by })
+        .eq("id", user.id);
+
+      // Increment the referrer's referral_count
+      const { data: referrer } = await supabase
+        .from("profiles")
+        .select("id, referral_count")
+        .eq("referral_code", metadata.referred_by)
+        .single();
+
+      if (referrer) {
+        await supabase
+          .from("profiles")
+          .update({ referral_count: (referrer.referral_count || 0) + 1 })
+          .eq("id", referrer.id);
+      }
+    }
 
     if (!profile?.bio) {
       return NextResponse.redirect(`${origin}/${locale}/profile-setup`);
