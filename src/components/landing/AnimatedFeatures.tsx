@@ -1,6 +1,7 @@
 "use client";
 
 import { FadeIn, StaggerChildren, StaggerItem, ScaleOnHover } from "@/components/ui/animations";
+import FloatingOrbs from "@/components/FloatingOrbs";
 import type { ReactNode } from "react";
 
 type AnimatedFeaturesProps = {
@@ -12,9 +13,11 @@ type AnimatedFeaturesProps = {
 
 export default function AnimatedFeatures({ t, features }: AnimatedFeaturesProps) {
   return (
-    <section className="py-24 sm:py-32 relative">
-      <div className="absolute inset-0 gradient-subtle" />
-      <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+    <section className="py-24 sm:py-32 relative overflow-hidden">
+      {/* Subtle floating orbs */}
+      <FloatingOrbs variant="subtle" />
+
+      <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 z-10">
         <FadeIn className="text-center mb-16">
           <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold tracking-tight">
             {t.landing.featuresTitle}
@@ -24,7 +27,7 @@ export default function AnimatedFeatures({ t, features }: AnimatedFeaturesProps)
           </p>
         </FadeIn>
 
-        {/* Bento Grid */}
+        {/* Bento Grid — Liquid Glass */}
         <StaggerChildren className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5" stagger={0.08}>
           {features.map(({ icon, color }, i) => {
             const titleKey = `feature${i + 1}Title` as keyof typeof t.landing;
@@ -32,9 +35,9 @@ export default function AnimatedFeatures({ t, features }: AnimatedFeaturesProps)
             return (
               <StaggerItem key={i}>
                 <ScaleOnHover>
-                  <div className="card p-6 group">
+                  <div className="card p-6 group h-full">
                     <div
-                      className={`h-12 w-12 rounded-2xl bg-gradient-to-br ${color} flex items-center justify-center text-gold mb-4 group-hover:scale-110 transition-transform`}
+                      className={`h-12 w-12 rounded-2xl bg-gradient-to-br ${color} flex items-center justify-center text-gold mb-4 group-hover:scale-110 transition-transform duration-300`}
                     >
                       {icon}
                     </div>

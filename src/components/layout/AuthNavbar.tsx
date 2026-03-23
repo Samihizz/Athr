@@ -133,6 +133,7 @@ export default function AuthNavbar({ locale, userName, userId, isAdmin }: AuthNa
                 { href: `/${locale}/connections`, label: t.connections },
                 { href: `/${locale}/mentorship`, label: t.mentorship },
                 { href: `/${locale}/jobs`, label: t.jobs },
+                { href: `/${locale}/market`, label: t.market },
                 { href: `/${locale}/feed`, label: t.feed },
                 { href: `/${locale}/news`, label: t.news },
               ].map((link) => (

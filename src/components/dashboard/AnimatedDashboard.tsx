@@ -15,7 +15,7 @@ export function DashboardFadeIn({ children }: { children: ReactNode }) {
   return <PageFadeIn>{children}</PageFadeIn>;
 }
 
-/* ─── Animated stat card ─── */
+/* ─── Animated stat card — liquid glass ─── */
 export function AnimatedStatCard({
   value,
   label,
@@ -36,7 +36,7 @@ export function AnimatedStatCard({
       {children ? (
         children
       ) : (
-        <div className="glass rounded-xl p-5 text-center">
+        <div className="card rounded-xl p-5 text-center">
           {icon && <div className="flex justify-center mb-2 text-muted">{icon}</div>}
           <div className="text-2xl font-bold text-gradient-gold">
             <CountUp value={value ?? 0} suffix={suffix} />
@@ -98,7 +98,7 @@ export function AnimatedQuickLink({
   return <StaggerItem className={className}>{children}</StaggerItem>;
 }
 
-/* ─── Quick action card with hover glow ─── */
+/* ─── Quick action card — liquid glass with hover glow ─── */
 export function QuickActionCard({
   href,
   icon,
@@ -113,9 +113,9 @@ export function QuickActionCard({
   return (
     <Link
       href={href}
-      className="group glass rounded-xl p-5 flex items-start gap-4 border border-transparent hover:border-gold/40 transition-all duration-300 hover:shadow-[0_0_20px_rgba(204,163,0,0.08)]"
+      className="group card rounded-xl p-5 flex items-start gap-4 hover:border-gold/30 transition-all duration-500 hover:shadow-[0_0_24px_rgba(204,163,0,0.06)]"
     >
-      <div className="shrink-0 w-10 h-10 rounded-lg bg-gold/10 flex items-center justify-center text-gold group-hover:bg-gold/20 transition-colors">
+      <div className="shrink-0 w-10 h-10 rounded-lg bg-gold/10 flex items-center justify-center text-gold group-hover:bg-gold/20 transition-colors duration-300">
         {icon}
       </div>
       <div className="min-w-0">

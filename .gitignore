@@ -49,3 +49,6 @@ public/Screen Shot*
 next-env.d.ts
 public/tracks/*.svg
 public/Track icons/
+
+# claude skills (local tooling, not deployed)
+.claude/skills/

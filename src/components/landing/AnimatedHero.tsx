@@ -8,6 +8,7 @@ import {
   StaggerItem,
   CountUp,
 } from "@/components/ui/animations";
+import FloatingOrbs from "@/components/FloatingOrbs";
 
 type AnimatedHeroProps = {
   locale: string;
@@ -26,11 +27,16 @@ export default function AnimatedHero({
 }: AnimatedHeroProps) {
   return (
     <section className="relative min-h-screen flex items-center overflow-hidden pt-20">
-      {/* Background effects */}
-      <div className="absolute inset-0 gradient-hero" />
-      <div className="absolute inset-0 grid-bg opacity-40" />
+      {/* Floating abstract blur orbs */}
+      <FloatingOrbs variant="hero" />
 
-      <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-16 lg:py-24 w-full">
+      {/* Subtle grid */}
+      <div className="absolute inset-0 grid-bg opacity-30" />
+
+      {/* Noise texture */}
+      <div className="absolute inset-0 noise-overlay" />
+
+      <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-16 lg:py-24 w-full z-10">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 items-center">
           {/* Left: Text content */}
           <div>
@@ -70,7 +76,6 @@ export default function AnimatedHero({
             {/* Mini stats row */}
             <StaggerChildren className="mt-12 flex flex-wrap gap-8" delay={0.6} stagger={0.12}>
               {stats.map((stat) => {
-                // Handle fraction format like "12/500"
                 const isFraction = stat.value.includes("/");
                 const hasPlus = stat.value.includes("+");
                 const numericValue = parseInt(stat.value.replace(/[^0-9]/g, ""));
@@ -95,7 +100,7 @@ export default function AnimatedHero({
             </StaggerChildren>
           </div>
 
-          {/* Right: Hero mockup */}
+          {/* Right: Hero mockup with glow */}
           <FadeIn delay={0.4} y={0}>
             <div className="relative">
               <div className="img-glow animate-float">
@@ -108,7 +113,7 @@ export default function AnimatedHero({
                   priority
                 />
               </div>
-              {/* Floating accent card */}
+              {/* Floating accent card — liquid glass */}
               <div className="absolute -bottom-4 -start-4 sm:-start-8 card-elevated p-4 animate-pulse-glow">
                 <div className="flex items-center gap-3">
                   <div className="h-10 w-10 rounded-xl gradient-gold flex items-center justify-center text-background font-bold text-sm">
