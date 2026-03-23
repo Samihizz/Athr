@@ -157,7 +157,7 @@ export default function PostComposer({
             }}
             rows={3}
             autoFocus
-            className="w-full bg-transparent text-foreground text-sm leading-relaxed placeholder:text-muted focus:outline-none resize-none min-h-[80px]"
+            className="w-full bg-transparent text-foreground text-base leading-relaxed placeholder:text-muted focus:outline-none resize-none min-h-[80px]"
             placeholder={t.placeholder}
             dir={isAr ? "rtl" : "ltr"}
           />

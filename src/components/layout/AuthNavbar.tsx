@@ -120,34 +120,37 @@ export default function AuthNavbar({ locale, userName, userId, isAdmin }: AuthNa
       </div>
 
       {mobileOpen && (
-        <div className="md:hidden mx-4 mt-2 max-h-[calc(100vh-5rem)] overflow-y-auto">
-          <div className="glass-strong rounded-2xl p-4 flex flex-col gap-1">
-            {[
-              { href: `/${locale}/dashboard`, label: t.dashboard },
-              { href: `/${locale}/tracks`, label: t.tracks },
-              { href: `/${locale}/events`, label: t.events },
-              { href: `/${locale}/community`, label: t.community },
-              { href: `/${locale}/connections`, label: t.connections },
-              { href: `/${locale}/mentorship`, label: t.mentorship },
-              { href: `/${locale}/jobs`, label: t.jobs },
-              { href: `/${locale}/feed`, label: t.feed },
-              { href: `/${locale}/news`, label: t.news },
-            ].map((link) => (
-              <Link key={link.href} href={link.href} onClick={() => setMobileOpen(false)} className="px-4 py-3 text-sm text-muted hover:text-foreground rounded-xl hover:bg-surface-hover">{link.label}</Link>
-            ))}
-            <div className="section-divider my-2" />
-            <div className="px-4 py-2">
-              <NotificationBell locale={locale} userId={userId} />
+        <div className="md:hidden fixed inset-0 top-[4rem] z-40 bg-background/80 backdrop-blur-sm" onClick={() => setMobileOpen(false)}>
+          <div className="mx-4 mt-2 max-h-[calc(100vh-5rem)] overflow-y-auto overscroll-contain" onClick={(e) => e.stopPropagation()}>
+            <div className="glass-strong rounded-2xl p-3 flex flex-col gap-0.5 pb-6">
+              {[
+                { href: `/${locale}/dashboard`, label: t.dashboard },
+                { href: `/${locale}/tracks`, label: t.tracks },
+                { href: `/${locale}/events`, label: t.events },
+                { href: `/${locale}/community`, label: t.community },
+                { href: `/${locale}/connections`, label: t.connections },
+                { href: `/${locale}/mentorship`, label: t.mentorship },
+                { href: `/${locale}/jobs`, label: t.jobs },
+                { href: `/${locale}/feed`, label: t.feed },
+                { href: `/${locale}/news`, label: t.news },
+              ].map((link) => (
+                <Link key={link.href} href={link.href} onClick={() => setMobileOpen(false)} className="px-4 py-2.5 text-sm text-muted hover:text-foreground rounded-xl hover:bg-surface-hover">{link.label}</Link>
+              ))}
+              <div className="section-divider my-1.5" />
+              <div className="px-4 py-2">
+                <NotificationBell locale={locale} userId={userId} />
+              </div>
+              <Link href={`/${locale}/profile`} onClick={() => setMobileOpen(false)} className="px-4 py-2.5 text-sm text-muted hover:text-foreground rounded-xl hover:bg-surface-hover">{t.profile}</Link>
+              <Link href={`/${locale}/edit-profile`} onClick={() => setMobileOpen(false)} className="px-4 py-2.5 text-sm text-muted hover:text-foreground rounded-xl hover:bg-surface-hover">{t.editProfile}</Link>
+              {isAdmin && (
+                <Link href={`/${locale}/admin`} onClick={() => setMobileOpen(false)} className="px-4 py-2.5 text-sm text-gold rounded-xl hover:bg-surface-hover">{t.admin}</Link>
+              )}
+              <Link href={`/${otherLocale}/dashboard`} className="px-4 py-2.5 text-sm text-muted hover:text-foreground rounded-xl hover:bg-surface-hover">{t.language}</Link>
+              <div className="section-divider my-1.5" />
+              <form action={() => logout(locale)}>
+                <button type="submit" className="w-full text-start px-4 py-2.5 text-sm text-red-400 rounded-xl hover:bg-surface-hover">{t.logout}</button>
+              </form>
             </div>
-            <Link href={`/${locale}/profile`} onClick={() => setMobileOpen(false)} className="px-4 py-3 text-sm text-muted hover:text-foreground rounded-xl hover:bg-surface-hover">{t.profile}</Link>
-            <Link href={`/${locale}/edit-profile`} onClick={() => setMobileOpen(false)} className="px-4 py-3 text-sm text-muted hover:text-foreground rounded-xl hover:bg-surface-hover">{t.editProfile}</Link>
-            {isAdmin && (
-              <Link href={`/${locale}/admin`} onClick={() => setMobileOpen(false)} className="px-4 py-3 text-sm text-gold rounded-xl hover:bg-surface-hover">{t.admin}</Link>
-            )}
-            <Link href={`/${otherLocale}/dashboard`} className="px-4 py-3 text-sm text-muted hover:text-foreground rounded-xl hover:bg-surface-hover">{t.language}</Link>
-            <form action={() => logout(locale)}>
-              <button type="submit" className="w-full text-start px-4 py-3 text-sm text-red-400 rounded-xl hover:bg-surface-hover">{t.logout}</button>
-            </form>
           </div>
         </div>
       )}

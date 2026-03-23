@@ -132,7 +132,7 @@ export default function AiAssistant({ locale }: AiAssistantProps) {
       {/* Chat Panel */}
       {isOpen && (
         <div
-          className="fixed bottom-24 right-6 z-50 w-[360px] max-w-[calc(100vw-2rem)] h-[520px] max-h-[calc(100vh-8rem)] glass-strong rounded-2xl flex flex-col overflow-hidden shadow-2xl animate-fade-in-up"
+          className="fixed bottom-24 right-4 left-4 sm:left-auto sm:w-[360px] z-50 h-[520px] max-h-[calc(100vh-8rem)] glass-strong rounded-2xl flex flex-col overflow-hidden shadow-2xl animate-fade-in-up"
           style={{ animationDuration: "0.3s" }}
         >
           {/* Header */}
@@ -200,7 +200,7 @@ export default function AiAssistant({ locale }: AiAssistantProps) {
                 value={input}
                 onChange={(e) => setInput(e.target.value)}
                 placeholder={t.placeholder}
-                className="flex-1 bg-surface rounded-xl px-4 py-3 text-sm text-foreground placeholder:text-muted border border-border focus:border-gold focus:outline-none transition-colors"
+                className="flex-1 bg-surface rounded-xl px-4 py-3 text-base text-foreground placeholder:text-muted border border-border focus:border-gold focus:outline-none transition-colors"
                 dir={detectArabic(input) ? "rtl" : "ltr"}
                 disabled={isTyping}
               />
