@@ -21,7 +21,6 @@ import {
 } from "@/components/dashboard/AnimatedDashboard";
 import SuggestedConnections from "@/components/connections/SuggestedConnections";
 import ReferralCard from "@/components/ReferralCard";
-import { MemberMapCompact } from "@/components/MemberMap";
 import { getUserBadges, isUserInactive7Days } from "@/lib/badges";
 import { BadgeRow } from "@/components/ActivityBadge";
 import WelcomeBackBanner from "@/components/dashboard/WelcomeBackBanner";
@@ -505,20 +504,6 @@ export default async function DashboardPage({
                   referralCode={(profile?.referral_code as string) || null}
                   referralCount={(profile?.referral_count as number) || 0}
                   memberCount={stats?.total_members || 0}
-                />
-              </AnimatedSection>
-
-              {/* Member Map (compact) */}
-              <AnimatedSection delay={0.17}>
-                <MemberMapCompact
-                  members={(allMembers || []).map((m) => ({
-                    id: m.id,
-                    full_name: m.full_name,
-                    avatar_url: m.avatar_url,
-                    city: m.city,
-                    expertise: m.expertise,
-                  }))}
-                  locale={locale}
                 />
               </AnimatedSection>
 
