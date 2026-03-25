@@ -4,7 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { useState, useEffect } from "react";
 import { motion, useReducedMotion } from "framer-motion";
-import ThemeToggle from "@/components/ThemeToggle";
+// import ThemeToggle from "@/components/ThemeToggle";
 
 type NavbarProps = {
   locale: string;
@@ -70,8 +70,6 @@ export default function Navbar({ locale, t }: NavbarProps) {
 
           {/* Right side */}
           <div className="hidden md:flex items-center gap-2">
-            <ThemeToggle />
-
             <Link
               href={`/${otherLocale}`}
               className="text-sm text-muted hover:text-foreground transition-colors px-3 py-2 rounded-xl hover:bg-surface-hover"
@@ -133,15 +131,12 @@ export default function Navbar({ locale, t }: NavbarProps) {
               </Link>
             ))}
             <div className="section-divider my-2" />
-            <div className="flex items-center justify-between px-4 py-2">
-              <Link
-                href={`/${otherLocale}`}
-                className="text-sm text-muted hover:text-foreground rounded-xl hover:bg-surface-hover transition-colors"
-              >
-                {t.common.language}
-              </Link>
-              <ThemeToggle />
-            </div>
+            <Link
+              href={`/${otherLocale}`}
+              className="px-4 py-3 text-sm text-muted hover:text-foreground rounded-xl hover:bg-surface-hover transition-colors"
+            >
+              {t.common.language}
+            </Link>
             <Link
               href={`/${locale}/login`}
               onClick={() => setMobileOpen(false)}
