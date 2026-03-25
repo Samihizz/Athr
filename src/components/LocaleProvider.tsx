@@ -2,6 +2,7 @@
 
 import { useEffect } from "react";
 import { type Locale, getDirection } from "@/i18n/config";
+import ThemeProvider from "./ThemeProvider";
 
 export default function LocaleProvider({
   locale,
@@ -15,5 +16,5 @@ export default function LocaleProvider({
     document.documentElement.dir = getDirection(locale as Locale);
   }, [locale]);
 
-  return <>{children}</>;
+  return <ThemeProvider>{children}</ThemeProvider>;
 }

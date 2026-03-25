@@ -5,6 +5,7 @@ import Link from "next/link";
 import { useState } from "react";
 import { logout } from "@/app/[locale]/(auth)/logout/actions";
 import NotificationBell from "@/components/NotificationBell";
+import ThemeToggle from "@/components/ThemeToggle";
 
 type AuthNavbarProps = {
   locale: string;
@@ -71,6 +72,8 @@ export default function AuthNavbar({ locale, userName, userId, isAdmin }: AuthNa
           </div>
 
           <div className="hidden md:flex items-center gap-2">
+            <ThemeToggle />
+
             <Link
               href={`/${otherLocale}/dashboard`}
               className="text-sm text-muted hover:text-foreground transition-colors px-3 py-2 rounded-xl hover:bg-surface-hover"
@@ -148,7 +151,10 @@ export default function AuthNavbar({ locale, userName, userId, isAdmin }: AuthNa
               {isAdmin && (
                 <Link href={`/${locale}/admin`} onClick={() => setMobileOpen(false)} className="px-4 py-2.5 text-sm text-gold rounded-xl hover:bg-surface-hover">{t.admin}</Link>
               )}
-              <Link href={`/${otherLocale}/dashboard`} className="px-4 py-2.5 text-sm text-muted hover:text-foreground rounded-xl hover:bg-surface-hover">{t.language}</Link>
+              <div className="flex items-center justify-between px-4 py-2">
+                <Link href={`/${otherLocale}/dashboard`} className="text-sm text-muted hover:text-foreground rounded-xl hover:bg-surface-hover">{t.language}</Link>
+                <ThemeToggle />
+              </div>
               <div className="section-divider my-1.5" />
               <form action={() => logout(locale)}>
                 <button type="submit" className="w-full text-start px-4 py-2.5 text-sm text-red-400 rounded-xl hover:bg-surface-hover">{t.logout}</button>
