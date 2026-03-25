@@ -1,5 +1,7 @@
-import AiAssistant from "@/components/AiAssistant";
+import dynamic from "next/dynamic";
 import FloatingOrbs from "@/components/FloatingOrbs";
+
+const AiAssistant = dynamic(() => import("@/components/AiAssistant"));
 
 export default async function MainLayout({
   children,

@@ -4,8 +4,12 @@ import { createClient } from "@/lib/supabase/server";
 import { tracks, getTrackById } from "@/lib/tracks";
 import AuthNavbar from "@/components/layout/AuthNavbar";
 import PageHeader from "@/components/PageHeader";
+import dynamic from "next/dynamic";
 import WhatsAppGroupCard from "@/components/WhatsAppGroupCard";
-import TrackChat from "@/components/TrackChat";
+
+const TrackChat = dynamic(() => import("@/components/TrackChat"), {
+  loading: () => <div className="glass rounded-2xl p-8 animate-pulse h-64" />,
+});
 import TrackFeed from "./TrackFeed";
 
 const trackGradients: Record<string, string> = {

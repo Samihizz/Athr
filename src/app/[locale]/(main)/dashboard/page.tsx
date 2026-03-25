@@ -145,7 +145,6 @@ export default async function DashboardPage({
     { data: pendingConnections },
     { data: acceptedConnections },
     { data: myRegistrations },
-    { data: allMembers },
   ] = await Promise.all([
     supabase.from("profiles").select("*").eq("id", user.id).single(),
     supabase.from("community_stats").select("*").single(),
@@ -155,7 +154,6 @@ export default async function DashboardPage({
     supabase.from("connections").select("id").eq("receiver_id", user.id).eq("status", "pending"),
     supabase.from("connections").select("id").or(`requester_id.eq.${user.id},receiver_id.eq.${user.id}`).eq("status", "accepted"),
     supabase.from("event_registrations").select("event_id").eq("profile_id", user.id),
-    supabase.from("profiles").select("id, full_name, avatar_url, city, expertise"),
   ]);
 
   // Auto-generate referral code if missing
