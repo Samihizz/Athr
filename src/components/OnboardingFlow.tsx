@@ -7,6 +7,7 @@ import { useRouter } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
 import { uploadAvatar } from "@/lib/supabase/storage";
 import { tracks } from "@/lib/tracks";
+import TrackIcon from "@/components/TrackIcon";
 
 const cities = [
   "Dammam", "Khobar", "Dhahran", "Jubail", "Qatif",
@@ -377,11 +378,7 @@ export default function OnboardingFlow({
                               : "border-border glass hover:border-border-strong hover:bg-surface-hover"
                           }`}
                         >
-                          <img
-                            src={track.icon}
-                            alt=""
-                            className="w-6 h-6 rounded mb-1.5"
-                          />
+                          <TrackIcon trackId={track.id} size={24} className="mb-1.5" />
                           <div className="text-xs font-medium leading-tight">
                             {isAr ? track.ar.name : track.en.name}
                           </div>
@@ -470,11 +467,7 @@ export default function OnboardingFlow({
                     href={`/${locale}/tracks/${selectedTrack.id}`}
                     className="inline-flex items-center gap-2 glass rounded-xl px-4 py-2.5 mb-6 border border-gold/30 hover:bg-surface-hover transition-colors"
                   >
-                    <img
-                      src={selectedTrack.icon}
-                      alt=""
-                      className="w-5 h-5 rounded"
-                    />
+                    <TrackIcon trackId={selectedTrack.id} size={20} />
                     <span className="text-sm font-medium">
                       {t.yourTrack}:{" "}
                       {isAr ? selectedTrack.ar.name : selectedTrack.en.name}

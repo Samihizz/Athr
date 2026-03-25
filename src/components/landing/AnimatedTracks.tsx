@@ -3,10 +3,10 @@
 import Image from "next/image";
 import Link from "next/link";
 import { FadeIn, StaggerChildren, StaggerItem, ScaleOnHover } from "@/components/ui/animations";
+import TrackIcon from "@/components/TrackIcon";
 
 type Track = {
   id: string;
-  icon: string;
   ar: { name: string; description: string };
   en: { name: string; description: string };
 };
@@ -67,13 +67,7 @@ export default function AnimatedTracks({
                     <div className="absolute inset-0 bg-gradient-to-t from-background via-background/30 to-transparent" />
                     {/* Track icon */}
                     <div className="absolute top-4 start-4">
-                      <div className="p-1.5 rounded-lg bg-white/[0.06] backdrop-blur-xl border border-white/[0.1]">
-                        <img
-                          src={track.icon}
-                          alt=""
-                          className="w-7 h-7 rounded"
-                        />
-                      </div>
+                      <TrackIcon trackId={track.id} size={36} />
                     </div>
                   </div>
                   {/* Track info */}

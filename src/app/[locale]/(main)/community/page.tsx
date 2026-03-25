@@ -69,7 +69,7 @@ export default async function CommunityPage({
                 <WhatsAppGroupCard
                   key={track.id}
                   trackName={isAr ? track.ar.name : track.en.name}
-                  trackIcon={track.icon}
+                  trackId={track.id}
                   whatsappLink={track.whatsappGroup}
                   locale={locale}
                   variant="compact"

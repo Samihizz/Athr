@@ -6,6 +6,7 @@ import { tracks, ATHR_COMMUNITY_WHATSAPP } from "@/lib/tracks";
 import AuthNavbar from "@/components/layout/AuthNavbar";
 import OnboardingFlow from "@/components/OnboardingFlow";
 import WhatsAppGroupCard, { CommunityWhatsAppCard } from "@/components/WhatsAppGroupCard";
+import TrackIcon from "@/components/TrackIcon";
 import CalendarDownloadButton from "@/components/dashboard/CalendarDownloadButton";
 import {
   DashboardFadeIn,
@@ -262,7 +263,7 @@ export default async function DashboardPage({
                     <div className="flex items-center gap-3 mt-3 flex-wrap">
                       {userTrack && (
                         <span className="pill text-xs">
-                          <img src={userTrack.icon} alt="" className="w-4 h-4 rounded" />
+                          <TrackIcon trackId={userTrack.id} size={16} />
                           {isAr ? userTrack.ar.name : userTrack.en.name}
                         </span>
                       )}
@@ -565,7 +566,7 @@ export default async function DashboardPage({
                   {userTrack && (
                     <WhatsAppGroupCard
                       trackName={isAr ? userTrack.ar.name : userTrack.en.name}
-                      trackIcon={userTrack.icon}
+                      trackId={userTrack.id}
                       whatsappLink={userTrack.whatsappGroup}
                       locale={locale}
                       variant="compact"

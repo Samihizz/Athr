@@ -5,15 +5,7 @@ import { tracks } from "@/lib/tracks";
 import AuthNavbar from "@/components/layout/AuthNavbar";
 import PageHeader from "@/components/PageHeader";
 import TrackCardUnreadBadge from "@/components/TrackCardUnreadBadge";
-
-const trackGradients: Record<string, string> = {
-  ai: "linear-gradient(135deg, #8B5CF6 0%, #7C3AED 100%)",
-  creative: "linear-gradient(135deg, #EC4899 0%, #F43F5E 100%)",
-  business: "linear-gradient(135deg, #F59E0B 0%, #EAB308 100%)",
-  marketing: "linear-gradient(135deg, #10B981 0%, #14B8A6 100%)",
-  finance: "linear-gradient(135deg, #3B82F6 0%, #06B6D4 100%)",
-  tech: "linear-gradient(135deg, #6366F1 0%, #8B5CF6 100%)",
-};
+import TrackIcon from "@/components/TrackIcon";
 
 export default async function TracksPage({
   params,
@@ -68,15 +60,8 @@ export default async function TracksPage({
                   className="group card p-6 flex flex-col gap-4 hover:border-primary-light/30"
                 >
                   <div className="flex items-center gap-4">
-                    <div
-                      className="relative h-12 w-12 rounded-xl flex items-center justify-center shrink-0"
-                      style={{ background: trackGradients[track.id] }}
-                    >
-                      <img
-                        src={track.icon}
-                        alt=""
-                        className="w-7 h-7 rounded"
-                      />
+                    <div className="relative">
+                      <TrackIcon trackId={track.id} size={48} />
                       <TrackCardUnreadBadge trackId={track.id} />
                     </div>
                     <h2 className="text-lg font-semibold group-hover:text-white transition-colors">

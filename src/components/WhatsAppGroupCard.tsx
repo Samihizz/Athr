@@ -1,8 +1,10 @@
 "use client";
 
+import TrackIcon from "@/components/TrackIcon";
+
 interface WhatsAppGroupCardProps {
   trackName: string;
-  trackIcon?: string;
+  trackId?: string;
   whatsappLink: string;
   locale: string;
   /** Compact variant for grids, full variant for track pages */
@@ -11,7 +13,7 @@ interface WhatsAppGroupCardProps {
 
 export default function WhatsAppGroupCard({
   trackName,
-  trackIcon,
+  trackId,
   whatsappLink,
   locale,
   variant = "full",
@@ -26,8 +28,8 @@ export default function WhatsAppGroupCard({
   if (variant === "compact") {
     return (
       <div className="glass rounded-2xl p-4 flex flex-col items-center text-center gap-3 hover:bg-surface-hover transition-colors">
-        {trackIcon && (
-          <img src={trackIcon} alt="" className="w-8 h-8 rounded" />
+        {trackId && (
+          <TrackIcon trackId={trackId} size={32} />
         )}
         <h3 className="font-semibold text-sm leading-tight">{trackName}</h3>
         {hasLink ? (

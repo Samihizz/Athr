@@ -3,6 +3,7 @@ import Link from "next/link";
 import { notFound, redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import { tracks } from "@/lib/tracks";
+import TrackIcon from "@/components/TrackIcon";
 import { getUserBadges } from "@/lib/badges";
 import AuthNavbar from "@/components/layout/AuthNavbar";
 import ConnectButton from "@/components/ConnectButton";
@@ -344,11 +345,7 @@ export default async function MemberProfilePage({
                               border: `1px solid ${trackColor}30`,
                             }}
                           >
-                            <img
-                              src={memberTrack.icon}
-                              alt=""
-                              className="w-3.5 h-3.5 rounded"
-                            />
+                            <TrackIcon trackId={memberTrack.id} size={14} />
                             {isAr ? memberTrack.ar.name : memberTrack.en.name}
                           </span>
                         )}

@@ -146,7 +146,7 @@ export default async function AuthTrackPage({
           <div className="mb-10">
             <WhatsAppGroupCard
               trackName={trackName}
-              trackIcon={track.icon}
+              trackId={track.id}
               whatsappLink={track.whatsappGroup}
               locale={locale}
             />
