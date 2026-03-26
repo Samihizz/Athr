@@ -15,7 +15,7 @@
   --color-muted: #8A8F98;
   --color-card: #0E0E1E;
   --color-card-hover: #12122A;
-  --font-sans: var(--font-poppins), var(--font-tajawal), system-ui, sans-serif;
+  --font-sans: "Poppins", "Tajawal", system-ui, sans-serif;
   --radius-sm: 8px;
   --radius-md: 12px;
   --radius-lg: 16px;
