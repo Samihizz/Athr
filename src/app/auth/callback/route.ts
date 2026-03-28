@@ -35,6 +35,10 @@ export async function GET(request: Request) {
   if (code) {
     const { error } = await supabase.auth.exchangeCodeForSession(code);
     if (!error) {
+      // Password recovery via PKCE: redirect to reset-password page
+      if (type === "recovery") {
+        return NextResponse.redirect(`${origin}/${locale}/reset-password`);
+      }
       return await redirectAfterAuth(supabase, origin, locale);
     }
   }
@@ -46,6 +50,10 @@ export async function GET(request: Request) {
       type: type as "signup" | "email" | "recovery" | "invite",
     });
     if (!error) {
+      // Password recovery: redirect to reset-password page instead of dashboard
+      if (type === "recovery") {
+        return NextResponse.redirect(`${origin}/${locale}/reset-password`);
+      }
       return await redirectAfterAuth(supabase, origin, locale);
     }
   }

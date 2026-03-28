@@ -75,9 +75,9 @@ export default function LoginPage() {
             <label htmlFor="password" className="block text-sm font-medium">
               {t.password}
             </label>
-            <button type="button" className="text-xs text-gold hover:text-gold-light transition-colors">
+            <Link href={`/${locale}/forgot-password`} className="text-xs text-gold hover:text-gold-light transition-colors">
               {t.forgotPassword}
-            </button>
+            </Link>
           </div>
           <input
             id="password"
