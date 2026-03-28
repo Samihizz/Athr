@@ -2,7 +2,7 @@ import { type NextRequest, NextResponse } from "next/server";
 import { updateSession } from "@/lib/supabase/middleware";
 import { defaultLocale, locales } from "@/i18n/config";
 
-export async function middleware(request: NextRequest) {
+export async function proxy(request: NextRequest) {
   // Handle locale routing
   const { pathname } = request.nextUrl;
 

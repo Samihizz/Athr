@@ -140,7 +140,7 @@ export default function NotificationBell({ locale, userId }: NotificationBellPro
       </button>
 
       {open && (
-        <div className="absolute end-0 mt-2 w-80 sm:w-96 glass-strong rounded-2xl overflow-hidden shadow-xl z-50">
+        <div className="fixed inset-x-3 top-16 sm:absolute sm:inset-x-auto sm:top-auto sm:end-0 sm:mt-2 w-auto sm:w-96 glass-strong rounded-2xl overflow-hidden shadow-xl z-50">
           {/* Header */}
           <div className="flex items-center justify-between px-4 py-3 border-b border-border">
             <h3 className="text-sm font-semibold">{t.title}</h3>
