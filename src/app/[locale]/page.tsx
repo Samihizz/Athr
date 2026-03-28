@@ -11,15 +11,6 @@ import AnimatedTracks from "@/components/landing/AnimatedTracks";
 import AnimatedStats from "@/components/landing/AnimatedStats";
 import AnimatedCTA from "@/components/landing/AnimatedCTA";
 
-const trackImages: Record<string, string> = {
-  ai: "/images/tracks/ai.svg",
-  creative: "/images/tracks/creative.svg",
-  business: "/images/tracks/business.svg",
-  marketing: "/images/tracks/marketing.svg",
-  finance: "/images/tracks/finance.svg",
-  tech: "/images/tracks/tech.svg",
-};
-
 export default async function LandingPage({
   params,
 }: {
@@ -85,7 +76,6 @@ export default async function LandingPage({
         isAr={isAr}
         t={t}
         tracks={tracks}
-        trackImages={trackImages}
       />
 
       {/* ── Stats Banner ── */}

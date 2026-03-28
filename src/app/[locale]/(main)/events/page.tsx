@@ -33,7 +33,7 @@ export default async function EventsPage({
   const { data: myRegistrations } = await supabase
     .from("event_registrations")
     .select("event_id")
-    .eq("profile_id", user.id);
+    .eq("member_id", user.id);
 
   const registeredIds = new Set(myRegistrations?.map((r: { event_id: string }) => r.event_id) || []);
 

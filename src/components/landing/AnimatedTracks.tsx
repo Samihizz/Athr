@@ -1,6 +1,5 @@
 "use client";
 
-import Image from "next/image";
 import Link from "next/link";
 import { FadeIn, StaggerChildren, StaggerItem, ScaleOnHover } from "@/components/ui/animations";
 import TrackIcon from "@/components/TrackIcon";
@@ -18,7 +17,16 @@ type AnimatedTracksProps = {
     landing: Record<string, string>;
   };
   tracks: readonly Track[];
-  trackImages: Record<string, string>;
+};
+
+/** Subtle gradient backgrounds per track, matching each track's accent color */
+const trackGradients: Record<string, string> = {
+  ai:        "radial-gradient(ellipse at 30% 20%, rgba(139,92,246,0.15) 0%, transparent 60%), linear-gradient(135deg, rgba(139,92,246,0.08) 0%, rgba(15,15,25,0.9) 100%)",
+  creative:  "radial-gradient(ellipse at 30% 20%, rgba(236,72,153,0.15) 0%, transparent 60%), linear-gradient(135deg, rgba(236,72,153,0.08) 0%, rgba(15,15,25,0.9) 100%)",
+  business:  "radial-gradient(ellipse at 30% 20%, rgba(245,158,11,0.15) 0%, transparent 60%), linear-gradient(135deg, rgba(245,158,11,0.08) 0%, rgba(15,15,25,0.9) 100%)",
+  marketing: "radial-gradient(ellipse at 30% 20%, rgba(16,185,129,0.15) 0%, transparent 60%), linear-gradient(135deg, rgba(16,185,129,0.08) 0%, rgba(15,15,25,0.9) 100%)",
+  finance:   "radial-gradient(ellipse at 30% 20%, rgba(59,130,246,0.15) 0%, transparent 60%), linear-gradient(135deg, rgba(59,130,246,0.08) 0%, rgba(15,15,25,0.9) 100%)",
+  tech:      "radial-gradient(ellipse at 30% 20%, rgba(99,102,241,0.15) 0%, transparent 60%), linear-gradient(135deg, rgba(99,102,241,0.08) 0%, rgba(15,15,25,0.9) 100%)",
 };
 
 export default function AnimatedTracks({
@@ -26,7 +34,6 @@ export default function AnimatedTracks({
   isAr,
   t,
   tracks,
-  trackImages,
 }: AnimatedTracksProps) {
   return (
     <section id="tracks" className="py-24 sm:py-32 relative overflow-hidden">
@@ -55,20 +62,26 @@ export default function AnimatedTracks({
                   href={`/${locale}/tracks/${track.id}`}
                   className="card group block"
                 >
-                  {/* Track cover image */}
-                  <div className="relative h-44 overflow-hidden rounded-t-xl">
-                    <Image
-                      src={trackImages[track.id]}
-                      alt={isAr ? track.ar.name : track.en.name}
-                      fill
-                      className="object-cover transition-transform duration-700 group-hover:scale-110"
+                  {/* Track visual header with gradient + icon */}
+                  <div
+                    className="relative h-44 overflow-hidden rounded-t-xl flex items-center justify-center"
+                    style={{ background: trackGradients[track.id] ?? trackGradients.ai }}
+                  >
+                    {/* Decorative grid pattern */}
+                    <div
+                      className="absolute inset-0 opacity-[0.04]"
+                      style={{
+                        backgroundImage:
+                          "linear-gradient(rgba(255,255,255,0.1) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.1) 1px, transparent 1px)",
+                        backgroundSize: "32px 32px",
+                      }}
                     />
-                    {/* Glass gradient overlay */}
-                    <div className="absolute inset-0 bg-gradient-to-t from-background via-background/30 to-transparent" />
-                    {/* Track icon */}
-                    <div className="absolute top-4 start-4">
-                      <TrackIcon trackId={track.id} size={36} />
+                    {/* Centered track icon */}
+                    <div className="relative transition-transform duration-500 group-hover:scale-110">
+                      <TrackIcon trackId={track.id} size={64} />
                     </div>
+                    {/* Bottom fade into card body */}
+                    <div className="absolute inset-x-0 bottom-0 h-16 bg-gradient-to-t from-background to-transparent" />
                   </div>
                   {/* Track info */}
                   <div className="p-5">

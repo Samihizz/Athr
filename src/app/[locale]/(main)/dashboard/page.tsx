@@ -153,7 +153,7 @@ export default async function DashboardPage({
     supabase.from("announcements").select("*").eq("is_active", true).order("created_at", { ascending: false }).limit(2),
     supabase.from("connections").select("id").eq("receiver_id", user.id).eq("status", "pending"),
     supabase.from("connections").select("id").or(`requester_id.eq.${user.id},receiver_id.eq.${user.id}`).eq("status", "accepted"),
-    supabase.from("event_registrations").select("event_id").eq("profile_id", user.id),
+    supabase.from("event_registrations").select("event_id").eq("member_id", user.id),
   ]);
 
   // Auto-generate referral code if missing

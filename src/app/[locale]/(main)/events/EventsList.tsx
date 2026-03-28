@@ -60,10 +60,10 @@ export default function EventsList({
     const supabase = createClient();
 
     if (registered.has(eventId)) {
-      await supabase.from("event_registrations").delete().eq("event_id", eventId).eq("profile_id", userId);
+      await supabase.from("event_registrations").delete().eq("event_id", eventId).eq("member_id", userId);
       setRegistered((prev) => { const s = new Set(prev); s.delete(eventId); return s; });
     } else {
-      await supabase.from("event_registrations").insert({ event_id: eventId, profile_id: userId });
+      await supabase.from("event_registrations").insert({ event_id: eventId, member_id: userId });
       setRegistered((prev) => new Set(prev).add(eventId));
     }
     setLoadingId(null);

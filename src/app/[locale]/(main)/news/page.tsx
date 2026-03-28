@@ -38,9 +38,8 @@ export default async function NewsPage({
   const displayName = profile?.full_name || user.user_metadata?.full_name || user.email;
 
   // Fetch news from the API route
-  const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || process.env.VERCEL_URL
-    ? `https://${process.env.VERCEL_URL}`
-    : "http://localhost:3000";
+  const baseUrl = process.env.NEXT_PUBLIC_SITE_URL
+    || (process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : "http://localhost:3000");
 
   let news = [];
   try {
