@@ -7,7 +7,6 @@ import {
   StaggerItem,
   CountUp,
 } from "@/components/ui/animations";
-import MeshGradientBackground from "./MeshGradientBackground";
 
 type AnimatedHeroProps = {
   locale: string;
@@ -26,8 +25,8 @@ export default function AnimatedHero({
 }: AnimatedHeroProps) {
   return (
     <section className="relative min-h-screen flex items-center overflow-hidden pt-20">
-      {/* Morphing mesh gradient background */}
-      <MeshGradientBackground />
+      {/* Background gradient */}
+      <div className="absolute inset-0 bg-gradient-to-b from-primary/10 via-transparent to-transparent pointer-events-none" />
 
       {/* Subtle bottom fade to blend into next section */}
       <div
