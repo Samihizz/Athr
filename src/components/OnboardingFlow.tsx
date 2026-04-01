@@ -40,7 +40,6 @@ export default function OnboardingFlow({
   const [visible, setVisible] = useState(false);
   const [step, setStep] = useState(0);
   const [transitioning, setTransitioning] = useState(false);
-  const [direction, setDirection] = useState<"forward" | "back">("forward");
 
   // Form state
   const [fullName, setFullName] = useState(initialName);
@@ -53,7 +52,6 @@ export default function OnboardingFlow({
   const [error, setError] = useState("");
 
   useEffect(() => {
-    // Don't show if profile is already complete or if user dismissed
     const dismissed = localStorage.getItem(`onboarding_done_${userId}`);
     if (profileComplete || (hasBio && hasExpertise) || dismissed) {
       setVisible(false);
@@ -63,7 +61,6 @@ export default function OnboardingFlow({
   }, [profileComplete, hasBio, hasExpertise, userId]);
 
   function goToStep(next: number) {
-    setDirection(next > step ? "forward" : "back");
     setTransitioning(true);
     setTimeout(() => {
       setStep(next);
@@ -114,11 +111,11 @@ export default function OnboardingFlow({
       return;
     }
     setSaving(false);
-    goToStep(2);
+    handleFinish();
   }
 
-  function handleSkipProfile() {
-    goToStep(2);
+  function handleSkip() {
+    handleFinish();
   }
 
   function handleFinish() {
@@ -128,8 +125,6 @@ export default function OnboardingFlow({
   }
 
   if (!visible) return null;
-
-  const selectedTrack = tracks.find((t) => t.id === expertise);
 
   const t = {
     welcomeTitle: isAr ? "حبابك في أثر" : "Welcome to Athr",
@@ -141,16 +136,16 @@ export default function OnboardingFlow({
       : "The Eastern Province's professional community for Sudanese talent",
     bullet1: isAr
       ? "تواصل مع شفاتة في مجالك وتبادلوا الخبرات"
-      : "Connect with professionals in your field and share expertise",
+      : "Connect with professionals in your field",
     bullet2: isAr
       ? "احضر برامج وفعاليات حصرية للمجتمع"
-      : "Attend exclusive community events and programs",
+      : "Attend exclusive community events",
     bullet3: isAr
       ? "طوّر مهاراتك من خلال محتوى ومسارات تعليمية"
-      : "Grow your skills with curated content and learning tracks",
+      : "Grow with curated learning tracks",
     getStarted: isAr ? "يلا نبدأ" : "Let's Get Started",
-    profileTitle: isAr ? "كمّل ملفك" : "Complete Your Profile",
-    profileSubtitle: isAr ? "قول لينا عن نفسك" : "Tell us about yourself",
+    profileTitle: isAr ? "كمّل ملفك" : "Quick Profile Setup",
+    profileSubtitle: isAr ? "عرّفنا بنفسك — تقدر تكمل بعدين" : "Tell us a bit about yourself — you can always update later",
     fullName: isAr ? "الاسم الكامل" : "Full Name",
     bio: isAr ? "نبذة عنك" : "Bio",
     bioPlaceholder: isAr ? "أخبرنا عن نفسك..." : "Tell us about yourself...",
@@ -159,17 +154,8 @@ export default function OnboardingFlow({
     selectTrack: isAr ? "اختر مسارك" : "Select your track",
     uploadPhoto: isAr ? "رفع صورة" : "Upload Photo",
     changePhoto: isAr ? "تغيير الصورة" : "Change Photo",
-    next: isAr ? "التالي" : "Next",
-    skip: isAr ? "بعدين" : "Skip for now",
-    doneTitle: isAr ? "حبابك في الضل!" : "You're All Set!",
-    doneSubtitle: isAr
-      ? "أنت الحين جزء من مجتمع أثر"
-      : "You're now part of the Athr community",
-    exploreMembers: isAr ? "شوف الشفاتة" : "Explore Members",
-    browseEvents: isAr ? "شوف البرامج" : "Browse Events",
-    readContent: isAr ? "طالع الشمارات" : "Read Content",
-    goToDashboard: isAr ? "خش محل الشغل" : "Go to Dashboard",
-    yourTrack: isAr ? "مسارك" : "Your Track",
+    save: isAr ? "حفظ وأدخل" : "Save & Enter",
+    skip: isAr ? "دخول مباشر" : "Skip — take me in",
   };
 
   return (
@@ -186,13 +172,13 @@ export default function OnboardingFlow({
         <div className="h-1 w-full bg-border">
           <div
             className="h-full gradient-gold transition-all duration-500 ease-out"
-            style={{ width: `${((step + 1) / 3) * 100}%` }}
+            style={{ width: `${((step + 1) / 2) * 100}%` }}
           />
         </div>
 
         {/* Step dots */}
         <div className="flex items-center justify-center gap-2 pt-5">
-          {[0, 1, 2].map((i) => (
+          {[0, 1].map((i) => (
             <div
               key={i}
               className={`h-2 rounded-full transition-all duration-300 ${
@@ -206,14 +192,12 @@ export default function OnboardingFlow({
           ))}
         </div>
 
-        {/* Content area with transitions */}
+        {/* Content area */}
         <div className="overflow-y-auto" style={{ maxHeight: "calc(90vh - 40px)" }}>
           <div
             className={`transition-all duration-250 ease-out ${
               transitioning
-                ? direction === "forward"
-                  ? "opacity-0 translate-x-4"
-                  : "opacity-0 -translate-x-4"
+                ? "opacity-0 translate-x-4"
                 : "opacity-100 translate-x-0"
             }`}
           >
@@ -263,10 +247,18 @@ export default function OnboardingFlow({
                 >
                   {t.getStarted}
                 </button>
+
+                {/* Skip straight to dashboard */}
+                <button
+                  onClick={handleSkip}
+                  className="w-full py-3 mt-2 rounded-xl text-sm text-muted hover:text-foreground transition-colors"
+                >
+                  {t.skip}
+                </button>
               </div>
             )}
 
-            {/* ── Step 1: Profile ── */}
+            {/* ── Step 1: Quick Profile ── */}
             {step === 1 && (
               <div className="p-8">
                 <div className="text-center mb-6">
@@ -417,127 +409,15 @@ export default function OnboardingFlow({
                     disabled={saving}
                     className="w-full btn-primary disabled:opacity-50"
                   >
-                    {saving ? "..." : t.next}
+                    {saving ? "..." : t.save}
                   </button>
                   <button
-                    onClick={handleSkipProfile}
+                    onClick={handleSkip}
                     className="w-full py-3 rounded-xl text-sm text-muted hover:text-foreground transition-colors"
                   >
                     {t.skip}
                   </button>
                 </div>
-              </div>
-            )}
-
-            {/* ── Step 2: Done ── */}
-            {step === 2 && (
-              <div className="p-8 text-center relative overflow-hidden">
-                {/* Confetti animation */}
-                <div className="onboarding-confetti" aria-hidden="true">
-                  {Array.from({ length: 24 }).map((_, i) => (
-                    <span key={i} className="confetti-piece" />
-                  ))}
-                </div>
-
-                <div className="mb-6 relative z-10">
-                  <div className="inline-flex items-center justify-center h-16 w-16 rounded-full gradient-gold mb-4 animate-pulse-glow">
-                    <svg
-                      className="w-8 h-8 text-background"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      stroke="currentColor"
-                      strokeWidth={2.5}
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        d="M5 13l4 4L19 7"
-                      />
-                    </svg>
-                  </div>
-                  <h2 className="text-2xl font-bold text-gradient-gold">
-                    {t.doneTitle}
-                  </h2>
-                  <p className="text-sm text-muted mt-2">{t.doneSubtitle}</p>
-                </div>
-
-                {/* Selected track */}
-                {selectedTrack && (
-                  <Link
-                    href={`/${locale}/tracks/${selectedTrack.id}`}
-                    className="inline-flex items-center gap-2 glass rounded-xl px-4 py-2.5 mb-6 border border-gold/30 hover:bg-surface-hover transition-colors"
-                  >
-                    <TrackIcon trackId={selectedTrack.id} size={20} />
-                    <span className="text-sm font-medium">
-                      {t.yourTrack}:{" "}
-                      {isAr ? selectedTrack.ar.name : selectedTrack.en.name}
-                    </span>
-                  </Link>
-                )}
-
-                {/* Action cards */}
-                <div className="space-y-2.5 mb-6 relative z-10">
-                  {[
-                    {
-                      href: `/${locale}/community`,
-                      label: t.exploreMembers,
-                      icon: (
-                        <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
-                          <path strokeLinecap="round" strokeLinejoin="round" d="M15 19.128a9.38 9.38 0 002.625.372 9.337 9.337 0 004.121-.952 4.125 4.125 0 00-7.533-2.493M15 19.128v-.003c0-1.113-.285-2.16-.786-3.07M15 19.128v.106A12.318 12.318 0 018.624 21c-2.331 0-4.512-.645-6.374-1.766l-.001-.109a6.375 6.375 0 0111.964-3.07M12 6.375a3.375 3.375 0 11-6.75 0 3.375 3.375 0 016.75 0zm8.25 2.25a2.625 2.625 0 11-5.25 0 2.625 2.625 0 015.25 0z" />
-                        </svg>
-                      ),
-                    },
-                    {
-                      href: `/${locale}/events`,
-                      label: t.browseEvents,
-                      icon: (
-                        <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
-                          <path strokeLinecap="round" strokeLinejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 012.25-2.25h13.5A2.25 2.25 0 0121 7.5v11.25m-18 0A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75m-18 0v-7.5A2.25 2.25 0 015.25 9h13.5A2.25 2.25 0 0121 11.25v7.5" />
-                        </svg>
-                      ),
-                    },
-                    {
-                      href: `/${locale}/feed`,
-                      label: t.readContent,
-                      icon: (
-                        <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
-                          <path strokeLinecap="round" strokeLinejoin="round" d="M12 7.5h1.5m-1.5 3h1.5m-7.5 3h7.5m-7.5 3h7.5m3-9h3.375c.621 0 1.125.504 1.125 1.125V18a2.25 2.25 0 01-2.25 2.25M16.5 7.5V18a2.25 2.25 0 002.25 2.25M16.5 7.5V4.875c0-.621-.504-1.125-1.125-1.125H4.125C3.504 3.75 3 4.254 3 4.875V18a2.25 2.25 0 002.25 2.25h13.5" />
-                        </svg>
-                      ),
-                    },
-                  ].map((action) => (
-                    <Link
-                      key={action.href}
-                      href={action.href}
-                      className="flex items-center gap-3 glass rounded-xl p-3.5 hover:bg-surface-hover transition-colors text-start"
-                    >
-                      <div className="shrink-0 h-9 w-9 rounded-lg bg-gold/10 text-gold flex items-center justify-center">
-                        {action.icon}
-                      </div>
-                      <span className="text-sm font-medium">{action.label}</span>
-                      <svg
-                        className={`w-4 h-4 text-muted ms-auto ${isAr ? "rotate-180" : ""}`}
-                        fill="none"
-                        viewBox="0 0 24 24"
-                        stroke="currentColor"
-                        strokeWidth={2}
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          d="M9 5l7 7-7 7"
-                        />
-                      </svg>
-                    </Link>
-                  ))}
-                </div>
-
-                <button
-                  onClick={handleFinish}
-                  className="w-full btn-primary relative z-10"
-                >
-                  {t.goToDashboard}
-                </button>
               </div>
             )}
           </div>

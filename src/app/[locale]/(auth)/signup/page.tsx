@@ -139,7 +139,7 @@ function SignupContent() {
     // Generate a referral code for the new user
     const newReferralCode = generateReferralCode(fullName);
 
-    const { error: authError } = await supabase.auth.signUp({
+    const { data: signUpData, error: authError } = await supabase.auth.signUp({
       email,
       password,
       options: {
@@ -148,7 +148,6 @@ function SignupContent() {
           referral_code: newReferralCode,
           ...(refCode ? { referred_by: refCode } : {}),
         },
-        emailRedirectTo: `${window.location.origin}/auth/callback?locale=${locale}`,
       },
     });
 
@@ -158,6 +157,50 @@ function SignupContent() {
       return;
     }
 
+    // If email confirmation is disabled, the user is auto-confirmed
+    // Try to sign in immediately
+    if (signUpData.user && !signUpData.user.identities?.length === false) {
+      const { error: signInError } = await supabase.auth.signInWithPassword({
+        email,
+        password,
+      });
+
+      if (!signInError) {
+        // Process referral inline since we're skipping the callback
+        if (refCode) {
+          const { data: referrer } = await supabase
+            .from("profiles")
+            .select("id, referral_count")
+            .eq("referral_code", refCode)
+            .single();
+
+          if (referrer) {
+            await supabase
+              .from("profiles")
+              .update({ referred_by: refCode })
+              .eq("id", signUpData.user.id);
+
+            await supabase
+              .from("profiles")
+              .update({ referral_count: (referrer.referral_count || 0) + 1 })
+              .eq("id", referrer.id);
+          }
+        }
+
+        // Update referral code on profile
+        if (newReferralCode) {
+          await supabase
+            .from("profiles")
+            .update({ referral_code: newReferralCode })
+            .eq("id", signUpData.user.id);
+        }
+
+        router.push(`/${locale}/dashboard`);
+        return;
+      }
+    }
+
+    // Fallback: if email confirmation is still required, show the old flow
     setSuccess(true);
     setLoading(false);
   }

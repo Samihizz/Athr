@@ -108,9 +108,7 @@ async function redirectAfterAuth(
       }
     }
 
-    if (!profile?.bio) {
-      return NextResponse.redirect(`${origin}/${locale}/profile-setup`);
-    }
+    // Always go to dashboard — OnboardingFlow handles profile completion there
   }
 
   return NextResponse.redirect(`${origin}/${locale}/dashboard`);

@@ -1,6 +1,5 @@
 "use client";
 
-import Image from "next/image";
 import Link from "next/link";
 import {
   FadeIn,
@@ -8,7 +7,7 @@ import {
   StaggerItem,
   CountUp,
 } from "@/components/ui/animations";
-import FloatingOrbs from "@/components/FloatingOrbs";
+import MeshGradientBackground from "./MeshGradientBackground";
 
 type AnimatedHeroProps = {
   locale: string;
@@ -27,113 +26,81 @@ export default function AnimatedHero({
 }: AnimatedHeroProps) {
   return (
     <section className="relative min-h-screen flex items-center overflow-hidden pt-20">
-      {/* Floating abstract blur orbs */}
-      <FloatingOrbs variant="hero" />
+      {/* Morphing mesh gradient background */}
+      <MeshGradientBackground />
 
-      {/* Subtle grid */}
-      <div className="absolute inset-0 grid-bg opacity-30" />
+      {/* Subtle bottom fade to blend into next section */}
+      <div
+        className="absolute bottom-0 left-0 right-0 h-32 pointer-events-none"
+        style={{
+          background: "linear-gradient(to top, #050510 0%, transparent 100%)",
+        }}
+      />
 
-      {/* Noise texture */}
-      <div className="absolute inset-0 noise-overlay" />
-
-      <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-16 lg:py-24 w-full z-10">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 items-center">
-          {/* Left: Text content */}
-          <div>
-            <FadeIn delay={0.1}>
-              <div className="pill">
-                {isAr ? "ناس الشرقية 🇸🇦" : "🇸🇦 Eastern Region Community"}
-              </div>
-            </FadeIn>
-
-            <FadeIn delay={0.2}>
-              <h1 className="mt-6 text-4xl sm:text-5xl lg:text-6xl font-extrabold leading-[1.1] tracking-tight">
-                {t.landing.heroTitle}
-                <br />
-                <span className="text-gradient-gold">
-                  {t.landing.heroTitleAccent}
-                </span>
-              </h1>
-            </FadeIn>
-
-            <FadeIn delay={0.35}>
-              <p className="mt-6 text-lg text-muted leading-relaxed max-w-lg">
-                {t.landing.heroSubtitle}
-              </p>
-            </FadeIn>
-
-            <FadeIn delay={0.5}>
-              <div className="mt-8 flex flex-wrap gap-4">
-                <Link href={`/${locale}/signup`} className="btn-primary">
-                  {t.landing.heroCta}
-                </Link>
-                <a href="#tracks" className="btn-secondary">
-                  {t.landing.heroSecondaryCta}
-                </a>
-              </div>
-            </FadeIn>
-
-            {/* Mini stats row */}
-            <StaggerChildren className="mt-12 flex flex-wrap gap-8" delay={0.6} stagger={0.12}>
-              {stats.map((stat) => {
-                const isFraction = stat.value.includes("/");
-                const hasPlus = stat.value.includes("+");
-                const numericValue = parseInt(stat.value.replace(/[^0-9]/g, ""));
-                return (
-                  <StaggerItem key={stat.label}>
-                    <div>
-                      <div className="text-2xl font-bold text-gradient-gold">
-                        {isFraction ? (
-                          stat.value
-                        ) : (
-                          <CountUp
-                            value={numericValue}
-                            suffix={hasPlus ? "+" : ""}
-                          />
-                        )}
-                      </div>
-                      <div className="text-sm text-muted">{stat.label}</div>
-                    </div>
-                  </StaggerItem>
-                );
-              })}
-            </StaggerChildren>
+      {/* Content — centered text over the constellation */}
+      <div className="relative mx-auto max-w-4xl px-4 sm:px-6 lg:px-8 py-16 lg:py-24 w-full z-10 text-center">
+        <FadeIn delay={0.1}>
+          <div className="pill inline-block">
+            {isAr ? "ناس الشرقية 🇸🇦" : "🇸🇦 Eastern Region Community"}
           </div>
+        </FadeIn>
 
-          {/* Right: Hero mockup with glow */}
-          <FadeIn delay={0.4} y={0}>
-            <div className="relative">
-              <div className="img-glow animate-float">
-                <Image
-                  src="/images/hero-mockup.svg"
-                  alt="Athr Platform"
-                  width={800}
-                  height={500}
-                  className="w-full h-auto"
-                  priority
-                />
-              </div>
-              {/* Floating accent card — liquid glass */}
-              <div className="absolute -bottom-4 -start-4 sm:-start-8 card-elevated p-4 animate-pulse-glow">
-                <div className="flex items-center gap-3">
-                  <div className="h-10 w-10 rounded-xl gradient-gold flex items-center justify-center text-background font-bold text-sm">
-                    6
+        <FadeIn delay={0.2}>
+          <h1 className="mt-6 text-4xl sm:text-5xl lg:text-6xl xl:text-7xl font-extrabold leading-[1.1] tracking-tight">
+            {t.landing.heroTitle}
+            <br />
+            <span className="text-gradient-gold">
+              {t.landing.heroTitleAccent}
+            </span>
+          </h1>
+        </FadeIn>
+
+        <FadeIn delay={0.35}>
+          <p className="mt-6 text-lg sm:text-xl text-muted leading-relaxed max-w-2xl mx-auto">
+            {t.landing.heroSubtitle}
+          </p>
+        </FadeIn>
+
+        <FadeIn delay={0.5}>
+          <div className="mt-8 flex flex-wrap justify-center gap-4">
+            <Link href={`/${locale}/signup`} className="btn-primary">
+              {t.landing.heroCta}
+            </Link>
+            <a href="#tracks" className="btn-secondary">
+              {t.landing.heroSecondaryCta}
+            </a>
+          </div>
+        </FadeIn>
+
+        {/* Mini stats row */}
+        <StaggerChildren
+          className="mt-12 flex flex-wrap justify-center gap-8 sm:gap-12"
+          delay={0.6}
+          stagger={0.12}
+        >
+          {stats.map((stat) => {
+            const isFraction = stat.value.includes("/");
+            const hasPlus = stat.value.includes("+");
+            const numericValue = parseInt(stat.value.replace(/[^0-9]/g, ""));
+            return (
+              <StaggerItem key={stat.label}>
+                <div>
+                  <div className="text-2xl sm:text-3xl font-bold text-gradient-gold">
+                    {isFraction ? (
+                      stat.value
+                    ) : (
+                      <CountUp
+                        value={numericValue}
+                        suffix={hasPlus ? "+" : ""}
+                      />
+                    )}
                   </div>
-                  <div>
-                    <div className="text-sm font-semibold">
-                      {isAr ? "مسارات متخصصة" : "Expert Tracks"}
-                    </div>
-                    <div className="text-xs text-muted">
-                      {isAr
-                        ? "من الذكاء الاصطناعي إلى الأعمال"
-                        : "From AI to Business"}
-                    </div>
-                  </div>
+                  <div className="text-sm text-muted">{stat.label}</div>
                 </div>
-              </div>
-            </div>
-          </FadeIn>
-        </div>
+              </StaggerItem>
+            );
+          })}
+        </StaggerChildren>
       </div>
     </section>
   );
