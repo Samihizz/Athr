@@ -1,6 +1,6 @@
 import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
-import { tracks } from "@/lib/tracks";
+import { tracks, ATHR_COMMUNITY_WHATSAPP } from "@/lib/tracks";
 import AuthNavbar from "@/components/layout/AuthNavbar";
 import PageHeader from "@/components/PageHeader";
 import ConnectionsClient from "./ConnectionsClient";
@@ -24,6 +24,12 @@ export default async function ConnectionsPage({
     .select("full_name, is_admin, city, expertise")
     .eq("id", user.id)
     .single();
+
+  // Fetch ALL members for the Members directory tab
+  const { data: members } = await supabase
+    .from("profiles")
+    .select("id, full_name, bio, city, expertise, role, skills, avatar_url")
+    .order("created_at", { ascending: false });
 
   // Fetch all connections involving the user (not declined)
   const { data: connections } = await supabase
@@ -82,7 +88,7 @@ export default async function ConnectionsPage({
       />
       <main className="pt-20 pb-16">
         <PageHeader
-          title={isAr ? "شبكتي" : "Connections"}
+          title={isAr ? "التواصل" : "Connections"}
           subtitle={
             isAr
               ? "شبكتك المهنية في مجتمع أثر."
@@ -102,6 +108,16 @@ export default async function ConnectionsPage({
             locale={locale}
             userCity={profile?.city || null}
             userTrack={profile?.expertise || null}
+            members={members || []}
+            tracks={tracks.map((t) => ({ id: t.id, name: isAr ? t.ar.name : t.en.name }))}
+            whatsappLinks={{
+              community: ATHR_COMMUNITY_WHATSAPP,
+              tracks: tracks.map((t) => ({
+                id: t.id,
+                name: isAr ? t.ar.name : t.en.name,
+                whatsappGroup: t.whatsappGroup,
+              })),
+            }}
           />
         </div>
       </main>

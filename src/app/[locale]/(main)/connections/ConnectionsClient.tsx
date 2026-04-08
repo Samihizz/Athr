@@ -5,6 +5,8 @@ import Link from "next/link";
 import { createClient } from "@/lib/supabase/client";
 import type { Connection } from "@/types";
 import SuggestedConnections from "@/components/connections/SuggestedConnections";
+import MemberDirectory from "@/app/[locale]/(main)/community/MemberDirectory";
+import WhatsAppGroupCard, { CommunityWhatsAppCard } from "@/components/WhatsAppGroupCard";
 
 type ProfileInfo = {
   id: string;
@@ -16,6 +18,22 @@ type ProfileInfo = {
   skills: string | string[] | null;
 };
 
+type MemberInfo = {
+  id: string;
+  full_name: string | null;
+  bio: string | null;
+  city: string | null;
+  expertise: string | null;
+  role: string | null;
+  skills: string | string[] | null;
+  avatar_url: string | null;
+};
+
+type WhatsAppLinks = {
+  community: string;
+  tracks: { id: string; name: string; whatsappGroup: string }[];
+};
+
 type ConnectionsClientProps = {
   connections: Connection[];
   profileMap: Record<string, ProfileInfo>;
@@ -24,9 +42,12 @@ type ConnectionsClientProps = {
   locale: string;
   userCity: string | null;
   userTrack: string | null;
+  members: MemberInfo[];
+  tracks: { id: string; name: string }[];
+  whatsappLinks: WhatsAppLinks;
 };
 
-type Tab = "connected" | "pending" | "sent" | "suggested";
+type Tab = "connected" | "pending" | "sent" | "suggested" | "members";
 
 export default function ConnectionsClient({
   connections: initialConnections,
@@ -36,6 +57,9 @@ export default function ConnectionsClient({
   locale,
   userCity,
   userTrack,
+  members,
+  tracks: tracksList,
+  whatsappLinks,
 }: ConnectionsClientProps) {
   const [connections, setConnections] = useState<Connection[]>(initialConnections);
   const [profiles, setProfiles] = useState<Record<string, ProfileInfo>>(profileMap);
@@ -47,23 +71,25 @@ export default function ConnectionsClient({
   const isAr = locale === "ar";
 
   const t = {
-    myConnections: isAr ? "الفِرد" : "My Connections",
-    pending: isAr ? "طلبات الاتصال" : "Pending Requests",
+    myConnections: isAr ? "اتصالاتي" : "My Connections",
+    pending: isAr ? "طلبات واردة" : "Pending Requests",
     sent: isAr ? "طلبات مرسلة" : "Sent Requests",
     viewProfile: isAr ? "عرض الملف" : "View Profile",
     remove: isAr ? "إزالة الاتصال" : "Remove Connection",
-    accept: isAr ? "اقبل" : "Accept",
-    decline: isAr ? "ارفض" : "Decline",
+    accept: isAr ? "قبول" : "Accept",
+    decline: isAr ? "رفض" : "Decline",
     cancel: isAr ? "إلغاء الطلب" : "Cancel Request",
-    noConnections: isAr ? "ما في اتصالات لسه" : "No connections yet",
-    noPending: isAr ? "ما في طلبات" : "No pending requests",
-    noSent: isAr ? "ما في طلبات مرسلة" : "No sent requests",
+    noConnections: isAr ? "لا توجد اتصالات بعد" : "No connections yet",
+    noPending: isAr ? "لا توجد طلبات" : "No pending requests",
+    noSent: isAr ? "لا توجد طلبات مرسلة" : "No sent requests",
     note: isAr ? "ملاحظة" : "Note",
     editNote: isAr ? "تعديل الملاحظة" : "Edit Note",
     saveNote: isAr ? "حفظ" : "Save",
     connectionCount: (n: number) =>
       isAr ? `${n} اتصال` : `${n} connection${n !== 1 ? "s" : ""}`,
-    suggested: isAr ? "فِرد مقترحين" : "Suggested",
+    suggested: isAr ? "أعضاء مقترحون" : "Suggested",
+    members: isAr ? "الأعضاء" : "Members",
+    whatsappGroups: isAr ? "انضم للمجموعات" : "Join Our Groups",
   };
 
   // Real-time subscription
@@ -200,6 +226,7 @@ export default function ConnectionsClient({
     { key: "pending", label: t.pending, count: pendingReceived.length },
     { key: "sent", label: t.sent, count: pendingSent.length },
     { key: "suggested", label: t.suggested, count: 0 },
+    { key: "members", label: t.members, count: members.length },
   ];
 
   function renderMemberCard(
@@ -230,7 +257,7 @@ export default function ConnectionsClient({
           </div>
           <div className="flex-1 min-w-0">
             <h3 className="font-semibold text-sm truncate">
-              {profile.full_name || (isAr ? "شفت" : "Member")}
+              {profile.full_name || (isAr ? "عضو" : "Member")}
             </h3>
             <div className="flex items-center gap-2 text-xs text-muted">
               {profile.city && <span>{profile.city}</span>}
@@ -416,7 +443,7 @@ export default function ConnectionsClient({
                       </div>
                       <div className="flex-1 min-w-0">
                         <h3 className="font-semibold text-sm">
-                          {profile.full_name || (isAr ? "شفت" : "Member")}
+                          {profile.full_name || (isAr ? "عضو" : "Member")}
                         </h3>
                         <div className="flex items-center gap-2 text-xs text-muted">
                           {profile.city && <span>{profile.city}</span>}
@@ -490,7 +517,7 @@ export default function ConnectionsClient({
                       </div>
                       <div className="flex-1 min-w-0">
                         <h3 className="font-semibold text-sm">
-                          {profile.full_name || (isAr ? "شفت" : "Member")}
+                          {profile.full_name || (isAr ? "عضو" : "Member")}
                         </h3>
                         <div className="flex items-center gap-2 text-xs text-muted">
                           {profile.city && <span>{profile.city}</span>}
@@ -549,6 +576,39 @@ export default function ConnectionsClient({
           layout="grid"
         />
       )}
+
+      {activeTab === "members" && (
+        <MemberDirectory
+          members={members}
+          locale={locale}
+          tracks={tracksList}
+          currentUserId={currentUserId}
+        />
+      )}
+
+      {/* WhatsApp Groups — always visible below tabs */}
+      <section className="mt-16">
+        <h2 className="text-xl font-bold mb-6">
+          {t.whatsappGroups}
+        </h2>
+
+        <div className="mb-6">
+          <CommunityWhatsAppCard whatsappLink={whatsappLinks.community} locale={locale} />
+        </div>
+
+        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4">
+          {whatsappLinks.tracks.map((track) => (
+            <WhatsAppGroupCard
+              key={track.id}
+              trackName={track.name}
+              trackId={track.id}
+              whatsappLink={track.whatsappGroup}
+              locale={locale}
+              variant="compact"
+            />
+          ))}
+        </div>
+      </section>
     </div>
   );
 }

@@ -31,7 +31,7 @@ export default function PostComposer({
   const textareaRef = useRef<HTMLTextAreaElement>(null);
 
   const t = {
-    placeholder: isAr ? "قول الفي بالك..." : "What's on your mind?",
+    placeholder: isAr ? "شارك أفكارك..." : "What's on your mind?",
     post: isAr ? "انشر" : "Post",
     photo: isAr ? "صورة / فيديو" : "Photo / Video",
     selectTrack: isAr ? "المسار" : "Track",

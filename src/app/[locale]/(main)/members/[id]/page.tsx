@@ -133,7 +133,7 @@ export default async function MemberProfilePage({
     .slice(0, 2);
 
   const t = {
-    back: isAr ? "العودة للشفاتة" : "Back to Directory",
+    back: isAr ? "العودة للأعضاء" : "Back to Directory",
     bio: isAr ? "نبذة" : "About",
     education: isAr ? "التعليم" : "Education",
     experience: isAr ? "الخبرة" : "Experience",
@@ -152,7 +152,7 @@ export default async function MemberProfilePage({
 
   const profileUrl = `https://athrsa.org/${locale}/members/${id}`;
   const shareUrl = `https://wa.me/?text=${encodeURIComponent(
-    `${member.full_name} — ${isAr ? "شفت في أثر" : "Athr Member"}\n${profileUrl}`
+    `${member.full_name} — ${isAr ? "عضو في أثر" : "Athr Member"}\n${profileUrl}`
   )}`;
 
   const joinDate = member.created_at

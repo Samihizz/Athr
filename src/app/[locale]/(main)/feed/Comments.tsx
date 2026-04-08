@@ -81,7 +81,7 @@ export default function Comments({
   const t = {
     comments: isAr ? "التعليقات" : "Comments",
     writeComment: isAr ? "اكتب تعليق" : "Write a comment",
-    noComments: isAr ? "ما في تعليقات لسه" : "No comments yet",
+    noComments: isAr ? "لا توجد تعليقات بعد" : "No comments yet",
     delete: isAr ? "احذف" : "Delete",
   };
 

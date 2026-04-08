@@ -3,7 +3,8 @@
 import Image from "next/image";
 import Link from "next/link";
 import { useState, useEffect } from "react";
-import { motion, useReducedMotion } from "framer-motion";
+import { usePathname } from "next/navigation";
+import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
 // import ThemeToggle from "@/components/ThemeToggle";
 
 type NavbarProps = {
@@ -16,7 +17,9 @@ type NavbarProps = {
 export default function Navbar({ locale, t }: NavbarProps) {
   const [mobileOpen, setMobileOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+  const pathname = usePathname();
   const otherLocale = locale === "ar" ? "en" : "ar";
+  const isAr = locale === "ar";
   const prefersReduced = useReducedMotion();
 
   useEffect(() => {
@@ -71,7 +74,7 @@ export default function Navbar({ locale, t }: NavbarProps) {
           {/* Right side */}
           <div className="hidden md:flex items-center gap-2">
             <Link
-              href={`/${otherLocale}`}
+              href={pathname.replace(`/${locale}`, `/${otherLocale}`)}
               className="text-sm text-muted hover:text-foreground transition-colors px-3 py-2 rounded-xl hover:bg-surface-hover"
             >
               {t.common.language}
@@ -108,14 +111,25 @@ export default function Navbar({ locale, t }: NavbarProps) {
       </div>
 
       {/* Mobile menu */}
-      {mobileOpen && (
-        <motion.div
-          className="md:hidden mx-4 mt-2"
-          initial={prefersReduced ? { opacity: 1 } : { opacity: 0, y: -8 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.2, ease: "easeOut" }}
-        >
-          <div className="glass-strong rounded-2xl p-4 flex flex-col gap-1">
+      <AnimatePresence>
+        {mobileOpen && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.2 }}
+            className="md:hidden fixed inset-0 top-0 z-40 bg-background/80 backdrop-blur-sm"
+            onClick={() => setMobileOpen(false)}
+          >
+            <motion.div
+              initial={{ x: isAr ? "-100%" : "100%" }}
+              animate={{ x: 0 }}
+              exit={{ x: isAr ? "-100%" : "100%" }}
+              transition={{ duration: 0.3, ease: [0.32, 0.72, 0, 1] }}
+              className={`fixed top-0 ${isAr ? "left-0" : "right-0"} w-[80%] max-w-[320px] h-full overflow-y-auto overscroll-contain glass-strong`}
+              onClick={(e) => e.stopPropagation()}
+            >
+              <div className="p-4 pt-6 flex flex-col gap-1">
             {[
               { href: `/${locale}`, label: t.common.home },
               { href: `/${locale}/community`, label: t.common.community },
@@ -132,7 +146,7 @@ export default function Navbar({ locale, t }: NavbarProps) {
             ))}
             <div className="section-divider my-2" />
             <Link
-              href={`/${otherLocale}`}
+              href={pathname.replace(`/${locale}`, `/${otherLocale}`)}
               className="px-4 py-3 text-sm text-muted hover:text-foreground rounded-xl hover:bg-surface-hover transition-colors"
             >
               {t.common.language}
@@ -152,8 +166,10 @@ export default function Navbar({ locale, t }: NavbarProps) {
               {t.common.signup}
             </Link>
           </div>
-        </motion.div>
-      )}
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </motion.nav>
   );
 }

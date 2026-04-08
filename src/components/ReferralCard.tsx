@@ -35,20 +35,20 @@ export default function ReferralCard({
   const isFull = memberCount >= MAX_MEMBERS;
   const link = referralCode ? getReferralLink(referralCode) : "";
   const whatsappMessage = encodeURIComponent(
-    `خش أثر — ملتقى الشفاتة في الشرقية! ${link}`
+    `انضم لأثر — ملتقى المحترفين في الشرقية! ${link}`
   );
   const whatsappUrl = `https://wa.me/?text=${whatsappMessage}`;
 
   const t = {
-    title: isAr ? "جيب صاحبك" : "Invite Friends",
+    title: isAr ? "ادعُ صديقاً" : "Invite Friends",
     yourLink: isAr ? "رابط دعوتك" : "Your referral link",
     copyLink: isAr ? "انسخ الرابط" : "Copy Link",
     copied: isAr ? "تم النسخ!" : "Copied!",
     shareWhatsApp: isAr ? "شارك في الواتساب" : "Share on WhatsApp",
     inviteCount: isAr
-      ? `جبت ${referralCount} صاحب`
+      ? `دعوت ${referralCount} صديق`
       : `You've invited ${referralCount} friend${referralCount !== 1 ? "s" : ""}`,
-    topReferrers: isAr ? "أكتر ناس جابوا أصحاب" : "Top Referrers",
+    topReferrers: isAr ? "أكثر الأعضاء دعوةً" : "Top Referrers",
     communityCapacity: isAr ? "سعة الملتقى" : "Community Capacity",
     communityFull: isAr ? "الملتقى امتلأ!" : "Community is full!",
     noCode: isAr ? "جاري إنشاء رابط الدعوة..." : "Generating your referral link...",

@@ -67,9 +67,9 @@ export default function TrackChat({
     title: isAr ? "دردشة المسار" : "Track Chat",
     placeholder: isAr ? "اكتب رسالة..." : "Type a message...",
     send: isAr ? "إرسال" : "Send",
-    online: isAr ? "شفت أونلاين" : "online",
+    online: isAr ? "متصل الآن" : "online",
     delete: isAr ? "حذف" : "Delete",
-    noMessages: isAr ? "ما في رسائل لسه — كن أول واحد!" : "No messages yet — be the first!",
+    noMessages: isAr ? "لا توجد رسائل بعد — كن أول من يبدأ!" : "No messages yet — be the first!",
   };
 
   // Scroll to bottom

@@ -41,8 +41,8 @@ export default function NotificationBell({ locale, userId }: NotificationBellPro
 
   const t = {
     title: isAr ? "التنبيهات" : "Notifications",
-    markAllRead: isAr ? "قرأتها كلها" : "Mark all read",
-    noNotifications: isAr ? "ما في تنبيهات" : "No notifications",
+    markAllRead: isAr ? "تم قراءة الكل" : "Mark all read",
+    noNotifications: isAr ? "لا توجد تنبيهات" : "No notifications",
   };
 
   // Fetch notifications on mount

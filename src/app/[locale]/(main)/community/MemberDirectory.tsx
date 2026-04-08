@@ -64,8 +64,8 @@ export default function MemberDirectory({
     all: isAr ? "الكل" : "All",
     allCities: isAr ? "جميع المدن" : "All Cities",
     allTracks: isAr ? "جميع المسارات" : "All Tracks",
-    noResults: isAr ? "ما في نتائج" : "No members found",
-    results: isAr ? `${filtered.length} شفت` : `${filtered.length} members`,
+    noResults: isAr ? "لا توجد نتائج" : "No members found",
+    results: isAr ? `${filtered.length} عضو` : `${filtered.length} members`,
     viewProfile: isAr ? "الملف" : "View",
   };
 
@@ -140,7 +140,7 @@ export default function MemberDirectory({
                   <div className="min-w-0 flex-1">
                     <div className="flex items-center gap-2 flex-wrap">
                       <span className="font-semibold text-sm truncate hover:text-gold transition-colors">
-                        {member.full_name || (isAr ? "شفت" : "Member")}
+                        {member.full_name || (isAr ? "عضو" : "Member")}
                       </span>
                       {trackName && (
                         <span className="text-[10px] px-2 py-0.5 rounded-full bg-gold/10 text-gold-light font-medium shrink-0">

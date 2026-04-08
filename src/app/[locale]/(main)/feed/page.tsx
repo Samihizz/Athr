@@ -94,7 +94,7 @@ export default async function FeedPage({
       <AuthNavbar locale={locale} userName={profile?.full_name || user.email || ""} userId={user.id} isAdmin={profile?.is_admin} />
       <main className="pt-20 pb-16">
         <PageHeader
-          title={isAr ? "الشمارات" : "Feed"}
+          title={isAr ? "المنشورات" : "Feed"}
           subtitle={
             isAr
               ? "شارك أفكارك واسأل أسئلتك وخليك على تواصل مع المجتمع."

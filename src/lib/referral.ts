@@ -1,5 +1,5 @@
 /**
- * Referral system utilities for "جيب صاحبك" (Bring your friend)
+ * Referral system utilities for "ادعُ صديقاً" (Invite a friend)
  * Temporary system until 500 member capacity is reached.
  */
 

@@ -15,7 +15,7 @@ export default function LoginPage() {
 
   const isAr = locale === "ar";
   const t = {
-    loginTitle: isAr ? "حبابك" : "Welcome Back",
+    loginTitle: isAr ? "مرحباً بك" : "Welcome Back",
     loginSubtitle: isAr ? "سجّل الدخول إلى حسابك في أثر" : "Log in to your Athr account",
     email: isAr ? "البريد الإلكتروني" : "Email Address",
     password: isAr ? "كلمة المرور" : "Password",
@@ -43,7 +43,7 @@ export default function LoginPage() {
       return;
     }
 
-    router.push(`/${locale}/dashboard`);
+    router.push(`/${locale}/feed`);
     router.refresh();
   }
 

@@ -40,7 +40,7 @@ export default function AnimatedHero({
       <div className="relative mx-auto max-w-4xl px-4 sm:px-6 lg:px-8 py-16 lg:py-24 w-full z-10 text-center">
         <FadeIn delay={0.1}>
           <div className="pill inline-block">
-            {isAr ? "ناس الشرقية 🇸🇦" : "🇸🇦 Eastern Region Community"}
+            {isAr ? "مجتمع المنطقة الشرقية 🇸🇦" : "🇸🇦 Eastern Region Community"}
           </div>
         </FadeIn>
 

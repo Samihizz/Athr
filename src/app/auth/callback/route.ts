@@ -108,8 +108,8 @@ async function redirectAfterAuth(
       }
     }
 
-    // Always go to dashboard — OnboardingFlow handles profile completion there
+    // Always go to feed — OnboardingFlow handles profile completion there
   }
 
-  return NextResponse.redirect(`${origin}/${locale}/dashboard`);
+  return NextResponse.redirect(`${origin}/${locale}/feed`);
 }

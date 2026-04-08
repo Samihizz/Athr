@@ -32,7 +32,7 @@ export default function ConnectionsList({ userId, locale }: ConnectionsListProps
   const isAr = locale === "ar";
 
   const t = {
-    noConnections: isAr ? "ما عندك اتصالات بعد" : "No connections yet",
+    noConnections: isAr ? "ليس لديك اتصالات بعد" : "No connections yet",
     editNote: isAr ? "تعديل الملاحظة" : "Edit Note",
     addNote: isAr ? "أضف ملاحظة" : "Add Note",
     remove: isAr ? "فك الاتصال" : "Disconnect",
@@ -169,7 +169,7 @@ export default function ConnectionsList({ userId, locale }: ConnectionsListProps
                   href={`/${locale}/members/${conn.profile.id}`}
                   className="font-semibold text-sm hover:text-gold transition-colors"
                 >
-                  {conn.profile.full_name || (isAr ? "شفت" : "Member")}
+                  {conn.profile.full_name || (isAr ? "عضو" : "Member")}
                 </Link>
                 <div className="flex items-center gap-2 text-xs text-muted mt-0.5">
                   {conn.profile.city && <span>{conn.profile.city}</span>}

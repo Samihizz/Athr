@@ -72,7 +72,7 @@ export default function MarketList({ services, locale, tracks, currentUserId }: 
     hourly: isAr ? "بالساعة" : "Hourly",
     negotiable: isAr ? "قابل للتفاوض" : "Negotiable",
     contact: isAr ? "تواصل" : "Contact",
-    noServices: isAr ? "ما في خدمات حالياً" : "No services found",
+    noServices: isAr ? "لا توجد خدمات حالياً" : "No services found",
     search: isAr ? "ابحث عن خدمة..." : "Search services...",
   };
 

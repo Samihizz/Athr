@@ -71,9 +71,9 @@ export default function AdminTabs({
 
   const tabs = [
     { id: "overview" as const, label: isAr ? "نظرة عامة" : "Overview" },
-    { id: "members" as const, label: isAr ? "الشفاتة" : "Members" },
-    { id: "events" as const, label: isAr ? "البرامج" : "Events" },
-    { id: "posts" as const, label: isAr ? "الشمارات" : "Posts" },
+    { id: "members" as const, label: isAr ? "الأعضاء" : "Members" },
+    { id: "events" as const, label: isAr ? "الفعاليات" : "Events" },
+    { id: "posts" as const, label: isAr ? "المنشورات" : "Posts" },
     { id: "announcements" as const, label: isAr ? "الإعلانات" : "Announcements" },
   ];
 
@@ -151,7 +151,7 @@ export default function AdminTabs({
     setLoadingAction(null);
 
     if (error) {
-      showToast(isAr ? "حصل خطأ في الحذف" : "Failed to remove member", "error");
+      showToast(isAr ? "حدث خطأ في الحذف" : "Failed to remove member", "error");
       console.error("Delete error:", error);
     } else {
       setMembers((prev) => prev.filter((m) => m.id !== memberId));
@@ -160,7 +160,7 @@ export default function AdminTabs({
         next.delete(memberId);
         return next;
       });
-      showToast(isAr ? "تم شيل العضو" : "Member removed", "success");
+      showToast(isAr ? "تم إزالة العضو" : "Member removed", "success");
     }
     setConfirmModal(null);
   }
@@ -173,11 +173,11 @@ export default function AdminTabs({
     setLoadingAction(null);
 
     if (error) {
-      showToast(isAr ? "حصل خطأ في الحذف" : "Failed to remove members", "error");
+      showToast(isAr ? "حدث خطأ في الحذف" : "Failed to remove members", "error");
     } else {
       setMembers((prev) => prev.filter((m) => !selected.has(m.id)));
       setSelected(new Set());
-      showToast(isAr ? `تم شيل ${ids.length} عضو` : `Removed ${ids.length} members`, "success");
+      showToast(isAr ? `تم إزالة ${ids.length} عضو` : `Removed ${ids.length} members`, "success");
     }
     setConfirmModal(null);
   }
@@ -193,7 +193,7 @@ export default function AdminTabs({
     setLoadingAction(null);
 
     if (error) {
-      showToast(isAr ? "حصل خطأ" : "Failed to update", "error");
+      showToast(isAr ? "حدث خطأ" : "Failed to update", "error");
     } else {
       setMembers((prev) => prev.map((m) => (m.id === member.id ? { ...m, verified: newVal } : m)));
       showToast(
@@ -213,7 +213,7 @@ export default function AdminTabs({
     setLoadingAction(null);
 
     if (error) {
-      showToast(isAr ? "حصل خطأ" : "Failed to verify", "error");
+      showToast(isAr ? "حدث خطأ" : "Failed to verify", "error");
     } else {
       setMembers((prev) => prev.map((m) => (selected.has(m.id) ? { ...m, verified: true } : m)));
       setSelected(new Set());
@@ -325,10 +325,10 @@ export default function AdminTabs({
       {tab === "overview" && stats && (
         <div>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
-            <StatCard label={isAr ? "إجمالي الشفاتة" : "Total Members"} value={stats.total_members} />
+            <StatCard label={isAr ? "إجمالي الأعضاء" : "Total Members"} value={stats.total_members} />
             <StatCard label={isAr ? "الخبراء" : "Mentors"} value={stats.mentors} />
             <StatCard label={isAr ? "البرامج" : "Events"} value={events.length} />
-            <StatCard label={isAr ? "الشمارات" : "Posts"} value={posts.length} />
+            <StatCard label={isAr ? "المنشورات" : "Posts"} value={posts.length} />
           </div>
           <h3 className="text-lg font-semibold mb-4">{isAr ? "توزيع المسارات" : "Track Distribution"}</h3>
           <div className="grid grid-cols-2 md:grid-cols-3 gap-3 mb-8">
@@ -554,7 +554,7 @@ export default function AdminTabs({
                 {filteredMembers.length === 0 && (
                   <tr>
                     <td colSpan={8} className="py-12 text-center text-muted">
-                      {isAr ? "ما لقينا أعضاء" : "No members found"}
+                      {isAr ? "لم يتم العثور على أعضاء" : "No members found"}
                     </td>
                   </tr>
                 )}

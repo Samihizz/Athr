@@ -45,7 +45,7 @@ function SignupContent() {
 
   const t = {
     signupTitle: isAr ? "انضم لأثر" : "Join Athr",
-    signupSubtitle: isAr ? "أنشئ حسابك وتواصل مع ناس الشرقية" : "Create your account and connect with the community",
+    signupSubtitle: isAr ? "أنشئ حسابك وتواصل مع المجتمع" : "Create your account and connect with the community",
     fullName: isAr ? "الاسم الكامل" : "Full Name",
     email: isAr ? "البريد الإلكتروني" : "Email Address",
     password: isAr ? "كلمة المرور" : "Password",
@@ -62,12 +62,12 @@ function SignupContent() {
     invitedBy: isAr ? "تمت الدعوة بواسطة" : "Invited by",
     // Capacity translations
     communityFull: isAr
-      ? "الملتقى امتلأ! سجّل في قائمة الانتظار وبنبلغك لمن يفتح مكان."
+      ? "الملتقى ممتلئ! سجّل في قائمة الانتظار وسنبلغك عند توفر مكان."
       : "We've reached our 500-member capacity! Join the waitlist to be notified when a spot opens up.",
-    memberCount: isAr ? "شفت" : "members",
+    memberCount: isAr ? "عضو" : "members",
     waitlistPlaceholder: isAr ? "بريدك الإلكتروني" : "Your email address",
     waitlistButton: isAr ? "سجّل في قائمة الانتظار" : "Join Waitlist",
-    waitlistSuccess: isAr ? "تم التسجيل! بنبلغك لمن يفتح مكان." : "You're on the list! We'll notify you when a spot opens.",
+    waitlistSuccess: isAr ? "تم التسجيل! سنبلغك عند توفر مكان." : "You're on the list! We'll notify you when a spot opens.",
     waitlistComingSoon: isAr ? "قائمة الانتظار قريبًا" : "Waitlist coming soon",
   };
 
@@ -296,7 +296,7 @@ function SignupContent() {
           href={`/${locale}/login`}
           className="inline-block w-full py-3 rounded-xl gradient-gold text-background font-semibold text-sm hover:opacity-90 transition-opacity"
         >
-          {isAr ? "تم التأكيد — خش سجّل دخولك" : "I've confirmed — Log me in"}
+          {isAr ? "تم التأكيد — سجّل دخولك" : "I've confirmed — Log me in"}
         </Link>
         <Link
           href={`/${locale}`}

@@ -66,7 +66,7 @@ export default async function NewsPage({
     technology: isAr ? "التقنية" : "Technology",
     business: isAr ? "الأعمال" : "Business",
     readMore: isAr ? "اقرأ المزيد" : "Read More",
-    noNews: isAr ? "ما في أخبار حالياً" : "No news available at the moment",
+    noNews: isAr ? "لا توجد أخبار حالياً" : "No news available at the moment",
     source: isAr ? "المصدر" : "Source",
     backToDashboard: isAr ? "العودة للرئيسية" : "Back to Dashboard",
   };

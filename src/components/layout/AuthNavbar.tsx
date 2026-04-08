@@ -24,15 +24,13 @@ export default function AuthNavbar({ locale, userName, userId, isAdmin }: AuthNa
   const isAr = locale === "ar";
 
   const t = {
-    dashboard: isAr ? "محل الشغل" : "Dashboard",
+    dashboard: isAr ? "لوحة التحكم" : "Dashboard",
     tracks: isAr ? "المسارات" : "Tracks",
-    events: isAr ? "البرامج" : "Events",
-    community: isAr ? "ناس الشرقية" : "Community",
-    feed: isAr ? "الشمارات" : "Feed",
-    connections: isAr ? "الفِرد" : "Connections",
+    events: isAr ? "الفعاليات" : "Events",
+    feed: isAr ? "المنشورات" : "Feed",
+    connections: isAr ? "التواصل" : "Connections",
     mentorship: isAr ? "الإرشاد" : "Mentorship",
-    jobs: isAr ? "فرص" : "Jobs",
-    market: isAr ? "سوق الشرقية" : "Market",
+    market: isAr ? "السوق" : "Market",
     news: isAr ? "الأخبار" : "News",
     profile: isAr ? "ملفي الشخصي" : "My Profile",
     editProfile: isAr ? "تعديل الملف" : "Edit Profile",
@@ -44,16 +42,14 @@ export default function AuthNavbar({ locale, userName, userId, isAdmin }: AuthNa
   const initial = userName?.charAt(0)?.toUpperCase() || "?";
 
   const navLinks = [
-    { href: `/${locale}/dashboard`, label: t.dashboard },
+    { href: `/${locale}/feed`, label: t.feed },
     { href: `/${locale}/tracks`, label: t.tracks },
     { href: `/${locale}/events`, label: t.events },
-    { href: `/${locale}/community`, label: t.community },
     { href: `/${locale}/connections`, label: t.connections },
     { href: `/${locale}/mentorship`, label: t.mentorship },
-    { href: `/${locale}/jobs`, label: t.jobs },
     { href: `/${locale}/market`, label: t.market },
-    { href: `/${locale}/feed`, label: t.feed },
     { href: `/${locale}/news`, label: t.news },
+    { href: `/${locale}/dashboard`, label: t.dashboard },
   ];
 
   const isActive = (href: string) => pathname === href || pathname.startsWith(href + "/");
@@ -102,7 +98,7 @@ export default function AuthNavbar({ locale, userName, userId, isAdmin }: AuthNa
 
           <div className="hidden md:flex items-center gap-2">
             <Link
-              href={`/${otherLocale}/dashboard`}
+              href={pathname.replace(`/${locale}`, `/${otherLocale}`)}
               className="text-sm text-muted hover:text-foreground transition-colors px-3 py-2 rounded-xl hover:bg-surface-hover"
             >
               {t.language}
@@ -172,18 +168,18 @@ export default function AuthNavbar({ locale, userName, userId, isAdmin }: AuthNa
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             transition={{ duration: 0.2 }}
-            className="md:hidden fixed inset-0 top-[4rem] z-40 bg-background/80 backdrop-blur-sm"
+            className="md:hidden fixed inset-0 top-0 z-40 bg-background/80 backdrop-blur-sm"
             onClick={() => setMobileOpen(false)}
           >
             <motion.div
-              initial={{ opacity: 0, y: -12 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -12 }}
-              transition={{ duration: 0.25, ease: "easeOut" }}
-              className="mx-4 mt-2 max-h-[calc(100vh-5rem)] overflow-y-auto overscroll-contain"
+              initial={{ x: isAr ? "-100%" : "100%" }}
+              animate={{ x: 0 }}
+              exit={{ x: isAr ? "-100%" : "100%" }}
+              transition={{ duration: 0.3, ease: [0.32, 0.72, 0, 1] }}
+              className={`fixed top-0 ${isAr ? "left-0" : "right-0"} w-[80%] max-w-[320px] h-full overflow-y-auto overscroll-contain glass-strong`}
               onClick={(e) => e.stopPropagation()}
             >
-              <div className="glass-strong rounded-2xl p-3 flex flex-col gap-0.5 pb-6">
+              <div className="p-4 pt-6 flex flex-col gap-0.5 pb-6">
                 {navLinks.map((link) => (
                   <Link
                     key={link.href}
@@ -207,7 +203,7 @@ export default function AuthNavbar({ locale, userName, userId, isAdmin }: AuthNa
                 {isAdmin && (
                   <Link href={`/${locale}/admin`} onClick={() => setMobileOpen(false)} className="px-4 py-2.5 text-sm text-gold rounded-xl hover:bg-surface-hover">{t.admin}</Link>
                 )}
-                <Link href={`/${otherLocale}/dashboard`} className="px-4 py-2.5 text-sm text-muted hover:text-foreground rounded-xl hover:bg-surface-hover">{t.language}</Link>
+                <Link href={pathname.replace(`/${locale}`, `/${otherLocale}`)} className="px-4 py-2.5 text-sm text-muted hover:text-foreground rounded-xl hover:bg-surface-hover">{t.language}</Link>
                 <div className="section-divider my-1.5" />
                 <form action={() => logout(locale)}>
                   <button type="submit" className="w-full text-start px-4 py-2.5 text-sm text-red-400 rounded-xl hover:bg-surface-hover">{t.logout}</button>

@@ -58,7 +58,7 @@ export default async function AdminPage({
           {isAr ? "لوحة الإدارة" : "Admin Panel"}
         </h1>
         <p className="text-muted mb-8">
-          {isAr ? "إدارة الشفاتة والشمارات والبرامج" : "Manage members, content, and events"}
+          {isAr ? "إدارة الأعضاء والمنشورات والفعاليات" : "Manage members, content, and events"}
         </p>
 
         <AdminTabs

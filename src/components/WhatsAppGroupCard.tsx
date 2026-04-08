@@ -21,9 +21,9 @@ export default function WhatsAppGroupCard({
   const isAr = locale === "ar";
   const hasLink = !!whatsappLink;
 
-  const joinLabel = isAr ? "خش قروب الواتساب" : "Join WhatsApp Group";
+  const joinLabel = isAr ? "انضم لمجموعة الواتساب" : "Join WhatsApp Group";
   const comingSoon = isAr ? "قريباً" : "Coming Soon";
-  const joinShort = isAr ? "خش" : "Join";
+  const joinShort = isAr ? "انضم" : "Join";
 
   if (variant === "compact") {
     return (
@@ -118,10 +118,10 @@ export function CommunityWhatsAppCard({
 
         <div className="min-w-0">
           <h3 className="font-semibold text-base sm:text-lg leading-tight">
-            {isAr ? "قروب مجتمع أثر" : "Athr Community Group"}
+            {isAr ? "مجموعة مجتمع أثر" : "Athr Community Group"}
           </h3>
           <p className="text-xs sm:text-sm text-muted mt-0.5">
-            {isAr ? "القروب العام لجميع الشفاتة" : "General group for all members"}
+            {isAr ? "المجموعة العامة لجميع الأعضاء" : "General group for all members"}
           </p>
         </div>
       </div>
@@ -139,7 +139,7 @@ export function CommunityWhatsAppCard({
           }}
         >
           <WhatsAppIcon size={18} />
-          {isAr ? "خش قروب الواتساب" : "Join WhatsApp Group"}
+          {isAr ? "انضم لمجموعة الواتساب" : "Join WhatsApp Group"}
         </a>
       ) : (
         <span className="w-full sm:w-auto shrink-0 text-sm text-muted text-center px-5 py-2.5 rounded-xl bg-surface border border-border">

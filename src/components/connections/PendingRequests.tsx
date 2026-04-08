@@ -36,7 +36,7 @@ export default function PendingRequests({ userId, locale }: PendingRequestsProps
     accept: isAr ? "قبول" : "Accept",
     decline: isAr ? "رفض" : "Decline",
     cancel: isAr ? "إلغاء الطلب" : "Cancel Request",
-    noPending: isAr ? "ما في طلبات اتصال" : "No pending requests",
+    noPending: isAr ? "لا توجد طلبات اتصال" : "No pending requests",
     sentTo: isAr ? "طلب مرسل" : "Request sent",
     wantsToConnect: isAr ? "يريد التواصل" : "Wants to connect",
   };
@@ -176,7 +176,7 @@ export default function PendingRequests({ userId, locale }: PendingRequestsProps
                       href={`/${locale}/members/${req.profile.id}`}
                       className="font-semibold text-sm hover:text-gold transition-colors"
                     >
-                      {req.profile.full_name || (isAr ? "شفت" : "Member")}
+                      {req.profile.full_name || (isAr ? "عضو" : "Member")}
                     </Link>
                     <p className="text-xs text-gold mt-0.5">{t.wantsToConnect}</p>
                     {req.note && (
@@ -232,7 +232,7 @@ export default function PendingRequests({ userId, locale }: PendingRequestsProps
                       href={`/${locale}/members/${req.profile.id}`}
                       className="font-semibold text-sm hover:text-gold transition-colors"
                     >
-                      {req.profile.full_name || (isAr ? "شفت" : "Member")}
+                      {req.profile.full_name || (isAr ? "عضو" : "Member")}
                     </Link>
                     <p className="text-xs text-muted mt-0.5">{t.sentTo}</p>
                     {req.note && (

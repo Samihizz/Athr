@@ -101,9 +101,9 @@ export default async function AuthTrackPage({
     members: isAr ? "أعضاء المسار" : "Track Members",
     events: isAr ? "فعاليات المسار" : "Track Events",
     posts: isAr ? "منشورات المسار" : "Track Posts",
-    noMembers: isAr ? "ما في أعضاء لسه في المسار ده" : "No members in this track yet",
-    noEvents: isAr ? "ما في فعاليات جاية" : "No upcoming events",
-    noPosts: isAr ? "ما في منشورات لسه" : "No posts yet",
+    noMembers: isAr ? "لا يوجد أعضاء في هذا المسار بعد" : "No members in this track yet",
+    noEvents: isAr ? "لا توجد فعاليات قادمة" : "No upcoming events",
+    noPosts: isAr ? "لا توجد منشورات بعد" : "No posts yet",
     viewProfile: isAr ? "عرض الملف" : "View Profile",
     allTracks: isAr ? "كل المسارات" : "All Tracks",
   };

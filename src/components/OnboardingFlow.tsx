@@ -127,13 +127,13 @@ export default function OnboardingFlow({
   if (!visible) return null;
 
   const t = {
-    welcomeTitle: isAr ? "حبابك في أثر" : "Welcome to Athr",
+    welcomeTitle: isAr ? "مرحباً بك في أثر" : "Welcome to Athr",
     welcomePoem: "مرحب يا اخويا في خشم الباب..\nمرحب و حبابك..\nرتبنا البيت..\nهنا قعدة كيف..\nو هنا بِركة نور..\nو مع أجمل جار ح نهِدّ السور\nشان تعزف ريح.. موسيقى اللوز\nو نغني نشيد البن و الشاي..\nلحن العصفور..",
     welcomeDesc1: isAr
-      ? "ملتقى الشفاتة المهني في المنطقة الشرقية"
+      ? "ملتقى المحترفين في المنطقة الشرقية"
       : "The Eastern Province's professional community for Sudanese talent",
     bullet1: isAr
-      ? "تواصل مع شفاتة في مجالك وتبادلوا الخبرات"
+      ? "تواصل مع محترفين في مجالك وتبادلوا الخبرات"
       : "Connect with professionals in your field",
     bullet2: isAr
       ? "احضر برامج وفعاليات حصرية للمجتمع"
@@ -141,9 +141,9 @@ export default function OnboardingFlow({
     bullet3: isAr
       ? "طوّر مهاراتك من خلال محتوى ومسارات تعليمية"
       : "Grow with curated learning tracks",
-    getStarted: isAr ? "يلا نبدأ" : "Let's Get Started",
+    getStarted: isAr ? "هيا نبدأ" : "Let's Get Started",
     profileTitle: isAr ? "كمّل ملفك" : "Quick Profile Setup",
-    profileSubtitle: isAr ? "عرّفنا بنفسك — تقدر تكمل بعدين" : "Tell us a bit about yourself — you can always update later",
+    profileSubtitle: isAr ? "عرّفنا بنفسك — يمكنك الإكمال لاحقاً" : "Tell us a bit about yourself — you can always update later",
     fullName: isAr ? "الاسم الكامل" : "Full Name",
     bio: isAr ? "نبذة عنك" : "Bio",
     bioPlaceholder: isAr ? "أخبرنا عن نفسك..." : "Tell us about yourself...",

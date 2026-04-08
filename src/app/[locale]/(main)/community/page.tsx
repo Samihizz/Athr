@@ -38,7 +38,7 @@ export default async function CommunityPage({
           title={isAr ? "المجتمع" : "Community"}
           subtitle={
             isAr
-              ? "تواصل مع الشفاتة في المنطقة الشرقية. لاقي مرشدين وشركاء وابني علاقات قوية."
+              ? "تواصل مع المحترفين في المنطقة الشرقية. ابحث عن مرشدين وشركاء وابنِ علاقات قوية."
               : "Connect with Sudanese professionals in the Eastern Region. Find mentors, collaborators, and build meaningful relationships."
           }
 
@@ -57,7 +57,7 @@ export default async function CommunityPage({
           {/* WhatsApp Groups — bottom of page */}
           <section className="mt-16">
             <h2 className="text-xl font-bold mb-6">
-              {isAr ? "خش القروبات" : "Join Our Groups"}
+              {isAr ? "انضم للمجموعات" : "Join Our Groups"}
             </h2>
 
             <div className="mb-6">

@@ -40,10 +40,10 @@ export default function SuggestedConnections({
   const isAr = locale === "ar";
 
   const t = {
-    suggested: isAr ? "فِرد مقترحين" : "Suggested Connections",
+    suggested: isAr ? "أعضاء مقترحون" : "Suggested Connections",
     basedOnCity: isAr ? "من مدينتك" : "Based on your city",
     basedOnTrack: isAr ? "من مسارك" : "Based on your track",
-    noSuggestions: isAr ? "ما في اقتراحات حالياً" : "No suggestions available",
+    noSuggestions: isAr ? "لا توجد اقتراحات حالياً" : "No suggestions available",
   };
 
   useEffect(() => {
@@ -154,7 +154,7 @@ export default function SuggestedConnections({
               {person.full_name?.charAt(0)?.toUpperCase() || "?"}
             </div>
             <h4 className="font-semibold text-sm truncate hover:text-gold transition-colors">
-              {person.full_name || (isAr ? "شفت" : "Member")}
+              {person.full_name || (isAr ? "عضو" : "Member")}
             </h4>
           </Link>
 

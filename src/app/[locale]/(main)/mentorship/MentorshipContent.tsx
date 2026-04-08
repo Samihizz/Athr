@@ -73,9 +73,9 @@ export default function MentorshipContent({
     send: isAr ? "ارسال" : "Send Request",
     cancel: isAr ? "إلغاء" : "Cancel",
     all: isAr ? "الكل" : "All",
-    noMentors: isAr ? "ما في مرشدين في المسار دا لسه" : "No mentors available in this track yet",
-    noRequests: isAr ? "ما في طلبات" : "No requests yet",
-    noMentorship: isAr ? "ما عندك إرشاد نشط" : "No active mentorships yet",
+    noMentors: isAr ? "لا يوجد مرشدون في هذا المسار بعد" : "No mentors available in this track yet",
+    noRequests: isAr ? "لا توجد طلبات" : "No requests yet",
+    noMentorship: isAr ? "ليس لديك إرشاد نشط" : "No active mentorships yet",
     incomingRequests: isAr ? "طلبات واردة" : "Incoming Requests",
     outgoingRequests: isAr ? "طلبات صادرة" : "Outgoing Requests",
     requestSent: isAr ? "تم إرسال الطلب!" : "Request sent!",
@@ -254,7 +254,7 @@ export default function MentorshipContent({
                       </div>
                       <div className="min-w-0">
                         <h3 className="font-semibold text-sm truncate group-hover:text-gold transition-colors">
-                          {mentor.full_name || (isAr ? "شفت" : "Member")}
+                          {mentor.full_name || (isAr ? "عضو" : "Member")}
                         </h3>
                         <div className="flex items-center gap-2 text-xs text-muted">
                           {mentor.expertise && trackMap[mentor.expertise] && (
@@ -394,7 +394,7 @@ export default function MentorshipContent({
                               href={`/${locale}/members/${profile.id}`}
                               className="font-semibold text-sm hover:text-gold transition-colors"
                             >
-                              {profile.full_name || (isAr ? "شفت" : "Member")}
+                              {profile.full_name || (isAr ? "عضو" : "Member")}
                             </Link>
                             {req.track && trackMap[req.track] && (
                               <span className="text-xs text-gold">{trackMap[req.track]}</span>
@@ -454,7 +454,7 @@ export default function MentorshipContent({
                             href={`/${locale}/members/${profile.id}`}
                             className="font-semibold text-sm hover:text-gold transition-colors"
                           >
-                            {profile.full_name || (isAr ? "شفت" : "Member")}
+                            {profile.full_name || (isAr ? "عضو" : "Member")}
                           </Link>
                           {req.track && trackMap[req.track] && (
                             <p className="text-xs text-gold mt-0.5">{trackMap[req.track]}</p>
@@ -565,7 +565,7 @@ function MentorshipCard({
             href={`/${locale}/members/${profile.id}`}
             className="font-semibold text-sm truncate group-hover:text-gold transition-colors block"
           >
-            {profile.full_name || (isAr ? "شفت" : "Member")}
+            {profile.full_name || (isAr ? "عضو" : "Member")}
           </Link>
           <div className="flex items-center gap-2 text-xs text-muted">
             {request.track && trackMap[request.track] && (

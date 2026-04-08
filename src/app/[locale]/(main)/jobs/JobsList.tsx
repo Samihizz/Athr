@@ -71,7 +71,7 @@ export default function JobsList({ jobs, locale, tracks, currentUserId }: JobsLi
     open: isAr ? "مفتوح" : "Open",
     closed: isAr ? "مغلق" : "Closed",
     postedBy: isAr ? "نشرها" : "Posted by",
-    noJobs: isAr ? "ما في فرص حالياً" : "No opportunities found",
+    noJobs: isAr ? "لا توجد فرص حالياً" : "No opportunities found",
     allTracks: isAr ? "كل المسارات" : "All Tracks",
     remoteToggle: isAr ? "عن بعد فقط" : "Remote only",
     showMore: isAr ? "عرض المزيد" : "Show more",

@@ -204,22 +204,22 @@ export default async function DashboardPage({
     myConnectionsDesc: isAr ? "تابع شبكة علاقاتك" : "Manage your network",
     shareNews: isAr ? "شارك خبر" : "Share News",
     shareNewsDesc: isAr ? "أضف خبر يهم المجتمع" : "Post news for the community",
-    suggestedConnections: isAr ? "فِرد مقترحين" : "Suggested Connections",
-    upcomingEvents: isAr ? "الفعاليات الجاية" : "Upcoming Events",
-    noEvents: isAr ? "ما في فعاليات جاية" : "No upcoming events",
-    recentPosts: isAr ? "آخر الشمارات" : "Recent Posts",
-    noPosts: isAr ? "ما في شمارات لسه" : "No posts yet",
+    suggestedConnections: isAr ? "أعضاء مقترحون" : "Suggested Connections",
+    upcomingEvents: isAr ? "الفعاليات القادمة" : "Upcoming Events",
+    noEvents: isAr ? "لا توجد فعاليات قادمة" : "No upcoming events",
+    recentPosts: isAr ? "آخر المنشورات" : "Recent Posts",
+    noPosts: isAr ? "لا توجد منشورات بعد" : "No posts yet",
     announcementsTitle: isAr ? "الإعلانات" : "Announcements",
-    whatsappGroups: isAr ? "قروبات واتساب" : "WhatsApp Groups",
-    trackGroup: isAr ? "قروب مسارك" : "Your Track Group",
+    whatsappGroups: isAr ? "مجموعات واتساب" : "WhatsApp Groups",
+    trackGroup: isAr ? "مجموعة مسارك" : "Your Track Group",
     viewAll: isAr ? "عرض الكل" : "View All",
     profileCompletion: isAr ? "اكتمال الملف الشخصي" : "Profile completion",
     completeProfile: isAr ? "أكمل ملفك الشخصي" : "Complete your profile",
     pendingRequests: isAr ? "طلبات اتصال جديدة" : "Pending requests",
-    register: isAr ? "سجل" : "Register",
+    register: isAr ? "سجّل" : "Register",
     addToCal: isAr ? "أضف للتقويم" : "Add to Calendar",
     myBadges: isAr ? "أوسمتك" : "Your Badges",
-    noBadges: isAr ? "ما عندك أوسمة لسه — كن أكثر نشاطاً!" : "No badges yet — get more active!",
+    noBadges: isAr ? "ليس لديك أوسمة بعد — كن أكثر نشاطاً!" : "No badges yet — get more active!",
   };
 
   return (
@@ -506,7 +506,7 @@ export default async function DashboardPage({
             {/* Right column (narrower) */}
             <div className="lg:col-span-2 space-y-6">
 
-              {/* Referral Card — "جيب صاحبك" */}
+              {/* Referral Card — "ادعُ صديقاً" */}
               <AnimatedSection delay={0.16}>
                 <ReferralCard
                   locale={locale}
