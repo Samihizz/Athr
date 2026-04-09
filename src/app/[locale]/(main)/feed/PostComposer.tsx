@@ -32,7 +32,7 @@ export default function PostComposer({
 
   const t = {
     placeholder: isAr ? "شارك أفكارك..." : "What's on your mind?",
-    post: isAr ? "اطرح أفكارك" : "Share",
+    post: isAr ? "انشر" : "Post",
     photo: isAr ? "صورة / فيديو" : "Photo / Video",
     selectTrack: isAr ? "المسار" : "Track",
   };
