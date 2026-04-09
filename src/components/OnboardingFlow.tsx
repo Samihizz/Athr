@@ -128,7 +128,7 @@ export default function OnboardingFlow({
 
   const t = {
     welcomeTitle: isAr ? "مرحباً بك في أثر" : "Welcome to Athr",
-    welcomePoem: "مرحب يا اخويا في خشم الباب..\nمرحب و حبابك..\nرتبنا البيت..\nهنا قعدة كيف..\nو هنا بِركة نور..\nو مع أجمل جار ح نهِدّ السور\nشان تعزف ريح.. موسيقى اللوز\nو نغني نشيد البن و الشاي..\nلحن العصفور..",
+    welcomePoem: "بقيت ما بتجينا",
     welcomeDesc1: isAr
       ? "ملتقى المحترفين في المنطقة الشرقية"
       : "The Eastern Province's professional community for Sudanese talent",

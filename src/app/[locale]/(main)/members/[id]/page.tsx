@@ -133,7 +133,7 @@ export default async function MemberProfilePage({
     .slice(0, 2);
 
   const t = {
-    back: isAr ? "العودة للأعضاء" : "Back to Directory",
+    back: isAr ? "استكشف الأعضاء" : "Explore Members",
     bio: isAr ? "نبذة" : "About",
     education: isAr ? "التعليم" : "Education",
     experience: isAr ? "الخبرة" : "Experience",
@@ -189,7 +189,7 @@ export default async function MemberProfilePage({
         <div className="relative z-10 pt-20 pb-16 px-4 sm:px-6 lg:px-8 mx-auto max-w-4xl">
           {/* ── Back Link ── */}
           <Link
-            href={`/${locale}/community`}
+            href={`/${locale}/connections`}
             className="inline-flex items-center gap-1.5 text-sm text-muted hover:text-foreground transition-colors mb-6 animate-fade-in-up"
           >
             <svg
