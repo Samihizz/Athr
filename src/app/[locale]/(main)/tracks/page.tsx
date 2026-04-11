@@ -4,7 +4,6 @@ import { createClient } from "@/lib/supabase/server";
 import { tracks } from "@/lib/tracks";
 import AuthNavbar from "@/components/layout/AuthNavbar";
 import PageHeader from "@/components/PageHeader";
-import TrackCardUnreadBadge from "@/components/TrackCardUnreadBadge";
 import TrackIcon from "@/components/TrackIcon";
 
 export default async function TracksPage({
@@ -60,10 +59,7 @@ export default async function TracksPage({
                   className="group card p-6 flex flex-col gap-4 hover:border-primary-light/30"
                 >
                   <div className="flex items-center gap-4">
-                    <div className="relative">
-                      <TrackIcon trackId={track.id} size={48} />
-                      <TrackCardUnreadBadge trackId={track.id} />
-                    </div>
+                    <TrackIcon trackId={track.id} size={48} />
                     <h2 className="text-lg font-semibold group-hover:text-white transition-colors">
                       {name}
                     </h2>

@@ -4,12 +4,7 @@ import { createClient } from "@/lib/supabase/server";
 import { tracks, getTrackById } from "@/lib/tracks";
 import AuthNavbar from "@/components/layout/AuthNavbar";
 import PageHeader from "@/components/PageHeader";
-import dynamic from "next/dynamic";
 import WhatsAppGroupCard from "@/components/WhatsAppGroupCard";
-
-const TrackChat = dynamic(() => import("@/components/TrackChat"), {
-  loading: () => <div className="glass rounded-2xl p-8 animate-pulse h-64" />,
-});
 import TrackFeed from "./TrackFeed";
 
 const trackGradients: Record<string, string> = {
@@ -156,19 +151,7 @@ export default async function AuthTrackPage({
             />
           </div>
 
-          {/* Track Chat */}
-          <section className="mb-12">
-            <h2 className="text-2xl font-bold mb-6">
-              {isAr ? "دردشة المسار" : "Track Chat"}
-            </h2>
-            <TrackChat
-              trackId={trackId}
-              userId={user.id}
-              userName={profile?.full_name || user.email || ""}
-              avatarUrl={profile?.avatar_url}
-              locale={locale}
-            />
-          </section>
+
 
           {/* Track Members */}
           <section className="mb-12">
