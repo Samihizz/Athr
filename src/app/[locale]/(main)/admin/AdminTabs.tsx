@@ -147,7 +147,7 @@ export default function AdminTabs({
   // ── Remove member ──
   async function removeMember(memberId: string) {
     setLoadingAction(memberId);
-    const { error } = await supabase.from("profiles").delete().eq("id", memberId);
+    const { error } = await supabase.rpc("admin_delete_user", { target_user_id: memberId });
     setLoadingAction(null);
 
     if (error) {
@@ -169,11 +169,17 @@ export default function AdminTabs({
   async function bulkRemove() {
     setLoadingAction("bulk-remove");
     const ids = Array.from(selected);
-    const { error } = await supabase.from("profiles").delete().in("id", ids);
+    const errors: string[] = [];
+
+    for (const id of ids) {
+      const { error } = await supabase.rpc("admin_delete_user", { target_user_id: id });
+      if (error) errors.push(id);
+    }
+
     setLoadingAction(null);
 
-    if (error) {
-      showToast(isAr ? "حدث خطأ في الحذف" : "Failed to remove members", "error");
+    if (errors.length > 0) {
+      showToast(isAr ? "حدث خطأ في حذف بعض الأعضاء" : `Failed to remove ${errors.length} member(s)`, "error");
     } else {
       setMembers((prev) => prev.filter((m) => !selected.has(m.id)));
       setSelected(new Set());
