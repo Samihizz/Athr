@@ -7,7 +7,7 @@ import { createClient } from "@/lib/supabase/client";
 import { MAX_MEMBERS } from "@/lib/constants";
 import { generateReferralCode } from "@/lib/referral";
 
-const PAUSED = process.env.NEXT_PUBLIC_PLATFORM_PAUSED === "true";
+const PAUSED = true;
 
 function PausedNotice({ locale }: { locale: string }) {
   const isAr = locale === "ar";

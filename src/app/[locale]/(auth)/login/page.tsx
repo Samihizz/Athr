@@ -5,7 +5,7 @@ import { useState } from "react";
 import { useParams, useRouter } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
 
-const PAUSED = process.env.NEXT_PUBLIC_PLATFORM_PAUSED === "true";
+const PAUSED = true;
 
 function PausedNotice({ locale }: { locale: string }) {
   const isAr = locale === "ar";
