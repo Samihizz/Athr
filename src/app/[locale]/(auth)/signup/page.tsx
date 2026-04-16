@@ -7,6 +7,31 @@ import { createClient } from "@/lib/supabase/client";
 import { MAX_MEMBERS } from "@/lib/constants";
 import { generateReferralCode } from "@/lib/referral";
 
+const PAUSED = process.env.NEXT_PUBLIC_PLATFORM_PAUSED === "true";
+
+function PausedNotice({ locale }: { locale: string }) {
+  const isAr = locale === "ar";
+  return (
+    <div className="glass-strong rounded-2xl p-8 text-center">
+      <div className="text-5xl mb-5">🔐</div>
+      <h1 className="text-xl font-bold mb-3">
+        {isAr ? "المنصة متوقفة مؤقتاً" : "Platform Paused"}
+      </h1>
+      <p className="text-sm text-muted leading-relaxed mb-8">
+        {isAr
+          ? "أثر متوقف مؤقتاً عن قبول أعضاء جدد. سنعود قريباً بكل ما هو جديد."
+          : "Athr is temporarily paused. We'll be back soon with exciting updates."}
+      </p>
+      <Link
+        href={`/${locale}`}
+        className="inline-block w-full py-3 rounded-xl gradient-gold text-background font-semibold text-sm hover:opacity-90 transition-opacity"
+      >
+        {isAr ? "العودة للرئيسية" : "Back to Home"}
+      </Link>
+    </div>
+  );
+}
+
 export default function SignupPage() {
   return (
     <Suspense fallback={<div className="min-h-screen flex items-center justify-center"><div className="animate-spin h-8 w-8 border-2 border-gold border-t-transparent rounded-full" /></div>}>
@@ -204,6 +229,9 @@ function SignupContent() {
     setSuccess(true);
     setLoading(false);
   }
+
+  // Platform paused — no new signups
+  if (PAUSED) return <PausedNotice locale={locale} />;
 
   // Loading state while checking capacity
   if (capacityLoading) {

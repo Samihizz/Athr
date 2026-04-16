@@ -5,6 +5,31 @@ import { useState } from "react";
 import { useParams, useRouter } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
 
+const PAUSED = process.env.NEXT_PUBLIC_PLATFORM_PAUSED === "true";
+
+function PausedNotice({ locale }: { locale: string }) {
+  const isAr = locale === "ar";
+  return (
+    <div className="glass-strong rounded-2xl p-8 text-center">
+      <div className="text-5xl mb-5">🔐</div>
+      <h1 className="text-xl font-bold mb-3">
+        {isAr ? "المنصة متوقفة مؤقتاً" : "Platform Paused"}
+      </h1>
+      <p className="text-sm text-muted leading-relaxed mb-8">
+        {isAr
+          ? "أثر متوقف مؤقتاً عن قبول أعضاء جدد. سنعود قريباً بكل ما هو جديد."
+          : "Athr is temporarily paused. We'll be back soon with exciting updates."}
+      </p>
+      <Link
+        href={`/${locale}`}
+        className="inline-block w-full py-3 rounded-xl gradient-gold text-background font-semibold text-sm hover:opacity-90 transition-opacity"
+      >
+        {isAr ? "العودة للرئيسية" : "Back to Home"}
+      </Link>
+    </div>
+  );
+}
+
 export default function LoginPage() {
   const { locale } = useParams<{ locale: string }>();
   const router = useRouter();
@@ -14,6 +39,8 @@ export default function LoginPage() {
   const [loading, setLoading] = useState(false);
 
   const isAr = locale === "ar";
+
+  if (PAUSED) return <PausedNotice locale={locale} />;
   const t = {
     loginTitle: isAr ? "مرحباً بك" : "Welcome Back",
     loginSubtitle: isAr ? "سجّل الدخول إلى حسابك في أثر" : "Log in to your Athr account",
